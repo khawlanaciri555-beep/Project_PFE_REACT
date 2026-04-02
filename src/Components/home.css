@@ -519,3 +519,41 @@
     flex-direction: column;
   }
 }
+.section-footer-centered {
+  display: flex;
+  justify-content: center;
+  margin-top: 4rem;
+  margin-bottom: 2rem;
+}
+
+.btn-see-more {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 2.5rem;
+  background: white;
+  border: 1px solid #EBE9E1;
+  border-radius: 999px;
+  color: #1A1817;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+}
+
+.btn-see-more:hover {
+  background: #C58A3A;
+  color: white;
+  border-color: #C58A3A;
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(197, 138, 58, 0.3);
+}
+
+.btn-see-more svg {
+  transition: transform 0.4s ease;
+}
+
+.btn-see-more:hover svg {
+  transform: translateX(5px);
+}

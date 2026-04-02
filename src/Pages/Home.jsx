@@ -110,13 +110,18 @@ const Home = () => {
               marginBottom: '1.5rem'
             }}
           >
-            <span style={{ color: 'rgba(226, 218, 215, 1)' }}>Discover<br/>Marrakech:<br/>A Journey</span> <br/>
+            <span style={{ color: 'rgba(226, 218, 215, 1)', fontSize: '4.8rem', fontWeight: '800' }}>Discover Marrakech</span> <br/>
             <span style={{ 
               background: 'linear-gradient(90deg, #EAD3B1, #C58A3A)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
-              display: 'inline-block'
-            }}>Through Time and Color</span>
+              display: 'inline-block',
+              fontSize: '2.4rem',
+              fontWeight: '600',
+              textTransform: 'uppercase',
+              letterSpacing: '4px',
+              marginTop: '0.5rem'
+            }}>A Journey Through Time and Color</span>
           </motion.h1>
           <motion.p 
             className="hero-subtitle"
@@ -152,7 +157,7 @@ const Home = () => {
             </div>
             <div className="new-card-content">
               <p>Le monument le plus emblématique de Marrakech, visible depuis toute la ville.</p>
-              <Link to="#" className="new-btn-detail">Voir détail &rarr;</Link>
+              <Link to="/place/1" className="new-btn-detail">Voir détail &rarr;</Link>
             </div>
           </div>
 
@@ -166,7 +171,7 @@ const Home = () => {
             </div>
             <div className="new-card-content">
               <p>Un splendide palais du XIXe siècle, chef-d'œuvre de l'art marocain.</p>
-              <Link to="#" className="new-btn-detail">Voir détail &rarr;</Link>
+              <Link to="/place/2" className="new-btn-detail">Voir détail &rarr;</Link>
             </div>
           </div>
 
@@ -180,7 +185,7 @@ const Home = () => {
             </div>
             <div className="new-card-content">
               <p>Un labyrinthe coloré de marchés traditionnels remplis d'artisanat local.</p>
-              <Link to="#" className="new-btn-detail">Voir détail &rarr;</Link>
+              <Link to="/place/3" className="new-btn-detail">Voir détail &rarr;</Link>
             </div>
           </div>
           
@@ -194,7 +199,7 @@ const Home = () => {
             </div>
             <div className="new-card-content">
               <p>Un jardin exotique enchanteur créé par Jacques Majorelle avec un bleu vibrant.</p>
-              <Link to="#" className="new-btn-detail">Voir détail &rarr;</Link>
+              <Link to="/place/4" className="new-btn-detail">Voir détail &rarr;</Link>
             </div>
           </div>
 
@@ -209,7 +214,7 @@ const Home = () => {
             </div>
             <div className="new-card-content">
               <p>Le cœur battant de la ville, une place immense aux mille spectacles.</p>
-              <Link to="#" className="new-btn-detail">Voir détail &rarr;</Link>
+              <Link to="/place/5" className="new-btn-detail">Voir détail &rarr;</Link>
             </div>
           </div>
 
@@ -224,7 +229,7 @@ const Home = () => {
             </div>
             <div className="new-card-content">
               <p>Une évasion désertique à quelques minutes de la ville ocre.</p>
-              <Link to="#" className="new-btn-detail">Voir détail &rarr;</Link>
+              <Link to="/place/6" className="new-btn-detail">Voir détail &rarr;</Link>
             </div>
           </div>
 
@@ -239,9 +244,18 @@ const Home = () => {
             </div>
             <div className="new-card-content">
               <p>Un palais transformé en musée, abritant des trésors de l'artisanat marocain.</p>
-              <Link to="#" className="new-btn-detail">Voir détail &rarr;</Link>
+              <Link to="/place/7" className="new-btn-detail">Voir détail &rarr;</Link>
             </div>
           </div>
+        </div>
+
+        <div className="section-footer-centered">
+          <Link to="/explore" className="btn-see-more">
+            <span>Explorer tout Marrakech</span>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M13 5l7 7-7 7M4 5l7 7-7 7" />
+            </svg>
+          </Link>
         </div>
       </section>
 
