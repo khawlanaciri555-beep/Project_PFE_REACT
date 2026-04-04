@@ -98,7 +98,7 @@ const Register = () => {
       <div className="register-card">
         <div className="auth-header">
           <h1>Create Account</h1>
-          <p>Join the AL-RIAD experience</p>
+          <p>Join the VibKech experience</p>
         </div>
 
         <RoleSelector activeRole={role} setRole={(r) => {

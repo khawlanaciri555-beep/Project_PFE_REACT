@@ -37,7 +37,7 @@ const Login = () => {
                 <div className="login-panel-content">
                     <div className="login-brand">
                         <span className="login-brand-icon">✦</span>
-                        <span className="login-brand-name">AL‑RIAD</span>
+                        <span className="login-brand-name">VibKech</span>
                     </div>
                     <h2 className="login-panel-title">
                         Welcome Back to<br />

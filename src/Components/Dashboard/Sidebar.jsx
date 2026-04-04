@@ -56,7 +56,7 @@ const Sidebar = () => {
       <div className="sidebar-logo desktop-only">
         <Link to="/home" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <img src="/logo picter/logo.png" alt="VibKech" style={{ height: '50px' }} />
-          <span style={{ color: 'var(--dash-text)', fontSize: '1.2rem', fontWeight: '800', letterSpacing: '2px' }}>AL-RIAD</span>
+          <span style={{ color: 'var(--dash-text)', fontSize: '1.2rem', fontWeight: '800', letterSpacing: '2px' }}>VibKech</span>
         </Link>
       </div>
 

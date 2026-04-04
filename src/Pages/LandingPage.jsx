@@ -54,7 +54,7 @@ const LandingPage = () => {
       <div className="landing-topbar">
         <div className="landing-logo">
           <span className="logo-icon">✦</span>
-          <span className="logo-text">AL<span>-</span>RIAD</span>
+          <span className="logo-text">Vib<span>-</span>Kech</span>
         </div>
         <div className="landing-tagline-top">Marrakech · Morocco</div>
       </div>
