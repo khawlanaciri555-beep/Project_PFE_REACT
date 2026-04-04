@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { RoleSelector } from '../Components/Register/RoleSelector';
-import { 
-  TouristForm, 
-  HotelForm, 
-  GuideForm, 
-  TransporteurForm, 
-  CooperativeForm 
+import {
+  TouristForm,
+  HotelForm,
+  GuideForm,
+  TransporteurForm,
+  CooperativeForm
 } from '../Components/Register/RegisterForms';
 import { GradientButton } from '../Components/Register/UIComponents';
 import { FaCheckCircle } from 'react-icons/fa';
@@ -17,7 +17,7 @@ const Register = () => {
   const [role, setRole] = useState('tourist');
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  
+
   // Unified form state
   const [formData, setFormData] = useState({
     email: '',
@@ -49,12 +49,12 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
+
     // Simulate API call
     console.log('Submitting for role:', role);
     console.log('Form data:', formData);
     console.log('Files:', files);
-    
+
     setTimeout(() => {
       setLoading(false);
       setSubmitted(true);
@@ -75,7 +75,7 @@ const Register = () => {
   if (submitted) {
     return (
       <div className="auth-page">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           className="register-card success-container"

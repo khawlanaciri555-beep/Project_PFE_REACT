@@ -27,10 +27,10 @@ export const RoleSelector = ({ activeRole, setRole }) => {
               style={{
                 position: 'absolute',
                 inset: 0,
-                background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)',
+                background: 'linear-gradient(135deg, #C58A3A 0%, #cc5533 100%)',
                 borderRadius: '12px',
                 zIndex: -1,
-                boxShadow: '0 4px 12px rgba(99, 102, 241, 0.4)'
+                boxShadow: '0 4px 12px rgba(197, 138, 58, 0.4)'
               }}
             />
           )}
