@@ -39,7 +39,6 @@ const Navbar = () => {
       <div className="nav-logo">
         <Link to="/home">
           <img src="/logo picter/logo.png" alt="VibKech Logo" className="brand-logo" />
-          <span className="brand-name">VibKech</span>
         </Link>
       </div>
 

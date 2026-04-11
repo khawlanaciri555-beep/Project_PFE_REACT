@@ -4,8 +4,11 @@ import { Link } from 'react-router-dom';
 import Layout from '../Components/Layout';
 import api from '../api/axios';
 import ServiceMap from '../Components/Explore/ServiceMap';
-import { FaThLarge, FaMapMarkedAlt } from 'react-icons/fa';
+import FavoriteButton from '../Components/FavoriteButton';
+import RatingStars from '../Components/RatingStars';
+import { FaThLarge, FaMapMarkedAlt, FaCommentDots } from 'react-icons/fa';
 import './Explore.css';
+import getImageUrl from '../utils/imageUrl';
 
 const Explore = () => {
   const [items, setItems] = useState([]);
@@ -16,8 +19,8 @@ const Explore = () => {
     const fetchExploreData = async () => {
       try {
         setLoading(true);
-        const response = await api.get('/services');
-        setItems(response.data);
+        const response = await api.get('/places');
+        setItems(response.data.data ? response.data.data : response.data);
       } catch (err) {
         console.error('Error fetching explore data', err);
       } finally {
@@ -110,31 +113,45 @@ const Explore = () => {
               className="explore-grid"
             >
               {items.map((place) => (
-                <motion.div
+                <Link
                   key={place.id}
-                  variants={{
-                    hidden: { opacity: 0, y: 30 },
-                    visible: { opacity: 1, y: 0 }
-                  }}
-                  transition={{ duration: 0.5, ease: "easeOut" }}
-                  whileHover={{ y: -10 }}
-                  className="destination-card new-card"
+                  to={`/place/${place.id}`}
+                  style={{ textDecoration: 'none', color: 'inherit' }}
                 >
-                  <div className="new-card-image-wrap">
-                    <img src={place.image || '/logo picter/placeholder.jpg'} alt={place.title} />
-                    <div className="image-overlay">
-                      <span className="new-card-tag">{place.category || place.type}</span>
-                      <h3 className="new-card-title">{place.title}</h3>
+                  <motion.div
+                    variants={{
+                      hidden: { opacity: 0, y: 30 },
+                      visible: { opacity: 1, y: 0 }
+                    }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                    whileHover={{ y: -10 }}
+                    className="destination-card new-card"
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <div className="new-card-image-wrap">
+                      <FavoriteButton 
+                        placeId={place.id} 
+                        initialIsFavorited={place.is_favorited} 
+                        initialFavoriteId={place.favorite_id}
+                      />
+                      <img src={getImageUrl(place.image) || '/logo picter/placeholder.jpg'} alt={place.title} />
+                      <div className="image-overlay">
+                        <span className="new-card-tag">{place.category || place.type}</span>
+                        <h3 className="new-card-title">{place.title}</h3>
+                      </div>
                     </div>
-                  </div>
-                  <div className="new-card-content">
-                    <p>{place.description || 'Une expérience inoubliable au cœur de Marrakech.'}</p>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem' }}>
-                       <span style={{ fontWeight: '700', color: 'var(--primary)' }}>{place.price}</span>
-                       <Link to={`/place/${place.id}`} className="new-btn-detail">Détail &rarr;</Link>
+                    <div className="new-card-content">
+                      <div style={{ marginBottom: '0.8rem' }}>
+                        <RatingStars rating={place.rating_avg} showCount={false} size={14} />
+                      </div>
+                      <p>{place.description || 'Une expérience inoubliable au cœur de Marrakech.'}</p>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem' }}>
+                         <span style={{ fontWeight: '700', color: 'var(--primary)' }}>{place.price}</span>
+                         <span className="new-link-text" style={{ fontSize: '0.85rem', fontWeight: 'bold' }}>Voir plus &rarr;</span>
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
+                  </motion.div>
+                </Link>
               ))}
             </motion.div>
           ) : (

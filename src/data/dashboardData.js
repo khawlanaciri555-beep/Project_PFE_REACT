@@ -23,14 +23,6 @@ export const mockRequests = [
     amount: "1200 MAD"
   },
   {
-    id: "req2",
-    user: "Mark Jenkins",
-    service: "Guided Tour (Souks)",
-    date: "2024-10-18",
-    status: "pending",
-    amount: "400 MAD"
-  },
-  {
     id: "req3",
     user: "Aisha Mansour",
     service: "Airport Transfer (Private)",
@@ -67,14 +59,6 @@ export const mockUserBookings = [
     date: "2024-03-10",
     price: "1200 MAD",
     status: "completed"
-  },
-  {
-    id: "b2",
-    serviceName: "Visite Guidee Medina",
-    provider: "Ahmed (Guide)",
-    date: "2024-10-15",
-    price: "300 MAD",
-    status: "confirmed"
   },
   {
     id: "b3",

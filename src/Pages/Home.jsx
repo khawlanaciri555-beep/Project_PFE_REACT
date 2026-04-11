@@ -2,7 +2,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import Layout from '../Components/Layout';
+import api from '../api/axios';
+import FavoriteButton from '../Components/FavoriteButton';
+import RatingStars from '../Components/RatingStars';
+import { FaCommentDots } from 'react-icons/fa';
 import '../Components/home.css';
+import getImageUrl from '../utils/imageUrl';
 
 // Counter Component for Statistics
 const Counter = ({ value, label, index }) => {
@@ -60,6 +65,7 @@ const Counter = ({ value, label, index }) => {
 
 const Home = () => {
   const sliderRef = useRef(null);
+  const [places, setPlaces] = useState([]);
   const { scrollY } = useScroll();
   
   // Parallax / Smooth scroll effect for hero
@@ -68,6 +74,18 @@ const Home = () => {
   const videoScale = useTransform(scrollY, [0, 400], [1, 1.1]);
 
   useEffect(() => {
+    // جلب الأماكن من Laravel
+    const fetchPlaces = async () => {
+      try {
+        const response = await api.get('/places');
+        const result = response.data;
+        setPlaces(result.data || []);
+      } catch (err) {
+        console.error("خطأ في جلب الأماكن", err);
+      }
+    };
+    fetchPlaces();
+
     const interval = setInterval(() => {
       if (sliderRef.current) {
         const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
@@ -147,106 +165,33 @@ const Home = () => {
         </div>
 
         <div className="destinations-grid slider-container" ref={sliderRef}>
-          <div className="destination-card new-card">
-            <div className="new-card-image-wrap">
-              <img src="https://images.unsplash.com/photo-1587974928442-7bd927f1fbff?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Mosquée Koutoubia" />
-              <div className="image-overlay">
-                <span className="new-card-tag">Monument</span>
-                <h3 className="new-card-title">Mosquée Koutoubia</h3>
+          {places.length > 0 ? (
+            places.map(place => (
+              <div className="destination-card new-card" key={place.id}>
+                <div className="new-card-image-wrap">
+                  <FavoriteButton 
+                    placeId={place.id} 
+                    initialIsFavorited={place.is_favorited} 
+                    initialFavoriteId={place.favorite_id}
+                  />
+                  <img src={getImageUrl(place.image)} alt={place.title} onClick={() => navigate(`/place/${place.id}`)} />
+                  <div className="image-overlay">
+                    <span className="new-card-tag">{place.category || 'Destination'}</span>
+                    <h3 className="new-card-title">{place.title}</h3>
+                  </div>
+                </div>
+                <div className="new-card-content">
+                  <div style={{ marginBottom: '0.8rem' }}>
+                    <RatingStars rating={place.rating_avg} showCount={false} size={14} />
+                  </div>
+                  <p>{place.description?.substring(0, 90)}...</p>
+                  <Link to={`/place/${place.id}`} className="new-btn-detail">Voir détail &rarr;</Link>
+                </div>
               </div>
-            </div>
-            <div className="new-card-content">
-              <p>Le monument le plus emblématique de Marrakech, visible depuis toute la ville.</p>
-              <Link to="/place/1" className="new-btn-detail">Voir détail &rarr;</Link>
-            </div>
-          </div>
-
-          <div className="destination-card new-card">
-            <div className="new-card-image-wrap">
-              <img src="https://images.unsplash.com/photo-1549429141-8f553f1f7ca4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Palais de la Bahia" />
-              <div className="image-overlay">
-                <span className="new-card-tag">Palais</span>
-                <h3 className="new-card-title">Palais de la Bahia</h3>
-              </div>
-            </div>
-            <div className="new-card-content">
-              <p>Un splendide palais du XIXe siècle, chef-d'œuvre de l'art marocain.</p>
-              <Link to="/place/2" className="new-btn-detail">Voir détail &rarr;</Link>
-            </div>
-          </div>
-
-          <div className="destination-card new-card">
-            <div className="new-card-image-wrap">
-              <img src="https://images.unsplash.com/photo-1539020140153-e479b8c22e70?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Les Souks" />
-              <div className="image-overlay">
-                <span className="new-card-tag">Marché</span>
-                <h3 className="new-card-title">Les Souks</h3>
-              </div>
-            </div>
-            <div className="new-card-content">
-              <p>Un labyrinthe coloré de marchés traditionnels remplis d'artisanat local.</p>
-              <Link to="/place/3" className="new-btn-detail">Voir détail &rarr;</Link>
-            </div>
-          </div>
-          
-          <div className="destination-card new-card">
-            <div className="new-card-image-wrap">
-              <img src="https://images.unsplash.com/photo-1590089849504-20412e106da4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Jardin Majorelle" />
-              <div className="image-overlay">
-                <span className="new-card-tag">Jardin</span>
-                <h3 className="new-card-title">Jardin Majorelle</h3>
-              </div>
-            </div>
-            <div className="new-card-content">
-              <p>Un jardin exotique enchanteur créé par Jacques Majorelle avec un bleu vibrant.</p>
-              <Link to="/place/4" className="new-btn-detail">Voir détail &rarr;</Link>
-            </div>
-          </div>
-
-          {/* New Card 5 */}
-          <div className="destination-card new-card">
-            <div className="new-card-image-wrap">
-              <img src="https://images.unsplash.com/photo-1548013146-72479768bbaa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Place Jemaa el-Fna" />
-              <div className="image-overlay">
-                <span className="new-card-tag">Atmosphere</span>
-                <h3 className="new-card-title">Place Jemaa el-Fna</h3>
-              </div>
-            </div>
-            <div className="new-card-content">
-              <p>Le cœur battant de la ville, une place immense aux mille spectacles.</p>
-              <Link to="/place/5" className="new-btn-detail">Voir détail &rarr;</Link>
-            </div>
-          </div>
-
-          {/* New Card 6 */}
-          <div className="destination-card new-card">
-            <div className="new-card-image-wrap">
-              <img src="https://images.unsplash.com/photo-1598967069123-5e744a569a7c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Désert d'Agafay" />
-              <div className="image-overlay">
-                <span className="new-card-tag">Adventure</span>
-                <h3 className="new-card-title">Désert d'Agafay</h3>
-              </div>
-            </div>
-            <div className="new-card-content">
-              <p>Une évasion désertique à quelques minutes de la ville ocre.</p>
-              <Link to="/place/6" className="new-btn-detail">Voir détail &rarr;</Link>
-            </div>
-          </div>
-
-          {/* New Card 7 */}
-          <div className="destination-card new-card">
-            <div className="new-card-image-wrap">
-              <img src="https://images.unsplash.com/photo-1597212618440-806262de4f6b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Musée de Marrakech" />
-              <div className="image-overlay">
-                <span className="new-card-tag">Culture</span>
-                <h3 className="new-card-title">Musée de Marrakech</h3>
-              </div>
-            </div>
-            <div className="new-card-content">
-              <p>Un palais transformé en musée, abritant des trésors de l'artisanat marocain.</p>
-              <Link to="/place/7" className="new-btn-detail">Voir détail &rarr;</Link>
-            </div>
-          </div>
+            ))
+          ) : (
+             <div style={{ color: "white", padding: "2rem" }}>Chargement des destinations...</div>
+          )}
         </div>
 
         <div className="section-footer-centered">
@@ -333,6 +278,9 @@ const Home = () => {
       </section>
 
       </div>
+      <Link to="/comments/general" className="floating-general-comment" title="Discussion Générale">
+        <FaCommentDots size={28} />
+      </Link>
     </Layout>
   );
 };

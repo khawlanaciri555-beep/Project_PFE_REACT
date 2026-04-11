@@ -1,9 +1,14 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaTrash, FaEye } from 'react-icons/fa';
+import { FaEye } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import FavoriteButton from '../FavoriteButton';
 
 const FavoriteCard = ({ place, onRemove }) => {
+  const placeData = place.place; // Accessing the nested place object from FavoriteResource
+
+  if (!placeData) return null;
+
   return (
     <motion.div 
       layout
@@ -20,45 +25,41 @@ const FavoriteCard = ({ place, onRemove }) => {
         boxShadow: 'var(--shadow-sm)'
       }}
     >
-      <div style={{ height: '180px', overflow: 'hidden' }}>
-        <img src={place.image} alt={place.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+      <div style={{ height: '180px', overflow: 'hidden', position: 'relative' }}>
+        <FavoriteButton 
+          placeId={placeData.id} 
+          initialIsFavorited={true} 
+          initialFavoriteId={place.id}
+          onToggle={(pId, isFav) => {
+            if (!isFav) onRemove(place.id);
+          }}
+        />
+        <img src={placeData.image} alt={placeData.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
       </div>
       <div style={{ padding: '1.25rem' }}>
-        <span style={{ fontSize: '0.7rem', color: 'var(--dash-accent)', fontWeight: '700', textTransform: 'uppercase' }}>{place.category}</span>
-        <h3 style={{ fontSize: '1.1rem', margin: '0.25rem 0' }}>{place.title}</h3>
+        <span style={{ fontSize: '0.7rem', color: 'var(--dash-accent)', fontWeight: '700', textTransform: 'uppercase' }}>{placeData.category}</span>
+        <h3 style={{ fontSize: '1.1rem', margin: '0.25rem 0' }}>{placeData.title}</h3>
         
         <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
-          <Link to={`/place/${place.id}`} style={{ flex: 1, textDecoration: 'none' }}>
+          <Link to={`/place/${placeData.id}`} style={{ flex: 1, textDecoration: 'none' }}>
             <button style={{ 
               width: '100%', 
               background: 'rgba(188, 73, 49, 0.05)', 
               color: 'var(--dash-accent)', 
               border: '1px solid var(--glass-border)', 
-              padding: '0.5rem', 
-              borderRadius: '8px', 
+              padding: '0.6rem', 
+              borderRadius: '12px', 
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               gap: '0.5rem',
-              fontWeight: '700'
+              fontWeight: '700',
+              transition: '0.3s'
             }}>
-              <FaEye /> View
+              <FaEye /> View Details
             </button>
           </Link>
-          <button 
-            onClick={() => onRemove(place.id)}
-            style={{ 
-              background: 'rgba(239, 68, 68, 0.1)', 
-              color: '#ef4444', 
-              border: '1px solid rgba(239, 68, 68, 0.2)', 
-              padding: '0.5rem', 
-              borderRadius: '8px', 
-              cursor: 'pointer' 
-            }}
-          >
-            <FaTrash />
-          </button>
         </div>
       </div>
     </motion.div>

@@ -30,7 +30,7 @@ const ServiceMap = ({ items }) => {
   const defaultCenter = [31.6295, -7.9811]; // Medina, Marrakech
 
   return (
-    <div style={{ height: '70vh', width: '100%', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 50px rgba(0,0,0,0.1)', border: '1px solid rgba(188, 73, 49, 0.1)' }}>
+    <div className="premium-map-wrapper" style={{ height: '100%', width: '100%', position: 'relative' }}>
       <MapContainer 
         center={defaultCenter} 
         zoom={13} 
@@ -39,36 +39,42 @@ const ServiceMap = ({ items }) => {
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          // Using a slightly more muted tile set for a boutique feel
-          className="map-tiles"
+          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+          className="premium-tiles"
         />
         
         {items.map((item) => (
           <Marker 
             key={item.id} 
-            position={[item.lat || 31.63 + (Math.random() - 0.5) * 0.05, item.lng || -7.98 + (Math.random() - 0.5) * 0.05]} 
+            position={[item.lat || 31.63, item.lng || -7.98]} 
             icon={terracottaIcon}
           >
-            <Popup className="premium-popup">
-              <div style={{ padding: '0.5rem', minWidth: '180px' }}>
-                <img 
-                  src={item.image || '/logo picter/placeholder.jpg'} 
-                  alt={item.title} 
-                  style={{ width: '100%', height: '100px', objectFit: 'cover', borderRadius: '12px', marginBottom: '1rem' }} 
-                />
-                <h4 style={{ margin: '0 0 0.5rem 0', fontFamily: 'var(--font-serif)', color: 'var(--primary)' }}>{item.title}</h4>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontWeight: '700', fontSize: '0.9rem' }}>{item.price}</span>
-                  <Link to={`/place/${item.id}`} style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: '600', fontSize: '0.8rem' }}>
-                    Voir détail &rarr;
-                  </Link>
+            <Popup className="signature-popup">
+              <div className="premium-popup-content">
+                <div className="popup-img-wrap">
+                  <img 
+                    src={item.image || '/logo picter/placeholder.jpg'} 
+                    alt={item.title} 
+                  />
+                  <div className="popup-badge">Premium</div>
+                </div>
+                <div className="popup-info">
+                   <h4>{item.title}</h4>
+                   <div className="popup-meta">
+                      <span className="p-price">{item.price} MAD</span>
+                      <Link to={`/place/${item.id}`} className="p-link">
+                        Détails &rarr;
+                      </Link>
+                   </div>
                 </div>
               </div>
             </Popup>
           </Marker>
         ))}
       </MapContainer>
+      
+      {/* Decorative Gradient Overlay */}
+      <div className="map-edge-overlay" />
     </div>
   );
 };

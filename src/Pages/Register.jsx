@@ -5,7 +5,6 @@ import { RoleSelector } from '../Components/Register/RoleSelector';
 import {
   TouristForm,
   HotelForm,
-  GuideForm,
   TransporteurForm,
   CooperativeForm
 } from '../Components/Register/RegisterForms';
@@ -65,7 +64,6 @@ const Register = () => {
     switch (role) {
       case 'tourist': return <TouristForm data={formData} onChange={handleInputChange} />;
       case 'hotel': return <HotelForm data={formData} onChange={handleInputChange} onFileChange={handleFileChange} />;
-      case 'guide': return <GuideForm data={formData} onChange={handleInputChange} onFileChange={handleFileChange} />;
       case 'transporteur': return <TransporteurForm data={formData} onChange={handleInputChange} onFileChange={handleFileChange} />;
       case 'cooperative': return <CooperativeForm data={formData} onChange={handleInputChange} onFileChange={handleFileChange} />;
       default: return <TouristForm data={formData} onChange={handleInputChange} />;

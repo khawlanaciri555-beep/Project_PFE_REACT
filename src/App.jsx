@@ -8,6 +8,7 @@ import { AuthProvider } from './context/AuthContext';
 import PlaceDetails from './Pages/PlaceDetails';
 import Explore from './Pages/Explore';
 import Planning from './Pages/Planning';
+import Comments from './Pages/Comments';
 import Dashboard from './Pages/Dashboard/Dashboard';
 import Favorites from './Pages/Dashboard/Favorites';
 import BookingRequests from './Pages/Dashboard/BookingRequests';
@@ -33,6 +34,8 @@ function App() {
           <Route path="/place/:id" element={<PlaceDetails />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/planning" element={<Planning />} />
+          <Route path="/place/:id/comments" element={<Comments />} />
+          <Route path="/comments/:id" element={<Comments />} />
           
           {/* Protected Dashboard Routes */}
           {/* <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />

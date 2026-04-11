@@ -25,43 +25,6 @@ export const TouristForm = ({ data, onChange }) => (
   </>
 );
 
-export const GuideForm = ({ data, onChange, onFileChange }) => (
-  <>
-    <FloatingInput
-      icon={FaEnvelope}
-      label="Email Address"
-      type="email"
-      name="email"
-      value={data.email}
-      onChange={onChange}
-      required
-    />
-    <FloatingInput
-      icon={FaLock}
-      label="Password"
-      type="password"
-      name="password"
-      value={data.password}
-      onChange={onChange}
-      required
-    />
-    <FloatingInput
-      icon={FaPhone}
-      label="Phone Number"
-      type="tel"
-      name="phone"
-      value={data.phone}
-      onChange={onChange}
-      required
-    />
-    <FileUpload
-      label="Upload License"
-      description="PDF or Image of your guide license"
-      onChange={(e) => onFileChange(e, 'license')}
-    />
-  </>
-);
-
 export const HotelForm = ({ data, onChange, onFileChange }) => (
   <>
     <FloatingInput

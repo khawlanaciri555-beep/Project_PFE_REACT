@@ -172,7 +172,6 @@ const MyServices = () => {
                         >
                             <option value="">Select...</option>
                             <option value="Hébergement">Hébergement</option>
-                            <option value="Guide">Guide</option>
                             <option value="Transport">Transport</option>
                             <option value="Activités">Activités</option>
                         </select>

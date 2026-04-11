@@ -76,7 +76,7 @@ const LandingPage = () => {
         </div>
 
         <h1 className="landing-title">
-          <span className="title-line-1">Al‑Riad</span>
+          <span className="title-line-1">Welcome</span>
           <span className="title-line-2">
             <em>The</em> Marrakech <em>Guide</em>
           </span>

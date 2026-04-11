@@ -4,16 +4,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Layout from '../Components/Layout';
 import api from '../api/axios';
 import { AuthContext } from '../context/AuthContext';
+import FavoriteButton from '../Components/FavoriteButton';
+import RatingStars from '../Components/RatingStars';
 import BookingModal from '../Components/BookingModal';
+import { Link } from 'react-router-dom';
+import { FaCommentDots } from 'react-icons/fa';
 import './PlaceDetails.css';
+import getImageUrl from '../utils/imageUrl';
 
 // SVG Icons
 const Icons = {
-  Guides: () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-    </svg>
-  ),
   Hotels: () => (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
@@ -90,16 +90,17 @@ const PlaceDetails = () => {
   
   const [place, setPlace] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('guides');
-  const [isMapVisible, setIsMapVisible] = useState(false);
+  const [activeTab, setActiveTab] = useState('hotels');
   const [selectedService, setSelectedService] = useState(null);
+  const [currentImgIndex, setCurrentImgIndex] = useState(0);
+  const [isMapVisible, setIsMapVisible] = useState(false);
 
   useEffect(() => {
     const fetchPlaceDetails = async () => {
       try {
         setLoading(true);
-        const response = await api.get(`/services/${id}`);
-        setPlace(response.data);
+        const response = await api.get(`/places/${id}`);
+        setPlace(response.data.data ? response.data.data : response.data);
       } catch (err) {
         console.error('Error fetching place details', err);
       } finally {
@@ -108,6 +109,30 @@ const PlaceDetails = () => {
     };
     fetchPlaceDetails();
   }, [id]);
+
+  useEffect(() => {
+    if (place?.images && place.images.length > 1) {
+      const interval = setInterval(() => {
+        setCurrentImgIndex((prev) => (prev + 1) % place.images.length);
+      }, 4000);
+      return () => clearInterval(interval);
+    }
+  }, [place]);
+
+  const handleRate = async (value) => {
+    if (!user) {
+      navigate('/login', { state: { from: `/place/${id}` } });
+      return;
+    }
+    try {
+      await api.post('/ratings', { place_id: id, rating: value });
+      // Refresh place data to show new average
+      const response = await api.get(`/places/${id}`);
+      setPlace(response.data.data ? response.data.data : response.data);
+    } catch (err) {
+      console.error('Error submitting rating', err);
+    }
+  };
 
   const handleBookClick = (service) => {
     if (!user) {
@@ -146,7 +171,6 @@ const PlaceDetails = () => {
   }
 
   const tabs = [
-    { id: 'guides', label: 'Guides', icon: Icons.Guides },
     { id: 'hotels', label: 'Hôtels', icon: Icons.Hotels },
     { id: 'activites', label: 'Activités', icon: Icons.Activites },
     { id: 'restaurants', label: 'Restaurants', icon: Icons.Restaurants },
@@ -154,6 +178,7 @@ const PlaceDetails = () => {
   ];
 
   const currentServices = place.related_services?.[activeTab] || [];
+  const galleryImages = place.images && place.images.length > 0 ? place.images : [place.image];
 
   return (
     <Layout>
@@ -163,46 +188,74 @@ const PlaceDetails = () => {
         <div className="max-container">
           <header className="details-header">
             <motion.button 
-              whileHover={{ rotate: 90, scale: 1.1 }}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              whileHover={{ scale: 1.05 }}
               onClick={() => navigate('/')}
-              className="close-btn"
-              aria-label="Fermer"
+              className="back-btn-minimal"
             >
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
               </svg>
+              <span>Explorer Marrakech</span>
             </motion.button>
           </header>
 
           <main className="main-content-wrapper">
-            <motion.div 
-              layout
-              className={`details-split-container ${isMapVisible ? 'map-open' : ''}`}
-            >
-              {/* Left Side: Photo & Info */}
-              <motion.div 
-                layout
-                className="place-hero-container"
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              >
+             {/* Dynamic Layout: Split when Map is open */}
+             <motion.div 
+               layout
+               className={`details-split-container ${isMapVisible ? 'map-open' : ''}`}
+             >
+                {/* 1. Hero / Info Box (Slider Inside) */}
                 <motion.div 
-                  className="place-hero"
+                  layout
+                  className="place-hero-legacy"
                 >
-                  <div className="hero-image-wrap">
-                    <img src={place.image} alt={place.title} />
-                    <div className="hero-image-overlay" />
+                  <div className="hero-slider-wrap">
+                    <AnimatePresence mode="wait">
+                      <motion.img 
+                        key={currentImgIndex}
+                        src={getImageUrl(galleryImages[currentImgIndex])} 
+                        alt={place.title}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.8 }}
+                      />
+                    </AnimatePresence>
+                    <div className="img-overlay-light" />
                   </div>
                   
-                  <div className="hero-info-wrap">
-                    <span className="category-tag">
-                      {place.category}
-                    </span>
-                    <h1 className="place-title">
-                      {place.title}
-                    </h1>
-                    <p className="place-description">
-                      {place.description}
-                    </p>
+                    <div className="hero-info-legacy" style={{ position: 'relative' }}>
+                      <FavoriteButton 
+                        placeId={place.id} 
+                        initialIsFavorited={place.is_favorited} 
+                        initialFavoriteId={place.favorite_id}
+                        style={{ top: '20px', right: '20px' }} 
+                      />
+                      
+                      <Link to={`/place/${place.id}/comments`} className="comment-btn-bounce" style={{ bottom: '20px', right: '20px', top: 'auto' }}>
+                        <FaCommentDots />
+                      </Link>
+
+                      <span className="info-tag">{place.category}</span>
+                    <h1 className="info-title">{place.title}</h1>
+                    <div style={{ marginBottom: '1.5rem' }}>
+                      <RatingStars 
+                         rating={place.rating_avg} 
+                         totalRatings={place.total_ratings} 
+                         interactive={true}
+                         onRate={handleRate}
+                         size={24}
+                      />
+                      {place.user_rating && (
+                        <p style={{ fontSize: '0.8rem', color: 'var(--primary)', marginTop: '0.4rem', fontWeight: '600' }}>
+                          Votre note : {place.user_rating} / 5
+                        </p>
+                      )}
+                    </div>
+                    <p className="info-desc">{place.description}</p>
                     
                     <motion.div 
                       onClick={() => setIsMapVisible(!isMapVisible)}
@@ -222,44 +275,45 @@ const PlaceDetails = () => {
                     </motion.div>
                   </div>
                 </motion.div>
-              </motion.div>
 
-              {/* Right Side: Map */}
-              <AnimatePresence>
-                {isMapVisible && (
-                  <motion.div 
-                    initial={{ opacity: 0, x: 100, scale: 0.95 }}
-                    animate={{ opacity: 1, x: 0, scale: 1 }}
-                    exit={{ opacity: 0, x: 100, scale: 0.95 }}
-                    transition={{ type: "spring", stiffness: 200, damping: 25 }}
-                    className="map-container-side"
-                  >
-                    <div className="map-frame">
-                      {/* Placeholder for map iframe */}
-                      <iframe 
-                        title="Marrakech Map"
-                        src={`https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d13587.21!2d${place.coordinates.split(',')[1]}!3d${place.coordinates.split(',')[0]}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sfr!2sma!4v1712067751965!5m2!1sfr!2sma`}
-                        width="100%" 
-                        height="100%" 
-                        style={{ border: 0 }} 
-                        allowFullScreen="" 
-                        loading="lazy" 
-                      />
-                      <div className="map-overlay-badge">
-                        <span>{place.title}</span>
+                {/* 2. Side Map (Appears when mapVisible is true) */}
+                <AnimatePresence>
+                  {isMapVisible && (
+                    <motion.div 
+                      key="side-map"
+                      initial={{ opacity: 0, x: 50, scale: 0.95 }}
+                      animate={{ opacity: 1, x: 0, scale: 1 }}
+                      exit={{ opacity: 0, x: 50, scale: 0.95 }}
+                      transition={{ type: "spring", stiffness: 200, damping: 25 }}
+                      className="side-map-container"
+                    >
+                      <div className="map-frame-wrapper">
+                        <iframe 
+                          title="Marrakech Map"
+                          src={`https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d13587.21!2d${place.coordinates.split(',')[1]}!3d${place.coordinates.split(',')[0]}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sfr!2sma!4v1712067751965!5m2!1sfr!2sma`}
+                          width="100%" 
+                          height="100%" 
+                          style={{ border: 0 }} 
+                          allowFullScreen="" 
+                          loading="lazy" 
+                        />
                       </div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+             </motion.div>
 
             {/* Services Section */}
             <div className="services-section">
-              <div className="section-head">
-                <h2 className="section-subtitle">Services Exclusifs</h2>
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="section-head"
+              >
+                <h2 className="section-subtitle">Découvrez nos services</h2>
                 <div className="section-line" />
-              </div>
+              </motion.div>
               
               <div className="tabs-filter">
                 {tabs.map(tab => (
@@ -278,9 +332,9 @@ const PlaceDetails = () => {
                   <motion.div 
                     key={activeTab}
                     className="grid-wrapper"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
                   >
                     {currentServices.length > 0 ? (
                       currentServices.map((service, index) => (
@@ -292,8 +346,8 @@ const PlaceDetails = () => {
                         />
                       ))
                     ) : (
-                      <div style={{ padding: '4rem 0', textAlign: 'center', gridColumn: '1 / -1', opacity: 0.5 }}>
-                        <p>Aucun service disponible pour le moment dans cette catégorie.</p>
+                      <div className="empty-services">
+                        <p>Aucun service disponible pour le moment.</p>
                       </div>
                     )}
                   </motion.div>
@@ -315,5 +369,6 @@ const PlaceDetails = () => {
     </Layout>
   );
 };
+
 
 export default PlaceDetails;
