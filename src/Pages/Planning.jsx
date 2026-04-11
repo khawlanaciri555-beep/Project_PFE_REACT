@@ -118,7 +118,7 @@ const Planning = () => {
 
         <div className="max-container">
           <div className="planning-header">
-            <span className="section-eyebrow">CONCIERGERIE AL-RIAD</span>
+            <span className="section-eyebrow">CONCIERGERIE VibKech</span>
             <h1 className="planning-title premium-font">Créez votre évasion de luxe</h1>
 
             {/* Step Indicator (Stepper) */}
