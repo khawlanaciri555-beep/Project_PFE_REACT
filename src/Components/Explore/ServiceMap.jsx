@@ -26,6 +26,38 @@ const terracottaIcon = new L.DivIcon({
   popupAnchor: [0, -24],
 });
 
+const MapBounds = ({ items }) => {
+  const map = useMap();
+  React.useEffect(() => {
+    if (items && items.length > 0) {
+      const bounds = [];
+      items.forEach(item => {
+        let lat = null, lng = null;
+        if (item.coordinates && typeof item.coordinates === 'string') {
+          const parts = item.coordinates.split(',');
+          if (parts.length === 2) {
+             const pLat = parseFloat(parts[0].trim());
+             const pLng = parseFloat(parts[1].trim());
+             if (!isNaN(pLat) && !isNaN(pLng)) { lat = pLat; lng = pLng; }
+          }
+        } else if (item.lat && item.lng) {
+             const pLat = parseFloat(item.lat);
+             const pLng = parseFloat(item.lng);
+             if (!isNaN(pLat) && !isNaN(pLng)) { lat = pLat; lng = pLng; }
+        }
+        if (lat !== null && lng !== null) {
+          bounds.push([lat, lng]);
+        }
+      });
+      if (bounds.length > 0) {
+        // give it a slight delay so map is fully rendered
+        setTimeout(() => map.fitBounds(bounds, { padding: [50, 50] }), 100);
+      }
+    }
+  }, [items, map]);
+  return null;
+};
+
 const ServiceMap = ({ items }) => {
   const defaultCenter = [31.6295, -7.9811]; // Medina, Marrakech
 
@@ -42,6 +74,7 @@ const ServiceMap = ({ items }) => {
           url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
           className="premium-tiles"
         />
+        <MapBounds items={items} />
         
         {items.map((item) => {
           let lat = 31.63;
