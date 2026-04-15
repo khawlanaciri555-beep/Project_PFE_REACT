@@ -1,0 +1,140 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "explore": "Explorer",
+    "planning": "Planification",
+    "about": "À propos",
+    "login": "Connexion",
+    "register": "S'inscrire",
+    "logout": "Déconnexion",
+    "dashboard": "Mon Tableau de Bord",
+    "hello": "Bonjour"
+  },
+  "home": {
+    "hero": {
+      "title": "Découvrez Marrakech",
+      "subtitle": "Un Voyage à Travers le Temps et les Couleurs",
+      "description": "Entrez au cœur de la Ville Rouge, où d'anciens palais murmurent des récits de dynasties et des souks vibrants offrent un festin des sens."
+    },
+    "destinations": {
+      "eyebrow": "DESTINATIONS POPULAIRES",
+      "title": "Explorer Marrakech",
+      "seeMore": "Explorer tout Marrakech",
+      "loading": "Chargement des destinations...",
+      "viewDetail": "Voir détail →"
+    },
+    "stats": {
+      "founded": "FONDÉE",
+      "monuments": "MONUMENTS",
+      "tourists": "TOURISTES PAR AN",
+      "heritage": "PATRIMOINE CULTUREL"
+    },
+    "testimonials": {
+      "eyebrow": "TÉMOIGNAGES",
+      "title": "Échos de la Cour"
+    }
+  },
+  "planning": {
+    "eyebrow": "CONCIERGERIE VibKech",
+    "title": "Créez votre évasion de luxe",
+    "steps": {
+      "destinations": "Destinations",
+      "experiences": "Expériences",
+      "accommodation": "Hébergement",
+      "signature": "Signature"
+    },
+    "step1": {
+      "title": "Où et quand commence l'aventure ?",
+      "arrival": "Arrivée",
+      "departure": "Départ",
+      "nights": "nuits",
+      "dreamDestinations": "Destinations de Rêve",
+      "continue": "Continuer"
+    },
+    "step2": {
+      "title": "Expériences sur mesure",
+      "budget": "Votre budget par activité",
+      "all": "Tout",
+      "selected": "Sélectionné",
+      "book": "Réserver",
+      "next": "Suivant"
+    },
+    "step3": {
+      "title": "Hébergement & Logistique",
+      "luxuryRetreats": "Retraites de Luxe",
+      "elegantMobility": "Mobilité Élégante",
+      "pickupLocation": "Lieu de ramassage",
+      "finalDestination": "Destination finale",
+      "previous": "Précédent",
+      "signature": "Signature"
+    },
+    "step4": {
+      "title": "Votre Itinéraire Signature",
+      "timeline": "Chronologie",
+      "destinations": "Destinations",
+      "experiences": "Expériences Choisies",
+      "accommodation": "Hébergement Prestige",
+      "noHotel": "Veuillez sélectionner un hôtel",
+      "totalInvestment": "INVESTISSEMENT TOTAL",
+      "adjust": "Ajuster",
+      "confirm": "Confirmer mon Évasion",
+      "confirmSuccess": "Félicitations ! Votre voyage de luxe est planifié.",
+      "confirmError": "Erreur lors de la confirmation."
+    },
+    "budget": {
+      "total": "ESTIMATION TOTAL",
+      "places": "Lieux",
+      "nights": "Nuits",
+      "next": "Suivant"
+    }
+  },
+  "explore": {
+    "title": "Explorer Marrakech",
+    "search": "Rechercher des destinations...",
+    "grid": "Grille",
+    "map": "Carte",
+    "seeMore": "Voir plus",
+    "defaultDescription": "Une expérience inoubliable au cœur de Marrakech.",
+    "filters": {
+      "all": "Tout",
+      "monuments": "Monuments",
+      "gardens": "Jardins",
+      "museums": "Musées",
+      "nature": "Nature",
+      "adventure": "Aventure"
+    },
+    "noResults": "Aucune destination trouvée."
+  },
+  "auth": {
+    "login": {
+      "title": "Bon retour",
+      "email": "Adresse e-mail",
+      "password": "Mot de passe",
+      "submit": "Se connecter",
+      "noAccount": "Vous n'avez pas de compte ?",
+      "register": "S'inscrire"
+    },
+    "register": {
+      "title": "Créer un compte",
+      "name": "Nom complet",
+      "email": "Adresse e-mail",
+      "password": "Mot de passe",
+      "confirm": "Confirmer le mot de passe",
+      "submit": "Créer un compte",
+      "haveAccount": "Déjà un compte ?",
+      "login": "Se connecter"
+    }
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur s'est produite",
+    "back": "Retour",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "confirm": "Confirmer",
+    "perNight": "MAD/nuit",
+    "mad": "MAD"
+  }
+}

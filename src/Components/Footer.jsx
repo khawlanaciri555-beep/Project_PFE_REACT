@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import './Footer.css';
 
 const Footer = () => {
+  const { t } = useTranslation();
   return (
     <footer className="home-footer">
       <div className="footer-top">
@@ -28,10 +30,10 @@ const Footer = () => {
         <div className="footer-col">
           <h4>Useful Links</h4>
           <ul>
-            <li><Link to="/home">Home</Link></li>
-            <li><Link to="/explore">Explore Marrakech</Link></li>
-            <li><Link to="/planning">Trip Planning</Link></li>
-            <li><Link to="/login">Login / Sign Up</Link></li>
+            <li><Link to="/home">{t('nav.home')}</Link></li>
+            <li><Link to="/explore">{t('nav.explore')}</Link></li>
+            <li><Link to="/planning">{t('nav.planning')}</Link></li>
+            <li><Link to="/login">{t('nav.login')} / {t('nav.register')}</Link></li>
           </ul>
         </div>
       </div>

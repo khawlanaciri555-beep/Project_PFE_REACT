@@ -43,34 +43,57 @@ const ServiceMap = ({ items }) => {
           className="premium-tiles"
         />
         
-        {items.map((item) => (
-          <Marker 
-            key={item.id} 
-            position={[item.lat || 31.63, item.lng || -7.98]} 
-            icon={terracottaIcon}
-          >
-            <Popup className="signature-popup">
-              <div className="premium-popup-content">
-                <div className="popup-img-wrap">
-                  <img 
-                    src={item.image || '/logo picter/placeholder.jpg'} 
-                    alt={item.title} 
-                  />
-                  <div className="popup-badge">Premium</div>
+        {items.map((item) => {
+          let lat = 31.63;
+          let lng = -7.98;
+          if (item.coordinates && typeof item.coordinates === 'string') {
+            const parts = item.coordinates.split(',');
+            if (parts.length === 2) {
+              const pLat = parseFloat(parts[0].trim());
+              const pLng = parseFloat(parts[1].trim());
+              if (!isNaN(pLat) && !isNaN(pLng)) {
+                lat = pLat;
+                lng = pLng;
+              }
+            }
+          } else if (item.lat && item.lng) {
+            const pLat = parseFloat(item.lat);
+            const pLng = parseFloat(item.lng);
+            if (!isNaN(pLat) && !isNaN(pLng)) {
+                lat = pLat;
+                lng = pLng;
+            }
+          }
+          
+          return (
+            <Marker 
+              key={item.id || Math.random()} 
+              position={[lat, lng]} 
+              icon={terracottaIcon}
+            >
+              <Popup className="signature-popup">
+                <div className="premium-popup-content">
+                  <div className="popup-img-wrap">
+                    <img 
+                      src={item.image || '/logo picter/placeholder.jpg'} 
+                      alt={item.title} 
+                    />
+                    <div className="popup-badge">Premium</div>
+                  </div>
+                  <div className="popup-info">
+                     <h4>{item.title}</h4>
+                     <div className="popup-meta">
+                        <span className="p-price">{item.price && item.price !== 'Gratuit' ? item.price : 'Gratuit'}</span>
+                        <Link to={`/place/${item.id}`} className="p-link">
+                          Détails &rarr;
+                        </Link>
+                     </div>
+                  </div>
                 </div>
-                <div className="popup-info">
-                   <h4>{item.title}</h4>
-                   <div className="popup-meta">
-                      <span className="p-price">{item.price} MAD</span>
-                      <Link to={`/place/${item.id}`} className="p-link">
-                        Détails &rarr;
-                      </Link>
-                   </div>
-                </div>
-              </div>
-            </Popup>
-          </Marker>
-        ))}
+              </Popup>
+            </Marker>
+          );
+        })}
       </MapContainer>
       
       {/* Decorative Gradient Overlay */}

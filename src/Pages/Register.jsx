@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { RoleSelector } from '../Components/Register/RoleSelector';
 import {
   TouristForm,
@@ -16,6 +17,7 @@ const Register = () => {
   const [role, setRole] = useState('tourist');
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const { t } = useTranslation();
 
   // Unified form state
   const [formData, setFormData] = useState({
@@ -81,10 +83,10 @@ const Register = () => {
           <div className="success-icon">
             <FaCheckCircle />
           </div>
-          <h1>Registration Successful!</h1>
-          <p>Your account as a <strong>{role}</strong> has been created. Please check your email for verification.</p>
+          <h1>{t('auth.register.title')} ✓</h1>
+          <p>{t('auth.register.haveAccount')}</p>
           <Link to="/login" style={{ textDecoration: 'none' }}>
-            <GradientButton>Go to Login</GradientButton>
+            <GradientButton>{t('auth.login.submit')}</GradientButton>
           </Link>
         </motion.div>
       </div>
@@ -95,8 +97,8 @@ const Register = () => {
     <div className="auth-page">
       <div className="register-card">
         <div className="auth-header">
-          <h1>Create Account</h1>
-          <p>Join the VibKech experience</p>
+          <h1>{t('auth.register.title')}</h1>
+          <p>VibKech</p>
         </div>
 
         <RoleSelector activeRole={role} setRole={(r) => {
@@ -119,13 +121,13 @@ const Register = () => {
 
           <div style={{ marginTop: '2.5rem' }}>
             <GradientButton loading={loading}>
-              Register as {role.charAt(0).toUpperCase() + role.slice(1)}
+              {t('auth.register.submit')}
             </GradientButton>
           </div>
         </form>
 
         <div className="auth-footer" style={{ textAlign: 'center', marginTop: '2rem' }}>
-          <p>Already have an account? <Link to="/login" style={{ color: 'var(--input-focus)', fontWeight: 'bold' }}>Login here</Link></p>
+          <p>{t('auth.register.haveAccount')} <Link to="/login" style={{ color: 'var(--input-focus)', fontWeight: 'bold' }}>{t('auth.register.login')}</Link></p>
         </div>
       </div>
     </div>

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+
 /* Register & Login Glassmorphism Styles */
 :root {
   --primary-gradient: linear-gradient(135deg, #CC5533 0%, #CC5533 100%);
@@ -332,8 +334,6 @@
 /* ═══════════════════════════════════════════
    LOGIN PAGE — Split Panel Design
    ═══════════════════════════════════════════ */
-
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
 
 .login-page {
   display: flex;

@@ -1,0 +1,140 @@
+{
+  "nav": {
+    "home": "Home",
+    "explore": "Explore",
+    "planning": "Planning",
+    "about": "About",
+    "login": "Login",
+    "register": "Sign Up",
+    "logout": "Logout",
+    "dashboard": "My Dashboard",
+    "hello": "Hello"
+  },
+  "home": {
+    "hero": {
+      "title": "Discover Marrakech",
+      "subtitle": "A Journey Through Time and Color",
+      "description": "Step into the heart of the Red City, where ancient palaces whisper tales of dynasties and vibrant souks offer a sensory feast unlike anywhere on earth."
+    },
+    "destinations": {
+      "eyebrow": "POPULAR DESTINATIONS",
+      "title": "Explore Marrakech",
+      "seeMore": "Explore all of Marrakech",
+      "loading": "Loading destinations...",
+      "viewDetail": "View details →"
+    },
+    "stats": {
+      "founded": "FOUNDED",
+      "monuments": "MONUMENTS",
+      "tourists": "TOURISTS YEARLY",
+      "heritage": "CULTURAL HERITAGE"
+    },
+    "testimonials": {
+      "eyebrow": "GUEST STORIES",
+      "title": "Echoes of the Courtyard"
+    }
+  },
+  "planning": {
+    "eyebrow": "CONCIERGERIE VibKech",
+    "title": "Create your luxury escape",
+    "steps": {
+      "destinations": "Destinations",
+      "experiences": "Experiences",
+      "accommodation": "Accommodation",
+      "signature": "Signature"
+    },
+    "step1": {
+      "title": "Where and when does the adventure begin?",
+      "arrival": "Arrival",
+      "departure": "Departure",
+      "nights": "nights",
+      "dreamDestinations": "Dream Destinations",
+      "continue": "Continue"
+    },
+    "step2": {
+      "title": "Tailor-made Experiences",
+      "budget": "Your budget per activity",
+      "all": "All",
+      "selected": "Selected",
+      "book": "Book",
+      "next": "Next"
+    },
+    "step3": {
+      "title": "Accommodation & Logistics",
+      "luxuryRetreats": "Luxury Retreats",
+      "elegantMobility": "Elegant Mobility",
+      "pickupLocation": "Pickup location",
+      "finalDestination": "Final destination",
+      "previous": "Previous",
+      "signature": "Signature"
+    },
+    "step4": {
+      "title": "Your Signature Itinerary",
+      "timeline": "Timeline",
+      "destinations": "Destinations",
+      "experiences": "Chosen Experiences",
+      "accommodation": "Prestige Accommodation",
+      "noHotel": "Please select a hotel",
+      "totalInvestment": "TOTAL INVESTMENT",
+      "adjust": "Adjust",
+      "confirm": "Confirm my Escape",
+      "confirmSuccess": "Congratulations! Your luxury trip is planned.",
+      "confirmError": "Error during confirmation."
+    },
+    "budget": {
+      "total": "TOTAL ESTIMATE",
+      "places": "Places",
+      "nights": "Nights",
+      "next": "Next"
+    }
+  },
+  "explore": {
+    "title": "Explore Marrakech",
+    "search": "Search destinations...",
+    "grid": "Grid",
+    "map": "Map",
+    "seeMore": "See more",
+    "defaultDescription": "An unforgettable experience at the heart of Marrakech.",
+    "filters": {
+      "all": "All",
+      "monuments": "Monuments",
+      "gardens": "Gardens",
+      "museums": "Museums",
+      "nature": "Nature",
+      "adventure": "Adventure"
+    },
+    "noResults": "No destinations found."
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome back",
+      "email": "Email address",
+      "password": "Password",
+      "submit": "Sign in",
+      "noAccount": "Don't have an account?",
+      "register": "Sign up"
+    },
+    "register": {
+      "title": "Create an account",
+      "name": "Full name",
+      "email": "Email address",
+      "password": "Password",
+      "confirm": "Confirm password",
+      "submit": "Create account",
+      "haveAccount": "Already have an account?",
+      "login": "Sign in"
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "back": "Back",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "confirm": "Confirm",
+    "perNight": "MAD/night",
+    "mad": "MAD"
+  }
+}

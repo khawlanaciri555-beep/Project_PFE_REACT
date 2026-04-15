@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import Layout from '../Components/Layout';
 import api from '../api/axios';
+import { useTranslation } from 'react-i18next';
 import ServiceMap from '../Components/Explore/ServiceMap';
 import FavoriteButton from '../Components/FavoriteButton';
 import RatingStars from '../Components/RatingStars';
@@ -13,7 +14,8 @@ import getImageUrl from '../utils/imageUrl';
 const Explore = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'map'
+  const [viewMode, setViewMode] = useState('grid');
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchExploreData = async () => {
@@ -41,10 +43,10 @@ const Explore = () => {
               transition={{ duration: 0.8 }}
               className="explore-hero-card"
             >
-              <span className="section-eyebrow">DÉCOUVREZ TOUTE LA VILLE</span>
+              <span className="section-eyebrow">{t('explore.title').toUpperCase()}</span>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '1rem' }}>
                 <div>
-                    <h1 className="explore-title">Explorer Marrakech</h1>
+                    <h1 className="explore-title">{t('explore.title')}</h1>
                     <p className="explore-subtitle">
                         Des palais impériaux aux jardins secrets, découvrez chaque recoin de la ville ocre.
                     </p>
@@ -66,7 +68,7 @@ const Explore = () => {
                        transition: '0.3s'
                      }}
                    >
-                     <FaThLarge /> Grille
+                     <FaThLarge /> {t('explore.grid')}
                    </button>
                    <button 
                      onClick={() => setViewMode('map')}
@@ -84,7 +86,7 @@ const Explore = () => {
                         transition: '0.3s'
                      }}
                    >
-                     <FaMapMarkedAlt /> Carte
+                     <FaMapMarkedAlt /> {t('explore.map')}
                    </button>
                 </div>
               </div>
@@ -144,10 +146,10 @@ const Explore = () => {
                       <div style={{ marginBottom: '0.8rem' }}>
                         <RatingStars rating={place.rating_avg} showCount={false} size={14} />
                       </div>
-                      <p>{place.description || 'Une expérience inoubliable au cœur de Marrakech.'}</p>
+                      <p>{place.description || t('explore.defaultDescription')}</p>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem' }}>
                          <span style={{ fontWeight: '700', color: 'var(--primary)' }}>{place.price}</span>
-                         <span className="new-link-text" style={{ fontSize: '0.85rem', fontWeight: 'bold' }}>Voir plus &rarr;</span>
+                         <span className="new-link-text" style={{ fontSize: '0.85rem', fontWeight: 'bold' }}>{t('explore.seeMore')} &rarr;</span>
                       </div>
                     </div>
                   </motion.div>
@@ -155,15 +157,20 @@ const Explore = () => {
               ))}
             </motion.div>
           ) : (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+            <motion.div 
+               initial={{ opacity: 0 }} 
+               animate={{ opacity: 1 }} 
+               transition={{ duration: 0.5 }}
+               style={{ height: '70vh', minHeight: '500px', width: '100%', borderRadius: '1.5rem', overflow: 'hidden', boxShadow: '0 10px 40px rgba(0,0,0,0.1)' }}
+            >
                <ServiceMap items={items} />
             </motion.div>
           )}
 
           {!loading && items.length === 0 && (
             <div style={{ textAlign: 'center', padding: '5rem 0', opacity: 0.6 }}>
-               <h3>Aucun résultat trouvé.</h3>
-               <p>Essayez d'autres filtres ou revenez plus tard.</p>
+               <h3>{t('explore.noResults')}</h3>
+               <p>{t('common.error')}</p>
             </div>
           )}
         </div>

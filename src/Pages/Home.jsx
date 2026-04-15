@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import Layout from '../Components/Layout';
 import api from '../api/axios';
 import FavoriteButton from '../Components/FavoriteButton';
@@ -24,21 +25,15 @@ const Counter = ({ value, label, index }) => {
       
       const target = parseInt(value.replace(/[^0-9]/g, ''));
       let startTime = null;
-      const duration = 1000; // 1 second - subtle and fast
+      const duration = 1000;
 
       const animate = (timestamp) => {
         if (!startTime) startTime = timestamp;
         const progress = timestamp - startTime;
         const percentage = Math.min(progress / duration, 1);
-        
-        // Ease-out quad for smoother finish
         const easeOutPercentage = 1 - (1 - percentage) * (1 - percentage);
-        
         setCount(Math.floor(easeOutPercentage * target));
-
-        if (percentage < 1) {
-          requestAnimationFrame(animate);
-        }
+        if (percentage < 1) requestAnimationFrame(animate);
       };
 
       requestAnimationFrame(animate);
@@ -50,7 +45,7 @@ const Counter = ({ value, label, index }) => {
   return (
     <motion.div 
       ref={ref}
-      className={`stat-item ${label === 'CULTURAL HERITAGE' ? 'unesco' : ''}`}
+      className={`stat-item ${label === 'unesco' ? 'unesco' : ''}`}
       initial={{ opacity: 0, y: 15 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.1, ease: "easeOut" }}
@@ -67,6 +62,7 @@ const Home = () => {
   const sliderRef = useRef(null);
   const [places, setPlaces] = useState([]);
   const { scrollY } = useScroll();
+  const { t } = useTranslation();
   
   // Parallax / Smooth scroll effect for hero
   const heroOpacity = useTransform(scrollY, [0, 400], [1, 0]);
@@ -74,14 +70,14 @@ const Home = () => {
   const videoScale = useTransform(scrollY, [0, 400], [1, 1.1]);
 
   useEffect(() => {
-    // جلب الأماكن من Laravel
+    // recepere les places
     const fetchPlaces = async () => {
       try {
         const response = await api.get('/places');
         const result = response.data;
         setPlaces(result.data || []);
       } catch (err) {
-        console.error("خطأ في جلب الأماكن", err);
+        console.error("failed to load places", err);
       }
     };
     fetchPlaces();
@@ -89,11 +85,10 @@ const Home = () => {
     const interval = setInterval(() => {
       if (sliderRef.current) {
         const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
-        // Adjusted for 7 cards
         if (scrollLeft + clientWidth >= scrollWidth - 20) {
           sliderRef.current.scrollTo({ left: 0, behavior: 'smooth' });
         } else {
-          sliderRef.current.scrollBy({ left: 320, behavior: 'smooth' }); // shifted scroll amount for more cards
+          sliderRef.current.scrollBy({ left: 320, behavior: 'smooth' });
         }
       }
     }, 3000);
@@ -123,12 +118,11 @@ const Home = () => {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            style={{ 
-              lineHeight: '1.1',
-              marginBottom: '1.5rem'
-            }}
+            style={{ lineHeight: '1.1', marginBottom: '1.5rem' }}
           >
-            <span style={{ color: 'rgba(226, 218, 215, 1)', fontSize: '4.8rem', fontWeight: '800' }}>Discover Marrakech</span> <br/>
+            <span style={{ color: 'rgba(226, 218, 215, 1)', fontSize: '4.8rem', fontWeight: '800' }}>
+              {t('home.hero.title')}
+            </span> <br/>
             <span style={{ 
               background: 'linear-gradient(90deg, #EAD3B1, #C58A3A)',
               WebkitBackgroundClip: 'text',
@@ -139,7 +133,9 @@ const Home = () => {
               textTransform: 'uppercase',
               letterSpacing: '4px',
               marginTop: '0.5rem'
-            }}>A Journey Through Time and Color</span>
+            }}>
+              {t('home.hero.subtitle')}
+            </span>
           </motion.h1>
           <motion.p 
             className="hero-subtitle"
@@ -148,9 +144,7 @@ const Home = () => {
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
             style={{ color: '#f7f0e7ff', opacity: 1 }}
           >
-            Step into the heart of the Red City, where ancient palaces whisper tales<br/>
-            of dynasties and vibrant souks offer a sensory feast unlike anywhere an<br/>
-            earth.
+            {t('home.hero.description')}
           </motion.p>
         </motion.div>
       </section>
@@ -159,8 +153,8 @@ const Home = () => {
       <section className="destinations-section">
         <div className="section-header">
           <div>
-            <span className="section-eyebrow">POPULAR DESTINATIONS</span>
-            <h2 className="section-title">Explorer Marrakech</h2>
+            <span className="section-eyebrow">{t('home.destinations.eyebrow')}</span>
+            <h2 className="section-title">{t('home.destinations.title')}</h2>
           </div>
         </div>
 
@@ -174,29 +168,29 @@ const Home = () => {
                     initialIsFavorited={place.is_favorited} 
                     initialFavoriteId={place.favorite_id}
                   />
-                  <img src={getImageUrl(place.image)} alt={place.title} onClick={() => navigate(`/place/${place.id}`)} />
+                  <img src={getImageUrl(place.image)} alt={place.title} />
                   <div className="image-overlay">
                     <span className="new-card-tag">{place.category || 'Destination'}</span>
                     <h3 className="new-card-title">{place.title}</h3>
                   </div>
                 </div>
+                {/* pour afficher la carte du pluce */}
                 <div className="new-card-content">
                   <div style={{ marginBottom: '0.8rem' }}>
                     <RatingStars rating={place.rating_avg} showCount={false} size={14} />
                   </div>
-                  <p>{place.description?.substring(0, 90)}...</p>
                   <Link to={`/place/${place.id}`} className="new-btn-detail">Voir détail &rarr;</Link>
                 </div>
               </div>
             ))
           ) : (
-             <div style={{ color: "white", padding: "2rem" }}>Chargement des destinations...</div>
+             <div style={{ color: "white", padding: "2rem" }}>{t('home.destinations.loading')}</div>
           )}
         </div>
 
         <div className="section-footer-centered">
           <Link to="/explore" className="btn-see-more">
-            <span>Explorer tout Marrakech</span>
+            <span>{t('home.destinations.seeMore')}</span>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M13 5l7 7-7 7M4 5l7 7-7 7" />
             </svg>
@@ -206,17 +200,17 @@ const Home = () => {
 
       {/* Statistics Section */}
       <section className="stats-section">
-          <Counter value="1062" label="FOUNDED" index={0} />
-          <Counter value="800+" label="MONUMENTS" index={1} />
-          <Counter value="10M+" label="TOURISTS YEARLY" index={2} />
-          <Counter value="UNESCO" label="CULTURAL HERITAGE" index={3} />
+          <Counter value="1062" label={t('home.stats.founded')} index={0} />
+          <Counter value="800+" label={t('home.stats.monuments')} index={1} />
+          <Counter value="10M+" label={t('home.stats.tourists')} index={2} />
+          <Counter value="UNESCO" label={t('home.stats.heritage')} index={3} />
       </section>
 
       {/* Testimonials Section */}
       <section className="testimonials-section">
         <div className="section-header-center">
-            <span className="section-eyebrow">GUEST STORIES</span>
-            <h2 className="section-title">Echoes of the Courtyard</h2>
+            <span className="section-eyebrow">{t('home.testimonials.eyebrow')}</span>
+            <h2 className="section-title">{t('home.testimonials.title')}</h2>
         </div>
 
         <div className="testimonials-masonry">
@@ -255,7 +249,7 @@ const Home = () => {
                    </div>
                </div>
                <p className="quote">
-                 "Authentic, luxurious, and soul-stirring. AL-RIAD is the perfect gateway to Marrakech culture."
+                 "Authentic, luxurious, and soul-stirring. VibKech is the perfect gateway to Marrakech culture."
                </p>
            </div>
 

@@ -1,0 +1,140 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "explore": "Explorar",
+    "planning": "Planificación",
+    "about": "Acerca de",
+    "login": "Iniciar sesión",
+    "register": "Registrarse",
+    "logout": "Cerrar sesión",
+    "dashboard": "Mi Panel",
+    "hello": "Hola"
+  },
+  "home": {
+    "hero": {
+      "title": "Descubre Marrakech",
+      "subtitle": "Un Viaje a Través del Tiempo y el Color",
+      "description": "Adéntrate en el corazón de la Ciudad Roja, donde antiguos palacios susurran relatos de dinastías y vibrantes zocos ofrecen un festín para los sentidos."
+    },
+    "destinations": {
+      "eyebrow": "DESTINOS POPULARES",
+      "title": "Explorar Marrakech",
+      "seeMore": "Explorar todo Marrakech",
+      "loading": "Cargando destinos...",
+      "viewDetail": "Ver detalle →"
+    },
+    "stats": {
+      "founded": "FUNDADA",
+      "monuments": "MONUMENTOS",
+      "tourists": "TURISTAS AL AÑO",
+      "heritage": "PATRIMONIO CULTURAL"
+    },
+    "testimonials": {
+      "eyebrow": "HISTORIAS DE HUÉSPEDES",
+      "title": "Ecos del Patio"
+    }
+  },
+  "planning": {
+    "eyebrow": "CONSERJERÍA VibKech",
+    "title": "Crea tu escapada de lujo",
+    "steps": {
+      "destinations": "Destinos",
+      "experiences": "Experiencias",
+      "accommodation": "Alojamiento",
+      "signature": "Firma"
+    },
+    "step1": {
+      "title": "¿Dónde y cuándo comienza la aventura?",
+      "arrival": "Llegada",
+      "departure": "Salida",
+      "nights": "noches",
+      "dreamDestinations": "Destinos de Ensueño",
+      "continue": "Continuar"
+    },
+    "step2": {
+      "title": "Experiencias a medida",
+      "budget": "Tu presupuesto por actividad",
+      "all": "Todo",
+      "selected": "Seleccionado",
+      "book": "Reservar",
+      "next": "Siguiente"
+    },
+    "step3": {
+      "title": "Alojamiento & Logística",
+      "luxuryRetreats": "Retiros de Lujo",
+      "elegantMobility": "Movilidad Elegante",
+      "pickupLocation": "Lugar de recogida",
+      "finalDestination": "Destino final",
+      "previous": "Anterior",
+      "signature": "Firma"
+    },
+    "step4": {
+      "title": "Tu Itinerario Firma",
+      "timeline": "Cronología",
+      "destinations": "Destinos",
+      "experiences": "Experiencias Elegidas",
+      "accommodation": "Alojamiento Prestigioso",
+      "noHotel": "Por favor selecciona un hotel",
+      "totalInvestment": "INVERSIÓN TOTAL",
+      "adjust": "Ajustar",
+      "confirm": "Confirmar mi Escapada",
+      "confirmSuccess": "¡Felicidades! Tu viaje de lujo está planificado.",
+      "confirmError": "Error al confirmar."
+    },
+    "budget": {
+      "total": "ESTIMACIÓN TOTAL",
+      "places": "Lugares",
+      "nights": "Noches",
+      "next": "Siguiente"
+    }
+  },
+  "explore": {
+    "title": "Explorar Marrakech",
+    "search": "Buscar destinos...",
+    "grid": "Cuadrícula",
+    "map": "Mapa",
+    "seeMore": "Ver más",
+    "defaultDescription": "Una experiencia inolvidable en el corazón de Marrakech.",
+    "filters": {
+      "all": "Todo",
+      "monuments": "Monumentos",
+      "gardens": "Jardines",
+      "museums": "Museos",
+      "nature": "Naturaleza",
+      "adventure": "Aventura"
+    },
+    "noResults": "No se encontraron destinos."
+  },
+  "auth": {
+    "login": {
+      "title": "Bienvenido de nuevo",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "submit": "Iniciar sesión",
+      "noAccount": "¿No tienes cuenta?",
+      "register": "Regístrate"
+    },
+    "register": {
+      "title": "Crear una cuenta",
+      "name": "Nombre completo",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "confirm": "Confirmar contraseña",
+      "submit": "Crear cuenta",
+      "haveAccount": "¿Ya tienes cuenta?",
+      "login": "Inicia sesión"
+    }
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Ha ocurrido un error",
+    "back": "Volver",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "confirm": "Confirmar",
+    "perNight": "MAD/noche",
+    "mad": "MAD"
+  }
+}

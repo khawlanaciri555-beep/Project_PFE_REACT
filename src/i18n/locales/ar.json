@@ -1,0 +1,141 @@
+{
+  "nav": {
+    "home": "الرئيسية",
+    "explore": "استكشف",
+    "planning": "التخطيط",
+    "about": "حول",
+    "login": "تسجيل الدخول",
+    "register": "إنشاء حساب",
+    "logout": "تسجيل الخروج",
+    "dashboard": "لوحة التحكم",
+    "hello": "مرحباً"
+  },
+  "home": {
+    "hero": {
+      "title": "اكتشف مراكش",
+      "subtitle": "رحلة عبر الزمن والألوان",
+      "description": "ادخل إلى قلب المدينة الحمراء، حيث تهمس القصور العريقة بحكايات الأسرات الحاكمة، وتقدم الأسواق الصاخبة مهرجاناً للحواس لا مثيل له."
+    },
+    "destinations": {
+      "eyebrow": "الوجهات الشعبية",
+      "title": "استكشف مراكش",
+      "seeMore": "استكشف كل مراكش",
+      "loading": "جارٍ تحميل الوجهات...",
+      "viewDetail": "عرض التفاصيل ←"
+    },
+    "stats": {
+      "founded": "تأسست",
+      "monuments": "المعالم",
+      "tourists": "سياح سنوياً",
+      "heritage": "تراث ثقافي"
+    },
+    "testimonials": {
+      "eyebrow": "قصص الضيوف",
+      "title": "أصداء الفناء"
+    }
+  },
+  "planning": {
+    "eyebrow": "كونسيرج VibKech",
+    "title": "صمّم رحلتك الفاخرة",
+    "steps": {
+      "destinations": "الوجهات",
+      "experiences": "التجارب",
+      "accommodation": "الإقامة",
+      "signature": "التأكيد"
+    },
+    "step1": {
+      "title": "أين ومتى تبدأ المغامرة؟",
+      "arrival": "الوصول",
+      "departure": "المغادرة",
+      "nights": "ليالٍ",
+      "dreamDestinations": "وجهات الأحلام",
+      "continue": "متابعة"
+    },
+    "step2": {
+      "title": "تجارب مخصصة",
+      "budget": "ميزانيتك لكل نشاط",
+      "all": "الكل",
+      "selected": "تم الاختيار",
+      "book": "احجز",
+      "next": "التالي"
+    },
+    "step3": {
+      "title": "الإقامة والخدمات اللوجستية",
+      "luxuryRetreats": "منتجعات فاخرة",
+      "elegantMobility": "تنقل أنيق",
+      "pickupLocation": "موقع الاستلام",
+      "finalDestination": "الوجهة النهائية",
+      "previous": "السابق",
+      "signature": "التأكيد"
+    },
+    "step4": {
+      "title": "برنامجك السياحي المميز",
+      "timeline": "الجدول الزمني",
+      "destinations": "الوجهات",
+      "experiences": "التجارب المختارة",
+      "accommodation": "إقامة فاخرة",
+      "noHotel": "الرجاء اختيار فندق",
+      "totalInvestment": "إجمالي الاستثمار",
+      "adjust": "تعديل",
+      "confirm": "تأكيد رحلتي",
+      "confirmSuccess": "تهانينا! تم التخطيط لرحلتك الفاخرة.",
+      "confirmError": "حدث خطأ أثناء التأكيد."
+    },
+    "budget": {
+      "total": "التقدير الإجمالي",
+      "places": "الأماكن",
+      "nights": "الليالي",
+      "next": "التالي"
+    }
+  },
+  "explore": {
+    "title": "استكشف مراكش",
+    "search": "ابحث عن وجهات...",
+    "grid": "شبكة",
+    "map": "خريطة",
+    "seeMore": "عرض المزيد",
+    "defaultDescription": "تجربة لا تُنسى في قلب مراكش.",
+    "filters": {
+      "all": "الكل",
+      "monuments": "المعالم",
+      "gardens": "الحدائق",
+      "museums": "المتاحف",
+      "nature": "الطبيعة",
+      "adventure": "المغامرة"
+    },
+    "noResults": "لم يتم العثور على وجهات."
+  },
+
+  "auth": {
+    "login": {
+      "title": "مرحباً بعودتك",
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "submit": "تسجيل الدخول",
+      "noAccount": "ليس لديك حساب؟",
+      "register": "إنشاء حساب"
+    },
+    "register": {
+      "title": "إنشاء حساب",
+      "name": "الاسم الكامل",
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "confirm": "تأكيد كلمة المرور",
+      "submit": "إنشاء حساب",
+      "haveAccount": "لديك حساب بالفعل؟",
+      "login": "تسجيل الدخول"
+    }
+  },
+  "common": {
+    "loading": "جارٍ التحميل...",
+    "error": "حدث خطأ ما",
+    "back": "عودة",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "confirm": "تأكيد",
+    "perNight": "درهم/ليلة",
+    "mad": "درهم"
+  }
+}

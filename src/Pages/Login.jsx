@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import { useTranslation } from 'react-i18next';
 import './Auth.css';
 
 const Login = () => {
@@ -10,6 +11,7 @@ const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const { login } = useContext(AuthContext);
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const handleChange = (e) => {
         setCredentials({ ...credentials, [e.target.name]: e.target.value });
@@ -23,7 +25,7 @@ const Login = () => {
             await login(credentials);
             navigate('/dashboard');
         } catch (err) {
-            setError(err.response?.data?.message || 'Identifiants incorrects. Veuillez réessayer.');
+            setError(err.response?.data?.message || t('common.error'));
         } finally {
             setLoading(false);
         }
@@ -76,8 +78,8 @@ const Login = () => {
                             <span>SECURE LOGIN</span>
                             <span className="lf-line" />
                         </div>
-                        <h1>Se connecter</h1>
-                        <p>Content de vous revoir ! Entrez vos informations.</p>
+                        <h1>{t('auth.login.title')}</h1>
+                        <p>{t('auth.login.title')}</p>
                     </div>
 
                     {/* Error */}
@@ -103,7 +105,7 @@ const Login = () => {
                                 id="login-email"
                             />
                             <label className="floating-label" htmlFor="login-email">
-                                Adresse email
+                                {t('auth.login.email')}
                             </label>
                         </div>
 
@@ -121,7 +123,7 @@ const Login = () => {
                                 id="login-password"
                             />
                             <label className="floating-label" htmlFor="login-password">
-                                Mot de passe
+                                {t('auth.login.password')}
                             </label>
                             <button
                                 type="button"
@@ -148,11 +150,11 @@ const Login = () => {
                             {loading ? (
                                 <>
                                     <div className="spinner" />
-                                    Connexion en cours...
+                                    {t('common.loading')}
                                 </>
                             ) : (
                                 <>
-                                    Continuer
+                                    {t('auth.login.submit')}
                                     <span style={{ fontSize: '1.1rem' }}>→</span>
                                 </>
                             )}
@@ -162,7 +164,7 @@ const Login = () => {
                     {/* Divider */}
                     <div className="login-divider">
                         <span />
-                        <small>ou continuer avec</small>
+                        <small>—</small>
                         <span />
                     </div>
 
@@ -174,8 +176,8 @@ const Login = () => {
 
                     {/* Footer */}
                     <p className="login-form-footer">
-                        Nouveau ici ?{' '}
-                        <Link to="/register" id="go-to-register">Créer un compte</Link>
+                        {t('auth.login.noAccount')}{' '}
+                        <Link to="/register" id="go-to-register">{t('auth.login.register')}</Link>
                     </p>
                 </div>
             </div>
