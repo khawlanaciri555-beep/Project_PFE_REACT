@@ -1,6 +1,6 @@
 .explore-page {
   padding-bottom: 6rem;
-  background: #F8F7F4;
+  background-color: var(--bg-color);
   min-height: 100vh;
 }
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AuthContext } from '../context/AuthContext';
-import { FaBars, FaTimes, FaUser, FaSignOutAlt } from 'react-icons/fa';
+import { FaBars, FaTimes, FaUser, FaSignOutAlt, FaMoon, FaSun } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './LanguageSwitcher/LanguageSwitcher';
 import './Navbar.css';
@@ -15,6 +15,22 @@ const Navbar = () => {
   const navigate = useNavigate();
   const isHomePage = location.pathname === '/home';
   const { t } = useTranslation();
+  
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    return localStorage.getItem('theme') === 'dark';
+  });
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.body.classList.add('dark-mode');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.body.classList.remove('dark-mode');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [isDarkMode]);
+
+  const toggleTheme = () => setIsDarkMode(!isDarkMode);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -53,6 +69,9 @@ const Navbar = () => {
       </div>
 
       <div className="nav-buttons desktop-only">
+        <button onClick={toggleTheme} className="theme-toggle-btn" style={{ background: 'transparent', border: 'none', color: isScrolled || !isHomePage ? 'var(--text-dark)' : '#fff', cursor: 'pointer', fontSize: '1.2rem', marginRight: '1rem', display: 'flex', alignItems: 'center' }}>
+          {isDarkMode ? <FaSun color="#F59E0B" /> : <FaMoon />}
+        </button>
         <LanguageSwitcher />
         {user ? (
           <>
@@ -94,6 +113,12 @@ const Navbar = () => {
               <Link to="/explore" onClick={toggleMobileMenu}>{t('nav.explore')}</Link>
               <Link to="/planning" onClick={toggleMobileMenu}>{t('nav.planning')}</Link>
               <Link to="#" onClick={toggleMobileMenu}>{t('nav.about')}</Link>
+              <button 
+                onClick={toggleTheme} 
+                style={{ background: 'transparent', border: 'none', color: 'var(--text-dark)', cursor: 'pointer', fontSize: '1.2rem', margin: '1rem 0', display: 'flex', alignItems: 'center', gap: '10px' }}
+              >
+                {isDarkMode ? <><FaSun color="#F59E0B" /> {t('nav.light_mode') || 'Light Mode'}</> : <><FaMoon /> {t('nav.dark_mode') || 'Dark Mode'}</>}
+              </button>
               <hr style={{ border: 'none', borderTop: '1px solid rgba(188, 73, 49, 0.1)', margin: '1rem 0' }} />
               {user ? (
                 <>

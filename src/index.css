@@ -4,11 +4,23 @@
 :root {
   --primary: #BC4931; /* The Terracotta Red */
   --bg-color: #F8F7F4; /* Sand/Off-white */
+  --card-bg: #ffffff;
   --text-dark: #1A1817; 
   --text-light: #524E4A;
+  --border-color: #EBE9E1;
+  --footer-bg: #1A1817;
   --font-serif: 'Playfair Display', serif;
   --font-sans: 'Inter', sans-serif;
   --transition: all 0.3s ease;
+}
+
+body.dark-mode {
+  --bg-color: #121212;
+  --card-bg: #1e1e1e;
+  --text-dark: #f0f0f0;
+  --text-light: #b0b0b0;
+  --border-color: #333333;
+  --footer-bg: #0a0a0a;
 }
 
 * {
@@ -20,11 +32,135 @@
 body {
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
-  background-color: #F8F7F4;
+  background-color: var(--bg-color);
+  color: var(--text-dark);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #root {
   width: 100%;
   min-height: 100vh;
   display: block;
+}
+
+body.dark-mode {
+  --bg-color: #1a1a1a;
+  --text-dark: #F8F7F4;
+  --text-light: #A09D9A;
+  background-color: var(--bg-color);
+  color: var(--text-dark);
+}
+
+body.dark-mode .home-navbar.scrolled {
+  background: rgba(26, 26, 26, 0.95);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .home-navbar.scrolled * {
+  color: #fff !important;
+}
+
+body.dark-mode .nav-links a {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+body.dark-mode .nav-links a:hover,
+body.dark-mode .nav-links a.active {
+  color: #fff !important;
+}
+
+body.dark-mode .mobile-drawer {
+  background: #1a1a1a;
+  color: #fff;
+}
+
+body.dark-mode .drawer-links a {
+  color: #fff;
+}
+
+body.dark-mode .planning-page.premium-theme {
+  --premium-sand: #121212;
+  --premium-dark: #f0f0f0;
+  --premium-glass: rgba(30, 30, 30, 0.8);
+  background-color: var(--premium-sand);
+}
+
+body.dark-mode .planning-card {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .step-section-title,
+body.dark-mode .place-card-body-premium h3,
+body.dark-mode .step-label.active {
+  color: #fff;
+}
+
+body.dark-mode .place-card-premium,
+body.dark-mode .activity-card-premium,
+body.dark-mode .hotel-card-premium,
+body.dark-mode .transport-row-premium,
+body.dark-mode .discovery-chip,
+body.dark-mode .input-group-premium input,
+body.dark-mode .itinerary-summary-card,
+body.dark-mode .budget-discovery {
+  background: #1e1e1e;
+  border-color: #333;
+  color: #fff;
+}
+
+body.dark-mode .input-group-premium input {
+  color: #fff;
+}
+
+body.dark-mode .step-number {
+  background: #2a2a2a;
+  border-color: #444;
+}
+
+body.dark-mode .place-details-page {
+  background-color: var(--bg-color);
+}
+
+body.dark-mode .place-hero-legacy,
+body.dark-mode .place-coordinates-box,
+body.dark-mode .tab-btn,
+body.dark-mode .service-card-modern,
+body.dark-mode .empty-services,
+body.dark-mode .map-frame-wrapper {
+  background: var(--card-bg);
+  border-color: var(--border-color);
+  color: var(--text-dark);
+}
+
+body.dark-mode .info-title,
+body.dark-mode .card-name-bold,
+body.dark-mode .section-subtitle,
+body.dark-mode .details-link-arrow {
+  color: #fff;
+}
+
+body.dark-mode .info-desc,
+body.dark-mode .card-desc-small,
+body.dark-mode .back-btn-minimal,
+body.dark-mode .box-label,
+body.dark-mode .section-line {
+  color: var(--text-light);
+  background-color: transparent;
+}
+
+body.dark-mode .section-line {
+    background: var(--border-color);
+}
+
+body.dark-mode .tab-btn.active {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+body.dark-mode .book-btn-direct {
+  background: var(--primary);
+}
+
+body.dark-mode .invisible-tab-select {
+    color: #fff;
 }

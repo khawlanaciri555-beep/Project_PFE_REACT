@@ -36,27 +36,41 @@ const Icons = {
   )
 };
 
-const ServiceCard = ({ id, title, type, description, price, index, onBook }) => (
+const ServiceCard = ({ id, title, hotel_type, type, description, price, rating, image, index, onBook }) => (
   <motion.div 
     initial={{ opacity: 0, y: 30 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.5, delay: index * 0.1 }}
-    className="service-card"
+    whileHover={{ y: -5 }}
+    className="service-card-modern"
   >
-    <div className="service-card-header">
-      <h3>{title} <span className="service-role"> — {type}</span></h3>
-      <p className="service-desc">{description}</p>
+    <div className="card-top">
+      <img src={image || '/logo picter/placeholder.jpg'} alt={title} className="card-img" />
+      <div className="card-type-tag">{hotel_type || type}</div>
     </div>
-    <div className="service-footer">
-      <span className="service-price">{price}</span>
-      <motion.button 
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        className="reserve-btn"
-        onClick={() => onBook({ id, title, price, type })}
-      >
-        Réserver
-      </motion.button>
+    
+    <div className="card-details">
+      <div style={{ marginBottom: '0.4rem' }}>
+        <RatingStars rating={rating} size={14} showCount={false} />
+      </div>
+      
+      <div className="card-price-tag">{price} MAD</div>
+      
+      <h3 className="card-name-bold">{title}</h3>
+      
+      <p className="card-desc-small">{description?.substring(0, 120)}...</p>
+      
+      <div className="card-bottom-actions">
+        <Link to={`/service/${id}`} className="details-link-arrow">
+          Détails &rarr;
+        </Link>
+        <button 
+          className="book-btn-direct"
+          onClick={() => onBook({ id, title, price, type })}
+        >
+          Réserver
+        </button>
+      </div>
     </div>
   </motion.div>
 );
@@ -73,6 +87,9 @@ const TabButton = ({ label, active, onClick, IconComponent }) => (
       <IconComponent />
     </span>
     {label}
+    <span style={{ marginLeft: '0.3rem', fontSize: '0.7rem', opacity: 0.7 }}>
+      {active ? '▴' : '▾'}
+    </span>
     {active && (
       <motion.div
         layoutId="active-pill"
@@ -91,6 +108,8 @@ const PlaceDetails = () => {
   const [place, setPlace] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('hotels');
+  const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const [hotelTypeFilter, setHotelTypeFilter] = useState('Tous'); // 'Tous', 'Hôtel', 'Riad'
   const [selectedService, setSelectedService] = useState(null);
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const [isMapVisible, setIsMapVisible] = useState(false);
@@ -171,14 +190,26 @@ const PlaceDetails = () => {
   }
 
   const tabs = [
-    { id: 'hotels', label: 'Hôtels', icon: Icons.Hotels },
+    { id: 'hotels', label: 'Hébergement', icon: Icons.Hotels },
     { id: 'activites', label: 'Activités', icon: Icons.Activites },
     { id: 'restaurants', label: 'Restaurants', icon: Icons.Restaurants },
     { id: 'transport', label: 'Transport', icon: Icons.Transport }
   ];
 
-  const currentServices = place.related_services?.[activeTab] || [];
-  const galleryImages = place.images && place.images.length > 0 ? place.images : [place.image];
+  let currentServices = place.services?.[activeTab] || [];
+  
+  // Apply sub-filter for hotels (Case-insensitive)
+  if (activeTab === 'hotels' && hotelTypeFilter !== 'Tous') {
+    const filterLower = hotelTypeFilter.toLowerCase();
+    currentServices = currentServices.filter(s => {
+        const typeLower = (s.hotel_type || s.type || '').toLowerCase();
+        // Match 'Hôtel' with 'hotel' if needed, or exact match
+        if (filterLower === 'hôtel') return typeLower === 'hotel';
+        return typeLower === filterLower;
+    });
+  }
+
+  const galleryImages = (place.images && place.images.length > 0) ? place.images : [place.image];
 
   return (
     <Layout>
@@ -216,18 +247,30 @@ const PlaceDetails = () => {
                     <AnimatePresence mode="wait">
                       <motion.img 
                         key={currentImgIndex}
-                        src={getImageUrl(galleryImages[currentImgIndex])} 
+                        src={galleryImages[currentImgIndex]} 
                         alt={place.title}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
+                        initial={{ opacity: 0, scale: 1.1 }}
+                        animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.8 }}
+                        className="hero-main-img"
                       />
                     </AnimatePresence>
-                    <div className="img-overlay-light" />
+                    <div className="slider-overlay-gradient"></div>
+                    
+                    {/* Dots indicator */}
+                    <div className="slider-dots">
+                      {galleryImages.map((_, idx) => (
+                        <div 
+                          key={idx} 
+                          className={`slider-dot ${idx === currentImgIndex ? 'active' : ''}`}
+                          onClick={() => setCurrentImgIndex(idx)}
+                        />
+                      ))}
+                    </div>
                   </div>
                   
-                    <div className="hero-info-legacy" style={{ position: 'relative' }}>
+                  <div className="hero-info-legacy" style={{ position: 'relative' }}>
                       <FavoriteButton 
                         placeId={place.id} 
                         initialIsFavorited={place.is_favorited} 
@@ -317,42 +360,76 @@ const PlaceDetails = () => {
               
               <div className="tabs-filter">
                 {tabs.map(tab => (
-                  <TabButton 
-                    key={tab.id}
-                    label={tab.label}
-                    IconComponent={tab.icon}
-                    active={activeTab === tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                  />
+                  <div key={tab.id} className="tab-wrapper" style={{ position: 'relative' }}>
+                    <TabButton 
+                        label={tab.id === 'hotels' && hotelTypeFilter !== 'Tous' ? `${hotelTypeFilter}s` : tab.label}
+                        IconComponent={tab.icon}
+                        active={activeTab === tab.id && isServicesOpen}
+                        onClick={() => {
+                            if (activeTab === tab.id) {
+                              setIsServicesOpen(!isServicesOpen);
+                            } else {
+                              setActiveTab(tab.id);
+                              setIsServicesOpen(true);
+                            }
+                        }}
+                    />
+                    {tab.id === 'hotels' && (
+                        <select 
+                            value={hotelTypeFilter}
+                            onChange={(e) => {
+                                setHotelTypeFilter(e.target.value);
+                                setActiveTab('hotels');
+                                setIsServicesOpen(true);
+                            }}
+                            className="invisible-tab-select"
+                        >
+                            <option value="Tous">Tous</option>
+                            <option value="Hôtel">Hôtels</option>
+                            <option value="Riad">Riads</option>
+                        </select>
+                    )}
+                  </div>
                 ))}
               </div>
 
-              <div className="services-grid">
-                <AnimatePresence mode="wait">
-                  <motion.div 
-                    key={activeTab}
-                    className="grid-wrapper"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
+              <AnimatePresence>
+                {isServicesOpen && (
+                  <motion.div
+                    className="services-grid"
+                    initial={{ opacity: 0, height: 0, overflow: 'hidden' }}
+                    animate={{ opacity: 1, height: 'auto', overflow: 'visible' }}
+                    exit={{ opacity: 0, height: 0, overflow: 'hidden' }}
+                    transition={{ duration: 0.4, ease: 'easeInOut' }}
                   >
-                    {currentServices.length > 0 ? (
-                      currentServices.map((service, index) => (
-                        <ServiceCard 
-                          key={`${activeTab}-${index}`}
-                          index={index}
-                          onBook={handleBookClick}
-                          {...service}
-                        />
-                      ))
-                    ) : (
-                      <div className="empty-services">
-                        <p>Aucun service disponible pour le moment.</p>
-                      </div>
-                    )}
+                    <AnimatePresence mode="wait">
+                      <motion.div 
+                        key={activeTab}
+                        className="grid-wrapper"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                      >
+                        {currentServices.length > 0 ? (
+                          currentServices.map((service, index) => (
+                            <ServiceCard 
+                              key={`${activeTab}-${service.id}-${index}`}
+                              index={index}
+                              onBook={handleBookClick}
+                              {...service}
+                            />
+                          ))
+                        ) : (
+                          <div className="empty-services">
+                            <div className="empty-icon">🏜️</div>
+                            <p>Aucun service disponible dans cette place</p>
+                          </div>
+                        )}
+                      </motion.div>
+                    </AnimatePresence>
                   </motion.div>
-                </AnimatePresence>
-              </div>
+                )}
+              </AnimatePresence>
             </div>
           </main>
         </div>

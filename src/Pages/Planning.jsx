@@ -211,7 +211,7 @@ const Planning = () => {
                             }}
                           >
                             <div className="place-card-img-premium">
-                              <img src={place.image || '/logo picter/placeholder.jpg'} alt={place.name} />
+                              <img src={place.image || '/logo picter/placeholder.jpg'} alt={place.name || place.title} />
                               <div className="premium-overlay" />
                               <div className="selection-indicator">
                                 {formData.selectedPlaces.some(p => p.id === place.id) ? <FaCheckCircle /> : <div className="plus-icon">+</div>}
@@ -219,7 +219,7 @@ const Planning = () => {
                               <div className="place-badge">{place.category || 'Medina'}</div>
                             </div>
                             <div className="place-card-body-premium">
-                              <h3>{place.name}</h3>
+                              <h3>{place.name || place.title}</h3>
                               <p><FaMapMarkerAlt /> {place.address?.split(',')[0] || 'Marrakech'}</p>
                             </div>
                           </motion.div>

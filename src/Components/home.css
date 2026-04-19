@@ -205,8 +205,9 @@
   width: 45px;
   height: 45px;
   border-radius: 50%;
-  border: 1px solid #EBE9E1;
-  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-dark);
   font-size: 1.2rem;
   cursor: pointer;
   display: flex;
@@ -216,7 +217,7 @@
 }
 
 .slider-nav button:hover {
-  background: #EBE9E1;
+  background: var(--border-color);
 }
 
 .slider-container {
@@ -390,7 +391,7 @@
 }
 
 .test-card {
-  background: #fff;
+  background: var(--card-bg);
   border-radius: 8px;
   padding: 0.5rem; /* reduced from 2.5rem */
   box-shadow: 0 10px 30px rgba(0,0,0,0.03);
@@ -531,10 +532,10 @@
   align-items: center;
   gap: 1rem;
   padding: 1rem 2.5rem;
-  background: white;
-  border: 1px solid #EBE9E1;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
   border-radius: 999px;
-  color: #1A1817;
+  color: var(--text-dark);
   text-decoration: none;
   font-weight: 600;
   font-size: 1rem;
