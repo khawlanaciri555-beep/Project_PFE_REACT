@@ -45,7 +45,7 @@ const ServiceCard = ({ id, title, hotel_type, type, description, price, rating, 
     className="service-card-modern"
   >
     <div className="card-top">
-      <img src={image || '/logo picter/placeholder.jpg'} alt={title} className="card-img" />
+      <img src={getImageUrl(image) || '/logo picter/placeholder.jpg'} alt={title} className="card-img" />
       <div className="card-type-tag">{hotel_type || type}</div>
     </div>
     
@@ -247,7 +247,7 @@ const PlaceDetails = () => {
                     <AnimatePresence mode="wait">
                       <motion.img 
                         key={currentImgIndex}
-                        src={galleryImages[currentImgIndex]} 
+                        src={getImageUrl(galleryImages[currentImgIndex])} 
                         alt={place.title}
                         initial={{ opacity: 0, scale: 1.1 }}
                         animate={{ opacity: 1, scale: 1 }}

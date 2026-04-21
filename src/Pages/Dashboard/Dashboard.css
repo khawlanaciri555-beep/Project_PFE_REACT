@@ -6,6 +6,7 @@
   --dash-text: #1A1817; 
   --dash-text-muted: #524E4A;
   --sidebar-width: 280px;
+  --sidebar-collapsed-width: 90px;
   --glass-border: rgba(26, 24, 23, 0.08);
   --shadow-sm: 0 4px 20px rgba(0, 0, 0, 0.03);
   --shadow-md: 0 10px 30px rgba(188, 73, 49, 0.05);
@@ -38,6 +39,53 @@
 .sidebar-logo {
   margin-bottom: 3rem;
   padding: 0 1rem;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.dashboard-sidebar.collapsed {
+  width: var(--sidebar-collapsed-width);
+  padding: 2.5rem 1rem;
+}
+
+.dashboard-sidebar.collapsed .sidebar-logo span,
+.dashboard-sidebar.collapsed .nav-label {
+  display: none;
+}
+
+.dashboard-sidebar.collapsed .nav-item {
+  justify-content: center;
+  padding: 1.25rem;
+}
+
+.dashboard-sidebar.collapsed .sidebar-logo {
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.sidebar-toggle-btn {
+  position: absolute;
+  top: 1.5rem;
+  right: -15px;
+  width: 30px;
+  height: 30px;
+  background: var(--dash-accent);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 110;
+  box-shadow: 0 4px 10px rgba(188, 73, 49, 0.3);
+  transition: all 0.3s ease;
+}
+
+.sidebar-toggle-btn:hover {
+  transform: scale(1.1);
 }
 
 .sidebar-nav {
@@ -99,6 +147,11 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  transition: margin-left 0.3s ease;
+}
+
+.dashboard-main.sidebar-collapsed {
+  margin-left: var(--sidebar-collapsed-width);
 }
 
 .dashboard-topbar {
@@ -311,4 +364,37 @@
   .stats-grid {
     grid-template-columns: 1fr;
   }
+}
+/* Horizontal Tabs for Profile/Settings */
+.horizontal-tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.horizontal-tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  border: none;
+  background: transparent;
+  color: var(--dash-text-muted);
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.horizontal-tab-btn.active {
+  background: var(--dash-gold-glow);
+  color: var(--dash-accent);
+}
+
+.horizontal-tab-btn:hover:not(.active) {
+  background: rgba(0,0,0,0.02);
 }

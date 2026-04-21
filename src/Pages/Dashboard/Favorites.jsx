@@ -16,7 +16,8 @@ const Favorites = () => {
     try {
       setLoading(true);
       const response = await api.get('/favorites');
-      setFavorites(response.data);
+      const dataArray = response.data.data !== undefined ? response.data.data : response.data;
+      setFavorites(Array.isArray(dataArray) ? dataArray : []);
     } catch (err) {
       console.error('Error fetching favorites', err);
     } finally {

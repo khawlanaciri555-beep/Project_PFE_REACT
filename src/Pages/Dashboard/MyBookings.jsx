@@ -40,7 +40,8 @@ const MyBookings = () => {
     try {
       setLoading(true);
       const response = await api.get('/my-bookings');
-      setBookings(response.data);
+      const dataArray = response.data.data !== undefined ? response.data.data : response.data;
+      setBookings(Array.isArray(dataArray) ? dataArray : []);
       setError(null);
     } catch (err) {
       setError('Connection refused. Please start your Laravel server.');

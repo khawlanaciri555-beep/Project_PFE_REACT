@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import api from '../api/axios';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { AuthContext } from '../context/AuthContext';
 import { RoleSelector } from '../Components/Register/RoleSelector';
 import {
   TouristForm,
@@ -17,16 +19,35 @@ const Register = () => {
   const [role, setRole] = useState('tourist');
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState(null);
+  const { register } = useContext(AuthContext);
+  const navigate = useNavigate();
   const { t } = useTranslation();
+  const [places, setPlaces] = useState([]);
+
+  useEffect(() => {
+    const fetchPlaces = async () => {
+      try {
+        const response = await api.get('/places');
+        const data = response.data.data || response.data;
+        setPlaces(data.map(p => ({ value: p.id, label: p.title })));
+      } catch (err) {
+        console.error('Failed to fetch places', err);
+      }
+    };
+    fetchPlaces();
+  }, []);
 
   // Unified form state
   const [formData, setFormData] = useState({
+    name: '',
     email: '',
     password: '',
+    password_confirmation: '',
     phone: '',
     hotelName: '',
     address: '',
-    region: '',
+    place_id: '',
     description: '',
     company: '',
     vehicleType: '',
@@ -50,24 +71,65 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
 
-    // Simulate API call
-    console.log('Submitting for role:', role);
-    console.log('Form data:', formData);
-    console.log('Files:', files);
+    try {
+      // Map role to Laravel expected roles
+      let backendRole = 'tourist';
+      if (role === 'hotel') backendRole = 'hotel';
+      else if (role === 'transporteur') backendRole = 'transport';
+      else if (role === 'cooperative') backendRole = 'coop';
+      
+      // Determine name field based on role
+      let finalName = formData.name;
+      if (role === 'hotel') finalName = formData.hotelName;
+      else if (role === 'transporteur') finalName = formData.company;
+      else if (role === 'cooperative') finalName = formData.cooperativeName;
 
-    setTimeout(() => {
-      setLoading(false);
+      const dataToSend = new FormData();
+      dataToSend.append('name', finalName || 'Unknown');
+      dataToSend.append('email', formData.email);
+      dataToSend.append('password', formData.password);
+      dataToSend.append('password_confirmation', formData.password_confirmation);
+      dataToSend.append('role', backendRole);
+      dataToSend.append('phone', formData.phone);
+      dataToSend.append('address', formData.address);
+      dataToSend.append('place_id', formData.place_id);
+      dataToSend.append('description', formData.description);
+
+      // Add Files
+      if (files.images && files.images[0]) {
+        dataToSend.append('image', files.images[0]);
+      }
+      if (files.certificate && files.certificate[0]) {
+        dataToSend.append('certificate', files.certificate[0]);
+      }
+      if (files.licenseDoc && files.licenseDoc[0]) {
+        dataToSend.append('licenseDoc', files.licenseDoc[0]);
+      }
+
+      await register(dataToSend);
       setSubmitted(true);
-    }, 2000);
+    } catch (err) {
+      console.error(err);
+      if (err.response?.data?.errors) {
+        // Formatted Laravel validation errors
+        const firstErrorKey = Object.keys(err.response.data.errors)[0];
+        setError(err.response.data.errors[firstErrorKey][0]);
+      } else {
+        setError(err.response?.data?.message || t('common.error', 'Registration failed'));
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const renderForm = () => {
     switch (role) {
       case 'tourist': return <TouristForm data={formData} onChange={handleInputChange} />;
-      case 'hotel': return <HotelForm data={formData} onChange={handleInputChange} onFileChange={handleFileChange} />;
-      case 'transporteur': return <TransporteurForm data={formData} onChange={handleInputChange} onFileChange={handleFileChange} />;
-      case 'cooperative': return <CooperativeForm data={formData} onChange={handleInputChange} onFileChange={handleFileChange} />;
+      case 'hotel': return <HotelForm data={formData} onChange={handleInputChange} onFileChange={handleFileChange} places={places} />;
+      case 'transporteur': return <TransporteurForm data={formData} onChange={handleInputChange} onFileChange={handleFileChange} places={places} />;
+      case 'cooperative': return <CooperativeForm data={formData} onChange={handleInputChange} onFileChange={handleFileChange} places={places} />;
       default: return <TouristForm data={formData} onChange={handleInputChange} />;
     }
   };
@@ -107,6 +169,11 @@ const Register = () => {
         }} />
 
         <form onSubmit={handleSubmit}>
+          {error && (
+            <div className="login-error-msg" style={{ marginBottom: '1rem', color: '#ff4d4d', textAlign: 'center' }}>
+                <span>⚠</span> {error}
+            </div>
+          )}
           <AnimatePresence mode="wait">
             <motion.div
               key={role}

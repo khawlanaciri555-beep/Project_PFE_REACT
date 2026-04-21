@@ -16,7 +16,8 @@ const BookingRequests = () => {
     try {
       setLoading(true);
       const response = await api.get('/bookings');
-      setRequests(response.data);
+      const dataArray = response.data.data !== undefined ? response.data.data : response.data;
+      setRequests(Array.isArray(dataArray) ? dataArray : []);
     } catch (err) {
       console.error('Error fetching requests', err);
     } finally {

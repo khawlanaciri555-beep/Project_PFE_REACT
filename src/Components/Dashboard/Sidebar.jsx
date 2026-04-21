@@ -11,10 +11,12 @@ import {
   FaClipboardList, 
   FaBriefcase, 
   FaStar,
-  FaSignOutAlt
+  FaSignOutAlt,
+  FaChevronLeft,
+  FaChevronRight
 } from 'react-icons/fa';
 
-const Sidebar = () => {
+const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
   const { user, logout } = useContext(AuthContext);
   const location = useLocation();
   const role = user?.role || 'tourist';
@@ -22,41 +24,47 @@ const Sidebar = () => {
   // Navigation items based on role
   const navItems = {
     tourist: [
-      { path: '/dashboard', label: 'Overview', icon: <FaHome /> },
       { path: '/dashboard/favorites', label: 'My Favorites', icon: <FaHeart /> },
       { path: '/dashboard/my-bookings', label: 'My Bookings', icon: <FaCalendarAlt /> },
-      { path: '/explore', label: 'Explore Marrakech', icon: <FaStar /> },
     ],
     hotel: [
-      { path: '/dashboard', label: 'Overview', icon: <FaHome /> },
-      { path: '/dashboard/bookings', label: 'Booking Requests', icon: <FaClipboardList /> },
-      { path: '/dashboard/services', label: 'My Rooms/Services', icon: <FaBriefcase /> },
+      { path: '/dashboard/profile', label: 'My Public Profile', icon: <FaUser /> },
+      { path: '/dashboard/services', label: 'My Services', icon: <FaBriefcase /> },
+      { path: '/dashboard/bookings', label: 'My Demandes', icon: <FaClipboardList /> },
     ],
     guide: [
-      { path: '/dashboard', label: 'Overview', icon: <FaHome /> },
-      { path: '/dashboard/bookings', label: 'Incoming Requests', icon: <FaClipboardList /> },
+      { path: '/dashboard/profile', label: 'My Public Profile', icon: <FaUser /> },
       { path: '/dashboard/services', label: 'Expeditions', icon: <FaBriefcase /> },
+      { path: '/dashboard/bookings', label: 'Incoming Requests', icon: <FaClipboardList /> },
     ],
-    transporteur: [
-      { path: '/dashboard', label: 'Overview', icon: <FaHome /> },
-      { path: '/dashboard/bookings', label: 'Ride Requests', icon: <FaClipboardList /> },
+    transport: [
+      { path: '/dashboard/profile', label: 'My Public Profile', icon: <FaUser /> },
       { path: '/dashboard/services', label: 'Vehicles', icon: <FaBriefcase /> },
+      { path: '/dashboard/bookings', label: 'Ride Requests', icon: <FaClipboardList /> },
     ],
-    cooperative: [
-      { path: '/dashboard', label: 'Overview', icon: <FaHome /> },
+    coop: [
+      { path: '/dashboard/profile', label: 'My Public Profile', icon: <FaUser /> },
+      { path: '/dashboard/services', label: 'Products', icon: <FaBriefcase /> },
       { path: '/dashboard/bookings', label: 'Visit Requests', icon: <FaClipboardList /> },
-      { path: '/dashboard/services', label: 'Products/Workshops', icon: <FaBriefcase /> },
     ]
   };
 
   const currentNav = navItems[role] || navItems.tourist;
 
   return (
-    <div className="dashboard-sidebar">
+    <div className={`dashboard-sidebar ${isCollapsed ? 'collapsed' : ''}`}>
+      <button 
+        className="sidebar-toggle-btn desktop-only" 
+        onClick={() => setIsCollapsed(!isCollapsed)}
+        title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+      >
+        {isCollapsed ? <FaChevronRight /> : <FaChevronLeft />}
+      </button>
+
       <div className="sidebar-logo desktop-only">
         <Link to="/home" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <img src="/logo picter/logo.png" alt="VibKech" style={{ height: '50px' }} />
-          <span style={{ color: 'var(--dash-text)', fontSize: '1.2rem', fontWeight: '800', letterSpacing: '2px' }}>VibKech</span>
+          {!isCollapsed && <span style={{ color: 'var(--dash-text)', fontSize: '1.2rem', fontWeight: '800', letterSpacing: '2px' }}>VibKech</span>}
         </Link>
       </div>
 
@@ -69,23 +77,25 @@ const Sidebar = () => {
             title={item.label}
           >
             <span className="nav-icon">{item.icon}</span>
-            <span className="nav-label">{item.label}</span>
+            {!isCollapsed && <span className="nav-label">{item.label}</span>}
           </Link>
         ))}
       </nav>
 
       <div className="sidebar-footer desktop-only">
-        <Link to="/dashboard/settings" className={`nav-item ${location.pathname === '/dashboard/settings' ? 'active' : ''}`}>
-          <span className="nav-icon"><FaCog /></span>
-          <span className="nav-label">Settings</span>
-        </Link>
+        {role === 'tourist' && (
+          <Link to="/dashboard/settings" className={`nav-item ${location.pathname === '/dashboard/settings' ? 'active' : ''}`}>
+            <span className="nav-icon"><FaCog /></span>
+            {!isCollapsed && <span className="nav-label">Settings</span>}
+          </Link>
+        )}
         <button 
           onClick={logout} 
           className="nav-item" 
           style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left', cursor: 'pointer' }}
         >
           <span className="nav-icon"><FaSignOutAlt /></span>
-          <span className="nav-label">Log Out</span>
+          {!isCollapsed && <span className="nav-label">Log Out</span>}
         </button>
       </div>
     </div>
