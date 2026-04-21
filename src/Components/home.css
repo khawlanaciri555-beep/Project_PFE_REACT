@@ -3,6 +3,22 @@
   overflow-x: hidden;
 }
 
+.destinations-section, .testimonials-section {
+  background-image: 
+    linear-gradient(rgba(248, 247, 244, 0.45), rgba(248, 247, 244, 0.45)),
+    url('/background/zlige.png');
+  background-attachment: fixed;
+  background-size: 600px;
+  background-repeat: repeat;
+}
+
+body.dark-mode .destinations-section, 
+body.dark-mode .testimonials-section {
+  background-image: 
+    linear-gradient(rgba(26, 26, 26, 0.65), rgba(26, 26, 26, 0.65)),
+    url('/background/zlige.png');
+}
+
 /* Navbar and Footer styles moved to separate components */
 /* =========================================
    Hero Section
@@ -31,6 +47,8 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transform: scale(1.15); /* Zoom in to hide watermarks at edges */
+  filter: contrast(1.1) brightness(0.8); 
 }
 
 .hero-video-overlay {
@@ -39,7 +57,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.5) 100%);
+  background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.7) 100%);
   z-index: -1;
 }
 
@@ -391,10 +409,12 @@
 }
 
 .test-card {
-  background: var(--card-bg);
-  border-radius: 8px;
-  padding: 0.5rem; /* reduced from 2.5rem */
-  box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+  background: rgba(255, 255, 255, 0.4); /* Transparent glass effect */
+  backdrop-filter: blur(5px);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: none; /* Removed borders/shadows */
+  border: none;
 }
 
 .user-info {
@@ -440,7 +460,7 @@
 .small.right-col-1 {
   grid-column: 8 / 13;
   grid-row: 1 / 2;
-  background: #F4EBE6; /* Light pinkish */
+  background: rgba(244, 235, 230, 0.45); /* Glassy pinkish */
 }
 
 .small.block-bottom-left {
@@ -451,7 +471,7 @@
 .medium.block-bottom-right {
   grid-column: 5 / 13;
   grid-row: 2 / 4;
-  background: #EFF3EA; /* Light greenishish */
+  background: rgba(239, 243, 234, 0.45); /* Glassy greenish */
 }
 
 .split-content {

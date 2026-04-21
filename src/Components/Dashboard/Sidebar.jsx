@@ -30,7 +30,7 @@ const Sidebar = () => {
     hotel: [
       { path: '/dashboard', label: 'Overview', icon: <FaHome /> },
       { path: '/dashboard/bookings', label: 'Booking Requests', icon: <FaClipboardList /> },
-      { path: '/dashboard/services', label: 'My Rooms/Services', icon: <FaBriefcase /> },
+      { path: '/dashboard/properties', label: 'My Properties', icon: <FaBriefcase /> },
     ],
     guide: [
       { path: '/dashboard', label: 'Overview', icon: <FaHome /> },

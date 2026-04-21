@@ -11,6 +11,7 @@ import {
 } from '../Components/Register/RegisterForms';
 import { GradientButton } from '../Components/Register/UIComponents';
 import { FaCheckCircle } from 'react-icons/fa';
+import api from '../api/axios';
 import './Auth.css';
 
 const Register = () => {
@@ -51,15 +52,41 @@ const Register = () => {
     e.preventDefault();
     setLoading(true);
 
-    // Simulate API call
-    console.log('Submitting for role:', role);
-    console.log('Form data:', formData);
-    console.log('Files:', files);
+    try {
+      // Map names based on role
+      let name = formData.name || '';
+      if (role === 'hotel') name = formData.hotelName;
+      if (role === 'transporteur') name = formData.company;
+      if (role === 'cooperative') name = formData.cooperativeName;
+      if (role === 'tourist') name = formData.name || formData.email.split('@')[0];
 
-    setTimeout(() => {
-      setLoading(false);
+      const payload = {
+        name: name,
+        email: formData.email,
+        password: formData.password,
+        password_confirmation: formData.password, // Frontend uses same password for confirmation for simplicity
+        role: role === 'tourist' ? 'tourist' : role, // Match Laravel enum ['tourist', 'guide', 'hotel', 'coop', 'admin']
+      };
+
+      // Correct role mapping for Laravel enum
+      if (payload.role === 'cooperative') payload.role = 'coop';
+      if (payload.role === 'transporteur') payload.role = 'transport';
+
+      const response = await api.post('/register', payload);
+      
+      console.log('Registration successful:', response.data);
+      
+      // Store token
+      localStorage.setItem('auth_token', response.data.access_token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+
       setSubmitted(true);
-    }, 2000);
+    } catch (err) {
+      console.error('Registration failed:', err);
+      alert('Registration failed: ' + (err.response?.data?.message || 'Check your information and try again.'));
+    } finally {
+      setLoading(false);
+    }
   };
 
   const renderForm = () => {

@@ -65,7 +65,7 @@ const Navbar = () => {
         <Link to="/home" className={isHomePage ? 'active' : ''}>{t('nav.home')}</Link>
         <Link to="/explore" className={location.pathname === '/explore' ? 'active' : ''}>{t('nav.explore')}</Link>
         <Link to="/planning" className={location.pathname === '/planning' ? 'active' : ''}>{t('nav.planning')}</Link>
-        <Link to="#">{t('nav.about')}</Link>
+        <Link to="/about" className={location.pathname === '/about' ? 'active' : ''}>{t('nav.about')}</Link>
       </div>
 
       <div className="nav-buttons desktop-only">
@@ -112,7 +112,7 @@ const Navbar = () => {
               <Link to="/home" onClick={toggleMobileMenu}>{t('nav.home')}</Link>
               <Link to="/explore" onClick={toggleMobileMenu}>{t('nav.explore')}</Link>
               <Link to="/planning" onClick={toggleMobileMenu}>{t('nav.planning')}</Link>
-              <Link to="#" onClick={toggleMobileMenu}>{t('nav.about')}</Link>
+              <Link to="/about" onClick={toggleMobileMenu}>{t('nav.about')}</Link>
               <button 
                 onClick={toggleTheme} 
                 style={{ background: 'transparent', border: 'none', color: 'var(--text-dark)', cursor: 'pointer', fontSize: '1.2rem', margin: '1rem 0', display: 'flex', alignItems: 'center', gap: '10px' }}

@@ -134,7 +134,43 @@
     "delete": "Delete",
     "edit": "Edit",
     "confirm": "Confirm",
-    "perNight": "MAD/night",
     "mad": "MAD"
+  },
+  "about": {
+    "hero": {
+      "title": "Discover Marrakech with VibKech",
+      "subtitle": "A Journey Through Time and Color"
+    },
+    "story": {
+      "title": "A Passion for Authentic Discovery",
+      "p1": "Born from a deep love for the Ochre City, VibKech was created to bridge the gap between a traveler and the hidden secrets of Marrakech. We believe that true discovery happens when you step away from the crowds and into the heart of a culture.",
+      "p2": "Our platform centralizes everything you need: legendary monuments, luxury Riads with centuries of history, and authentic adventures in the hidden gems of the Medina."
+    },
+    "values": {
+      "title": "Why Choose VibKech?",
+      "v1": { "title": "Curated Experiences", "desc": "We don't just list places; we select experiences that resonate with the true spirit of Morocco." },
+      "v2": { "title": "Premium Quality", "desc": "From luxury riads to exclusive tours, we ensure every detail meets the highest standard of excellence." },
+      "v3": { "title": "Local Community", "desc": "We work directly with local guides and artisans to support the economy and ensure authenticity." }
+    },
+    "timeline": {
+      "title": "Marrakech Through the Ages",
+      "subtitle": "Chronicles of the Red City",
+      "step1": { "date": "1070 AD", "title": "The Foundation", "desc": "Marrakech was founded by Youssef Ibn Tachfine, leader of the Almoravid dynasty. He chose this strategic location as a gateway to the Sahara and a trading hub between Africa and Europe.", "details": ["Red walls (The Red City)", "First mosques founded", "Khattarat irrigation system"] },
+      "step2": { "date": "11-12th Century", "title": "Almoravid Era", "desc": "Marrakech became a powerful capital and a global commercial center for gold, salt, and spices, blending cultures from Africa and Andalusia.", "details": ["Political power center", "Trans-Saharan trade boom", "Architectural brilliance"] },
+      "step3": { "date": "12-13th Century", "title": "Almohad Era", "desc": "Significant progress was made. Construction of the Koutoubia Mosque, expansion of the city, and development of architecture.", "details": ["Koutoubia Mosque built", "City walls expanded", "Gardens and monuments"] },
+      "step4": { "date": "13-15th Century", "title": "The Merinids", "desc": "The capital moved to Fez, and political importance decreased, but the city remained a vital commercial and economic center.", "details": ["Economic activity continued", "Architectural identity kept", "North-South hub"] },
+      "step5": { "date": "16th Century", "title": "The Saadians", "desc": "Marrakech flourished again. Construction of the Saadian Tombs, development of palaces, and prosperous trade with Africa.", "details": ["Saadian Tombs built", "El Badi Palace", "Wealth and Power"] },
+      "step6": { "date": "17th Century to Today", "title": "The Alaouites", "desc": "Stability continued. Marrakech evolved into a global historic city and a world-class tourism hub.", "details": ["Global tourism center", "Restoration of monuments", "Agdal and Menara gardens"] },
+      "step7": { "date": "Today", "title": "Contemporary Marrakech", "desc": "Marrakech today is a unique blend of history, culture, and modern tourism.", "details": ["Jemaa el-Fnaa Square", "Jardin Majorelle", "Vibrant Souks"] }
+    },
+    "mission": {
+      "title": "Our Vision for Marrakech",
+      "desc": "To lead the digital renaissance of Marrakech hospitality, making it the most technologically advanced and traditionally preserved destination in the world. We unify local expertise with global standards for an unforgettable journey."
+    },
+    "cta": {
+      "title": "Experience Marrakech Beyond Limits",
+      "subtitle": "Your journey into the heart of the Ochre City starts here.",
+      "btn": "Explore Now"
+    }
   }
 }

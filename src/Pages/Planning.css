@@ -4,12 +4,18 @@
   --premium-terracotta: #BC4931;
   --premium-sand: #F8F7F4;
   --premium-dark: #1A1817;
-  --premium-glass: rgba(255, 255, 255, 0.7);
-  --premium-shadow: 0 20px 80px rgba(0, 0, 0, 0.08);
-  --premium-glow: 0 0 20px rgba(188, 73, 49, 0.2);
+  --premium-glass: rgba(255, 255, 255, 0.1);
+  --premium-shadow: 0 40px 100px rgba(0, 0, 0, 0.05);
+  --premium-glow: 0 0 20px rgba(188, 73, 49, 0.15);
 }
 
 .planning-page.premium-theme {
+  background-image: 
+    linear-gradient(rgba(248, 247, 244, 0.3), rgba(248, 247, 244, 0.3)),
+    url('/background/zlige.png');
+  background-attachment: fixed;
+  background-size: 600px;
+  background-repeat: repeat;
   background-color: var(--premium-sand);
   min-height: 100vh;
   padding: 8rem 5% 10rem;
@@ -19,6 +25,12 @@
 
 .premium-font {
   font-family: var(--font-serif);
+}
+
+body.dark-mode .planning-page.premium-theme {
+    background-image: 
+        linear-gradient(rgba(26, 26, 26, 0.75), rgba(26, 26, 26, 0.75)),
+        url('/background/zlige.png');
 }
 
 /* Floating Budget Bar */
@@ -110,6 +122,49 @@
   position: relative;
 }
 
+.stepper-inner-path {
+  position: absolute;
+  left: 21px;
+  right: 21px;
+  top: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.stepper-plane {
+  position: absolute;
+  top: 0;
+  width: 42px;
+  height: 42px;
+  background: transparent;
+  color: var(--premium-terracotta);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  pointer-events: none;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.pro-plane-icon {
+  filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
+  transform: rotate(10deg); /* Slight default pitch */
+}
+
+.plane-trail {
+  position: absolute;
+  right: 100%;
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(to left, var(--premium-terracotta), transparent);
+  border-radius: 100px;
+  transform-origin: right;
+  margin-right: -10px;
+  opacity: 0;
+}
+
 .step-item {
   display: flex;
   flex-direction: column;
@@ -157,24 +212,17 @@
 }
 
 .step-progress {
-  flex: 1;
-  height: 2px;
-  background: #e7e5e4;
-  margin-top: 22px;
-  position: relative;
-}
-
-.step-progress.active {
-  background: var(--premium-terracotta);
+  display: none;
 }
 
 /* Cards & Grid Overhaul */
 .planning-card {
   background: var(--premium-glass);
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
   border-radius: 40px;
   padding: 4rem;
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: var(--premium-shadow);
 }
 
@@ -720,4 +768,98 @@
   font-style: italic;
   border: 2px dashed #e7e5e4;
   border-radius: 20px;
+}
+
+/* --- Description Bubble Styles --- */
+
+.description-wrapper-premium {
+  position: relative;
+}
+
+.card-footer-premium {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.8rem;
+}
+
+.description-btn-premium {
+  color: var(--premium-terracotta);
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.8;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.description-btn-premium:hover {
+  opacity: 1;
+  transform: scale(1.2) rotate(15deg);
+}
+
+.description-bubble-premium {
+  position: absolute;
+  bottom: 100%;
+  right: -10px;
+  width: 260px;
+  z-index: 100;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 15px 35px rgba(0,0,0,0.15));
+}
+
+.bubble-content {
+  background: var(--premium-sand);
+  background: rgba(248, 247, 244, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 1.5rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  position: relative;
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+.close-bubble-btn {
+  position: absolute;
+  top: 8px; right: 8px;
+  background: rgba(188, 73, 49, 0.1);
+  color: var(--premium-terracotta);
+  border: none;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.close-bubble-btn:hover { background: var(--premium-terracotta); color: #fff; }
+
+.bubble-content p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--premium-dark);
+  margin: 0;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+.bubble-arrow {
+  position: absolute;
+  bottom: -10px;
+  right: 20px;
+  width: 0; 
+  height: 0; 
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid var(--premium-sand);
+  opacity: 0.95;
+}
+
+@media (max-width: 640px) {
+  .description-bubble-premium {
+    width: 200px;
+    right: -20px;
+  }
 }

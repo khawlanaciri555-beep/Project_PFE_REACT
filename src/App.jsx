@@ -6,6 +6,7 @@ import Login from './Pages/Login';
 import Register from './Pages/Register';
 import { AuthProvider } from './context/AuthContext';
 import PlaceDetails from './Pages/PlaceDetails';
+import About from './Pages/About';
 import Explore from './Pages/Explore';
 import Planning from './Pages/Planning';
 import Comments from './Pages/Comments';
@@ -14,6 +15,7 @@ import Favorites from './Pages/Dashboard/Favorites';
 import BookingRequests from './Pages/Dashboard/BookingRequests';
 import MyBookings from './Pages/Dashboard/MyBookings';
 import MyServices from './Pages/Dashboard/MyServices';
+import MyProperties from './Pages/Dashboard/MyProperties';
 import Profile from './Pages/Dashboard/Profile';
 // import ProtectedRoute from './Components/ProtectedRoute';
 
@@ -33,6 +35,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/place/:id" element={<PlaceDetails />} />
           <Route path="/explore" element={<Explore />} />
+          <Route path="/about" element={<About />} />
           <Route path="/planning" element={<Planning />} />
           <Route path="/place/:id/comments" element={<Comments />} />
           <Route path="/comments/:id" element={<Comments />} />
@@ -50,6 +53,7 @@ function App() {
           <Route path="/dashboard/bookings" element={<BookingRequests />} />
           <Route path="/dashboard/my-bookings" element={<MyBookings />} />
           <Route path="/dashboard/services" element={<MyServices />} />
+          <Route path="/dashboard/properties" element={<MyProperties />} />
           <Route path="/dashboard/settings" element={<Profile />} />
         </Routes>
       </BrowserRouter>
