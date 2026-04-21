@@ -1,0 +1,307 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600;800&display=swap');
+
+:root {
+  --primary-red: #BC4931;
+  --accent-gold: #C58A3A;
+  --bg-sand: #F4EBE6;
+  --glass-white: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.4);
+  --font-serif: 'Playfair Display', serif;
+  --font-sans: 'Inter', sans-serif;
+}
+
+.about-page-container {
+  overflow-x: hidden;
+  background-color: var(--page-bg, #fff);
+  color: var(--text-color, #1A1A1A);
+  transition: all 0.3s ease;
+}
+
+:global(body.dark-mode) .about-page-container {
+  --page-bg: #0f172a;
+  --text-color: #f8fafc;
+  --bg-sand: #1e293b;
+}
+
+/* --- Hero Section (First Style) --- */
+.hero-about {
+  position: relative;
+  height: 85vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+}
+
+.hero-glass-box {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 4rem 6rem;
+  border-radius: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  text-align: center;
+  color: #fff;
+  max-width: 900px;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+}
+
+.hero-glass-box h1 {
+  font-family: var(--font-serif);
+  font-size: 4.5rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+}
+
+.hero-glass-box p {
+  font-size: 1.4rem;
+  font-weight: 300;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* --- Alternating Sections (First Style) --- */
+.story-section {
+  padding: 10rem 10%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8rem;
+  align-items: center;
+}
+
+.story-section.reverse {
+  direction: rtl;
+}
+.story-section.reverse .story-text {
+  direction: ltr;
+  text-align: left;
+}
+
+.story-text h2 {
+  font-family: var(--font-serif);
+  font-size: 3.5rem;
+  color: var(--primary-red);
+  margin-bottom: 2.5rem;
+}
+
+.story-text p {
+  font-size: 1.2rem;
+  line-height: 2;
+  color: #444;
+  margin-bottom: 2rem;
+}
+
+.story-img-wrap {
+  position: relative;
+  border-radius: 50px;
+  overflow: hidden;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.1);
+  aspect-ratio: 4/5;
+}
+
+.story-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* --- Values Grid (Glass Cards) --- */
+.values-wrapper {
+  background-color: var(--bg-sand);
+  padding: 10rem 5%;
+  text-align: center;
+}
+
+.values-title {
+  font-family: var(--font-serif);
+  font-size: 3.5rem;
+  margin-bottom: 5rem;
+}
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.value-glass-card {
+  background: var(--glass-white);
+  backdrop-filter: blur(10px);
+  padding: 4rem 2rem;
+  border-radius: 40px;
+  border: 1px solid var(--glass-border);
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+:global(body.dark-mode) .value-glass-card {
+  background: rgba(30, 41, 59, 0.8);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.value-glass-card:hover {
+  transform: translateY(-20px) scale(1.02);
+  background: #fff;
+  box-shadow: 0 50px 100px rgba(188, 73, 49, 0.15);
+}
+
+/* --- Timeline Styles --- */
+.timeline-section {
+  padding: 10rem 5%;
+  background-color: #ffffff;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.45)),
+    url("/background/zlige.png");
+  background-size: 600px;
+  background-repeat: repeat;
+  background-attachment: fixed;
+}
+
+:global(body.dark-mode) .timeline-section {
+  background-color: #0f172a;
+  background-image: 
+    linear-gradient(rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.6)),
+    url("/background/zlige.png");
+}
+
+.timeline-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  padding: 4rem 0;
+}
+
+.timeline-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, transparent, var(--accent-gold), transparent);
+  transform: translateX(-50%);
+}
+
+.timeline-item {
+  width: 100%;
+  margin-bottom: 8rem;
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+}
+
+.timeline-item:nth-child(even) {
+  justify-content: flex-start;
+}
+
+.timeline-glass {
+  width: 42%;
+  background: var(--bg-sand);
+  padding: 3.5rem;
+  border-radius: 40px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+  position: relative;
+  border: 1px solid rgba(188, 73, 49, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+:global(body.dark-mode) .timeline-glass {
+  background: #1e293b;
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+:global(body.dark-mode) .story-text p,
+:global(body.dark-mode) .timeline-glass p,
+:global(body.dark-mode) .timeline-glass ul {
+  color: #94a3b8 !important;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  background: #fff;
+  border: 5px solid var(--accent-gold);
+  border-radius: 50%;
+  z-index: 10;
+  box-shadow: 0 0 20px rgba(197, 138, 58, 0.4);
+}
+
+.timeline-date {
+  font-family: var(--font-serif);
+  font-size: 2.2rem;
+  color: var(--accent-gold);
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+/* --- Mission Banner --- */
+.mission-banner {
+  background: var(--primary-red);
+  color: #fff;
+  padding: 8rem 10%;
+  display: flex;
+  gap: 5rem;
+  align-items: center;
+  border-radius: 60px;
+  margin: 5rem 5%;
+}
+
+.mission-banner h2 {
+  font-family: var(--font-serif);
+  font-size: 4rem;
+  flex: 1;
+}
+
+.mission-banner p {
+  flex: 1.5;
+  font-size: 1.4rem;
+  line-height: 1.8;
+  opacity: 0.9;
+}
+
+/* --- CTA Button --- */
+.cta-full {
+  background-color: #1A1A1A;
+  padding: 12rem 5%;
+  text-align: center;
+  color: #fff;
+}
+
+.btn-premium-cta {
+  display: inline-block;
+  padding: 1.8rem 5rem;
+  background: linear-gradient(135deg, var(--accent-gold) 0%, #a36d22 100%);
+  border-radius: 100px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.4rem;
+  box-shadow: 0 20px 40px rgba(197, 138, 58, 0.3);
+  transition: all 0.4s ease;
+}
+
+.btn-premium-cta:hover {
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 0 30px 60px rgba(197, 138, 58, 0.5);
+}
+
+@media (max-width: 1100px) {
+  .story-section, .timeline-item, .mission-banner {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+    text-align: center;
+    gap: 3rem;
+  }
+  .timeline-glass { width: 90%; margin: 0 auto; }
+  .timeline-line { left: 5%; }
+  .timeline-dot { left: 5%; }
+  .hero-glass-box h1 { font-size: 3rem; }
+  .values-grid { grid-template-columns: 1fr; }
+}

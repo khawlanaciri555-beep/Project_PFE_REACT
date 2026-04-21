@@ -1,7 +1,39 @@
 .explore-page {
   padding-bottom: 6rem;
-  background-color: var(--bg-color);
+  background-image: 
+    linear-gradient(rgba(248, 247, 244, 0.45), rgba(248, 247, 244, 0.45)),
+    url('/background/zlige.png');
+  background-attachment: fixed;
+  background-size: 600px;
+  background-repeat: repeat;
   min-height: 100vh;
+}
+
+body.dark-mode .explore-page {
+    background-image: 
+        linear-gradient(rgba(26, 26, 26, 0.65), rgba(26, 26, 26, 0.65)),
+        url('/background/zlige.png');
+}
+
+/* Make cards readable over the background */
+.explore-page .new-card {
+    background: var(--card-bg);
+    border-radius: 1.5rem;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-color);
+}
+
+.explore-page .new-card-content {
+    padding: 1.5rem;
+    flex-grow: 1;
+}
+
+.explore-page .new-card-image-wrap {
+    border-radius: 1.5rem 1.5rem 0 0;
 }
 
 .explore-hero {
@@ -17,6 +49,17 @@
   position: relative;
   text-align: center;
   margin-bottom: 3rem;
+  overflow: hidden;
+}
+
+.explore-hero-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
 }
 
 .explore-hero::after {
@@ -26,7 +69,8 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4));
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.6));
+  z-index: 2;
 }
 
 .max-container {
@@ -34,7 +78,7 @@
   width: 92%;
   margin: 0 auto;
   position: relative;
-  z-index: 10;
+  z-index: 5;
 }
 
 .explore-hero-card {

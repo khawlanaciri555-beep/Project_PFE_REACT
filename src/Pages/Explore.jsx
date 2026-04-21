@@ -36,6 +36,9 @@ const Explore = () => {
     <Layout>
       <div className="explore-page">
         <div className="explore-hero">
+          <video autoPlay loop muted playsInline className="explore-hero-video">
+            <source src="/background/backExplore.mp4" type="video/mp4" />
+          </video>
           <div className="max-container">
             <motion.div
               initial={{ opacity: 0, y: 30 }}

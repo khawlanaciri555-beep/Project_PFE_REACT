@@ -28,22 +28,22 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
       { path: '/dashboard/my-bookings', label: 'My Bookings', icon: <FaCalendarAlt /> },
     ],
     hotel: [
-      { path: '/dashboard/profile', label: 'My Public Profile', icon: <FaUser /> },
+      { path: '/dashboard/profile', label: 'My Profile', icon: <FaUser /> },
       { path: '/dashboard/services', label: 'My Services', icon: <FaBriefcase /> },
       { path: '/dashboard/bookings', label: 'My Demandes', icon: <FaClipboardList /> },
     ],
     guide: [
-      { path: '/dashboard/profile', label: 'My Public Profile', icon: <FaUser /> },
+      { path: '/dashboard/profile', label: 'My Profile', icon: <FaUser /> },
       { path: '/dashboard/services', label: 'Expeditions', icon: <FaBriefcase /> },
       { path: '/dashboard/bookings', label: 'Incoming Requests', icon: <FaClipboardList /> },
     ],
     transport: [
-      { path: '/dashboard/profile', label: 'My Public Profile', icon: <FaUser /> },
+      { path: '/dashboard/profile', label: 'My Profile', icon: <FaUser /> },
       { path: '/dashboard/services', label: 'Vehicles', icon: <FaBriefcase /> },
       { path: '/dashboard/bookings', label: 'Ride Requests', icon: <FaClipboardList /> },
     ],
     coop: [
-      { path: '/dashboard/profile', label: 'My Public Profile', icon: <FaUser /> },
+      { path: '/dashboard/profile', label: 'My Profile', icon: <FaUser /> },
       { path: '/dashboard/services', label: 'Products', icon: <FaBriefcase /> },
       { path: '/dashboard/bookings', label: 'Visit Requests', icon: <FaClipboardList /> },
     ]

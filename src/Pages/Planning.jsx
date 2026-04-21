@@ -4,7 +4,7 @@ import Layout from '../Components/Layout';
 import api from '../api/axios';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { FaMapMarkerAlt, FaCalendarAlt, FaChevronRight, FaChevronLeft, FaCheckCircle, FaCar } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaCalendarAlt, FaChevronRight, FaChevronLeft, FaCheckCircle, FaCar, FaInfoCircle, FaPlane } from 'react-icons/fa';
 import ServiceMap from '../Components/Explore/ServiceMap';
 import './Planning.css';
 
@@ -29,6 +29,8 @@ const Planning = () => {
     routeFrom: '',
     routeTo: ''
   });
+  const [showDescription, setShowDescription] = useState(null);
+  const [isFlying, setIsFlying] = useState(false);
 
   // Calculate duration in nights
   const nights = formData.startDate && formData.endDate 
@@ -72,10 +74,16 @@ const Planning = () => {
         alert(t('planning.step1.title'));
         return;
     }
+    setIsFlying(true);
     setStep(step + 1);
+    setTimeout(() => setIsFlying(false), 2000);
   };
   
-  const prevStep = () => setStep(step - 1);
+  const prevStep = () => {
+    setIsFlying(true);
+    setStep(step - 1);
+    setTimeout(() => setIsFlying(false), 2000);
+  };
 
   // Animation Variants
   const containerVariants = {
@@ -133,6 +141,34 @@ const Planning = () => {
             {/* Step Indicator (Stepper) */}
             <div className="stepper-wrapper">
               <div className="stepper">
+                {/* Internal path for perfect alignment */}
+                <div className="stepper-inner-path">
+                  {/* Animated Airplane - Only visible during flight */}
+                    <motion.div 
+                      className="stepper-plane"
+                      initial={{ opacity: 0, scale: 0 }}
+                      animate={{ 
+                        left: `${(step - 1) * 33.333}%`,
+                        opacity: isFlying ? [0, 1, 1, 0] : 0,
+                        scale: isFlying ? [0, 1.2, 1.2, 0] : 0,
+                        rotate: 0,
+                        y: 0,
+                      }}
+                      transition={{ 
+                        duration: 2, 
+                        ease: [0.45, 0.05, 0.55, 0.95], // Premium smooth easing
+                        times: [0, 0.15, 0.85, 1]
+                      }}
+                    >
+                      <FaPlane className="pro-plane-icon" />
+                      {/* Suble Trail Effect */}
+                      <motion.div 
+                        className="plane-trail" 
+                        animate={{ opacity: isFlying ? [0, 0.4, 0] : 0, scaleX: isFlying ? [0, 1, 0] : 0 }}
+                      />
+                    </motion.div>
+                </div>
+
                 {steps.map((s) => (
                   <React.Fragment key={s.id}>
                     <div className={`step-item ${step >= s.id ? 'active' : ''} ${step === s.id ? 'current' : ''}`}>
@@ -220,7 +256,40 @@ const Planning = () => {
                             </div>
                             <div className="place-card-body-premium">
                               <h3>{place.name || place.title}</h3>
-                              <p><FaMapMarkerAlt /> {place.address?.split(',')[0] || 'Marrakech'}</p>
+                              <div className="card-footer-premium">
+                                <p><FaMapMarkerAlt /> {place.address?.split(',')[0] || 'Marrakech'}</p>
+                                <div className="description-wrapper-premium">
+                                  <motion.div 
+                                    className="description-btn-premium"
+                                    whileHover={{ scale: 1.2, rotate: 15 }}
+                                    whileTap={{ scale: 0.9 }}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setShowDescription(showDescription?.id === place.id ? null : place);
+                                    }}
+                                  >
+                                    <FaInfoCircle />
+                                  </motion.div>
+
+                                  <AnimatePresence>
+                                    {showDescription?.id === place.id && (
+                                      <motion.div 
+                                        className="description-bubble-premium"
+                                        initial={{ opacity: 0, scale: 0.5, y: 20, x: 20 }}
+                                        animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
+                                        exit={{ opacity: 0, scale: 0.5, y: 20, x: 20 }}
+                                        onClick={(e) => e.stopPropagation()}
+                                      >
+                                        <div className="bubble-content">
+                                          <button className="close-bubble-btn" onClick={() => setShowDescription(null)}>&times;</button>
+                                          <p>{place.description || "Découvrez l'essence de cet endroit magnifique, imprégné d'histoire et de culture marocaine."}</p>
+                                        </div>
+                                        <div className="bubble-arrow" />
+                                      </motion.div>
+                                    )}
+                                  </AnimatePresence>
+                                </div>
+                              </div>
                             </div>
                           </motion.div>
                         ))}
