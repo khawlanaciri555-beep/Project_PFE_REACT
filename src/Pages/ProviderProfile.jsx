@@ -159,6 +159,9 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
   const { user } = useContext(AuthContext);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newItem, setNewItem] = useState({ title: '', description: '', price: '', imageFile: null, imagePreview: null });
+  const [addingItem, setAddingItem] = useState(false);
 
   // Determine provider type (hotel, coop, transport)
   const candidateType = isDashboard ? (user?.role || 'hotel') : type;
@@ -182,9 +185,18 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
               reviewsCount: 0,
               location: providerProfile.address || 'Location not set',
               description: providerProfile.description || 'No description provided.',
-              images: providerProfile.image ? [providerProfile.image] : [mockProviderData.hotel.images[0]],
+              images: providerProfile.image 
+                ? [providerProfile.image]
+                : [mockProviderData.hotel.images[0]],
+              gallery: providerProfile.gallery || [],
               features: mockProviderData[providerType]?.features || [],
-              services: [], // Services could be fetched separately
+              services: providerProfile.services ? providerProfile.services.filter(s => !s.is_deleted).map(s => ({
+                id: s.id,
+                title: s.title,
+                desc: s.description,
+                price: s.price,
+                image: s.image
+              })) : [],
               priceStarts: providerProfile.price || 0,
               contact: { 
                 phone: providerProfile.phone || 'No phone', 
@@ -204,11 +216,53 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
       };
       fetchDashboardProfile();
     } else {
-      // Public view - simulate or fetch by ID
-      setTimeout(() => {
-        setData(mockProviderData[providerType]);
-        setLoading(false);
-      }, 800);
+      // Public view - fetch by type and ID
+      const fetchPublicProfile = async () => {
+        try {
+          setLoading(true);
+          let endpoint = '';
+          if (providerType === 'hotel') endpoint = `/hotels/${id}`;
+          else if (providerType === 'transport') endpoint = `/transports/${id}`;
+          else if (providerType === 'coop') endpoint = `/cooperatives/${id}`;
+          
+          if (!endpoint) throw new Error('Invalid provider type');
+          
+          const response = await api.get(endpoint);
+          const providerProfile = response.data.data || response.data;
+          
+          setData({
+            name: providerProfile.name || 'Provider',
+            type: providerProfile.type || 'Provider',
+            rating: 4.8, 
+            reviewsCount: 0,
+            location: providerProfile.address || 'Location not set',
+            description: providerProfile.description || 'No description provided.',
+            images: providerProfile.image 
+              ? [providerProfile.image]
+              : [mockProviderData[providerType].images[0]],
+            gallery: providerProfile.gallery || [],
+            features: mockProviderData[providerType]?.features || [],
+            services: providerProfile.services ? providerProfile.services.filter(s => !s.is_deleted).map(s => ({
+              id: s.id,
+              title: s.title,
+              desc: s.description,
+              price: s.price,
+              image: s.image
+            })) : [],
+            priceStarts: providerProfile.price || 0,
+            contact: { 
+              phone: providerProfile.phone || 'No phone', 
+              email: providerProfile.email || 'No email'
+            }
+          });
+        } catch (err) {
+          console.error('Failed to fetch public profile', err);
+          setData(mockProviderData[providerType]);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchPublicProfile();
     }
   }, [isDashboard, providerType, id]);
 
@@ -260,6 +314,149 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
     }));
   };
 
+  const handleServiceImageUpload = async (event, serviceId) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+      formData.append('folder', 'services');
+
+      const response = await api.post('/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+
+      if (response.data.path) {
+        handleUpdateService(serviceId, 'image', response.data.path);
+        // Note: For a complete implementation, an API call to save the service image to the DB should be added here or in handleUpdateService.
+      }
+    } catch (err) {
+      console.error('Failed to upload service image', err);
+    }
+  };
+
+  const fileInputRef = React.useRef(null);
+
+  const handleImageUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    try {
+      const formData = new FormData();
+      formData.append('_method', 'PUT');
+      formData.append('image', file);
+      formData.append('name', data.name || '');
+      formData.append('phone', data.contact?.phone || '');
+      formData.append('address', data.location || '');
+      formData.append('description', data.description || '');
+      formData.append('price', data.priceStarts || 0);
+      formData.append('type', data.type || '');
+
+      const response = await api.post('/dashboard/profile', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+
+      if (response.data.image) {
+        setData(prev => {
+          const newImages = [...prev.images];
+          newImages[0] = response.data.image;
+          return { ...prev, images: newImages };
+        });
+      }
+    } catch (err) {
+      console.error('Failed to upload image', err);
+    }
+  };
+
+  const handleAddService = async () => {
+    if (!newItem.title) return alert('Please add a title');
+    try {
+      setAddingItem(true);
+      let imagePath = null;
+
+      // Upload image first if provided
+      if (newItem.imageFile) {
+        const formData = new FormData();
+        formData.append('image', newItem.imageFile);
+        formData.append('folder', 'services');
+        const uploadRes = await api.post('/upload', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+        imagePath = uploadRes.data.path;
+      }
+
+      // Get the provider's entity ID from the dashboard profile
+      const profileRes = await api.get('/dashboard/profile');
+      const providerProfile = profileRes.data.profile;
+
+      const payload = {
+        title: newItem.title,
+        description: newItem.description || '',
+        price: newItem.price || 0,
+        image: imagePath,
+        ...(providerType === 'hotel' && { hotel_id: providerProfile?.id }),
+        ...(providerType === 'coop' && { cooperative_id: providerProfile?.id }),
+        ...(providerType === 'transport' && { transport_id: providerProfile?.id }),
+      };
+
+      const res = await api.post('/services', payload);
+      const created = res.data.data || res.data;
+
+      // Add to local state
+      setData(prev => ({
+        ...prev,
+        services: [...(prev.services || []), {
+          id: created.id,
+          title: created.title,
+          desc: created.description,
+          price: created.price,
+          image: created.image || imagePath,
+        }]
+      }));
+
+      // Reset modal
+      setShowAddModal(false);
+      setNewItem({ title: '', description: '', price: '', imageFile: null, imagePreview: null });
+    } catch (err) {
+      console.error('Failed to add item', err);
+      alert('Error adding item. Please try again.');
+    } finally {
+      setAddingItem(false);
+    }
+  };
+
+  const handleAddFeature = () => {
+    const label = window.prompt('Enter new feature name:');
+    if (label) {
+      setData(prev => ({
+        ...prev,
+        features: [...(prev.features || []), { icon: <FaCheck />, label }]
+      }));
+    }
+  };
+
+  const handleDeleteFeature = (index) => {
+    if (!window.confirm('Remove this feature?')) return;
+    setData(prev => ({
+      ...prev,
+      features: prev.features.filter((_, i) => i !== index)
+    }));
+  };
+
+  const handleDeleteService = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this item?')) return;
+    try {
+      if (isDashboard && id) {
+         await api.delete(`/services/${id}`);
+      }
+      setData(prev => ({
+        ...prev,
+        services: prev.services.filter(s => s.id !== id)
+      }));
+    } catch (err) {
+      console.error('Failed to delete service', err);
+    }
+  };
+
   if (loading) {
     const loaderContent = (
       <div style={{ height: isDashboard ? '50vh' : '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -277,9 +474,22 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
       <section className="provider-hero" style={isDashboard ? { minHeight: '300px' } : {}}>
         <img src={getImageUrl(data.images[0])} alt={data.name} className="provider-hero-img" />
         {isEditMode && (
-          <button className="edit-hero-img-btn" style={{ position: 'absolute', top: '20px', right: '20px', background: '#fff', color: '#333', border: 'none', padding: '0.8rem 1.2rem', borderRadius: '12px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', zIndex: 10, boxShadow: '0 4px 10px rgba(0,0,0,0.3)' }}>
-             <FaCamera /> Change Cover Photo
-          </button>
+          <>
+            <input 
+              type="file" 
+              ref={fileInputRef} 
+              style={{ display: 'none' }} 
+              accept="image/*" 
+              onChange={handleImageUpload} 
+            />
+            <button 
+              className="edit-hero-img-btn" 
+              onClick={() => fileInputRef.current?.click()}
+              style={{ position: 'absolute', top: '20px', right: '20px', background: '#fff', color: '#333', border: 'none', padding: '0.8rem 1.2rem', borderRadius: '12px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', zIndex: 10, boxShadow: '0 4px 10px rgba(0,0,0,0.3)' }}
+            >
+               <FaCamera /> Change Cover Photo
+            </button>
+          </>
         )}
         <div className="provider-hero-overlay">
           <motion.div 
@@ -308,25 +518,85 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
         <div className="provider-main-content">
           
           {/* GALLERY */}
-          {(data.images.length > 1 || isEditMode) && (
+          {((data.gallery && data.gallery.length > 0) || isEditMode) && (
             <section>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                 <h2 className="section-title" style={{ marginBottom: 0 }}>Gallery</h2>
                 {isEditMode && (
-                   <button style={{ background: 'var(--lux-accent)', color: '#fff', border: 'none', padding: '0.6rem 1.2rem', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                   <button onClick={() => navigate('/dashboard/images')} style={{ background: 'var(--lux-accent)', color: '#fff', border: 'none', padding: '0.6rem 1.2rem', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                       <FaCamera /> Manage Photos
                    </button>
                 )}
               </div>
-              <div className="provider-gallery">
-                {data.images.slice(1, 4).map((img, i) => (
-                  <div key={i} className="gallery-item" style={{ overflow: 'hidden', position: 'relative' }}>
-                    <img src={getImageUrl(img)} alt="Gallery view" className="gallery-img" />
-                    {isEditMode && (
-                      <button style={{ position: 'absolute', top: '10px', right: '10px', background: 'rgba(255,255,255,0.9)', color: 'red', border: 'none', borderRadius: '50%', width: '30px', height: '30px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><FaTimes /></button>
-                    )}
-                  </div>
-                ))}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '200px 200px', gap: '1rem', height: '410px' }}>
+                {/* Big photo on the left spanning 2 rows */}
+                <div style={{ gridRow: '1 / 3', borderRadius: '16px', overflow: 'hidden' }}>
+                  {(data.gallery || [])[0] ? (
+                    <img
+                      src={getImageUrl(data.gallery[0].url)}
+                      alt={data.gallery[0].name || 'Photo 1'}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s', display: 'block' }}
+                      onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.04)'}
+                      onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+                    />
+                  ) : isEditMode ? (
+                    <div
+                      onClick={() => navigate('/dashboard/images')}
+                      style={{ width: '100%', height: '100%', background: '#faf9f7', border: '2px dashed #d4c5a9', borderRadius: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', gap: '0.5rem', color: '#b8a98a', transition: '0.3s' }}
+                      onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--lux-accent)'; e.currentTarget.style.color = 'var(--lux-accent)'; }}
+                      onMouseLeave={e => { e.currentTarget.style.borderColor = '#d4c5a9'; e.currentTarget.style.color = '#b8a98a'; }}
+                    >
+                      <FaCamera size={36} />
+                      <span style={{ fontSize: '0.9rem', fontWeight: '600' }}>Add Photo</span>
+                    </div>
+                  ) : null}
+                </div>
+
+                {/* Top-right small photo */}
+                <div style={{ borderRadius: '16px', overflow: 'hidden' }}>
+                  {(data.gallery || [])[1] ? (
+                    <img
+                      src={getImageUrl(data.gallery[1].url)}
+                      alt={data.gallery[1].name || 'Photo 2'}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s', display: 'block' }}
+                      onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.04)'}
+                      onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+                    />
+                  ) : isEditMode ? (
+                    <div
+                      onClick={() => navigate('/dashboard/images')}
+                      style={{ width: '100%', height: '100%', background: '#faf9f7', border: '2px dashed #d4c5a9', borderRadius: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', gap: '0.5rem', color: '#b8a98a', transition: '0.3s' }}
+                      onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--lux-accent)'; e.currentTarget.style.color = 'var(--lux-accent)'; }}
+                      onMouseLeave={e => { e.currentTarget.style.borderColor = '#d4c5a9'; e.currentTarget.style.color = '#b8a98a'; }}
+                    >
+                      <FaCamera size={28} />
+                      <span style={{ fontSize: '0.85rem', fontWeight: '600' }}>Add Photo</span>
+                    </div>
+                  ) : null}
+                </div>
+
+                {/* Bottom-right small photo */}
+                <div style={{ borderRadius: '16px', overflow: 'hidden' }}>
+                  {(data.gallery || [])[2] ? (
+                    <img
+                      src={getImageUrl(data.gallery[2].url)}
+                      alt={data.gallery[2].name || 'Photo 3'}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s', display: 'block' }}
+                      onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.04)'}
+                      onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+                    />
+                  ) : isEditMode ? (
+                    <div
+                      onClick={() => navigate('/dashboard/images')}
+                      style={{ width: '100%', height: '100%', background: '#faf9f7', border: '2px dashed #d4c5a9', borderRadius: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', gap: '0.5rem', color: '#b8a98a', transition: '0.3s' }}
+                      onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--lux-accent)'; e.currentTarget.style.color = 'var(--lux-accent)'; }}
+                      onMouseLeave={e => { e.currentTarget.style.borderColor = '#d4c5a9'; e.currentTarget.style.color = '#b8a98a'; }}
+                    >
+                      <FaCamera size={28} />
+                      <span style={{ fontSize: '0.85rem', fontWeight: '600' }}>Add Photo</span>
+                    </div>
+                  ) : null}
+                </div>
               </div>
             </section>
           )}
@@ -344,37 +614,48 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
             />
           </section>
 
-          {/* FEATURES */}
+          {/* FEATURES - only show if there are features */}
+          {(isEditMode || (data.features && data.features.length > 0)) && (
           <section>
             <h2 className="section-title" style={{ display: 'flex', justifyContent: 'space-between' }}>
               Amenities & Features
-              {isEditMode && <button style={{ fontSize: '0.9rem', color: 'var(--lux-accent)', background: 'none', border: 'none', cursor: 'pointer' }}>+ Add Feature</button>}
+              {isEditMode && <button onClick={handleAddFeature} style={{ fontSize: '0.9rem', color: 'var(--lux-accent)', background: 'none', border: 'none', cursor: 'pointer' }}>+ Add Feature</button>}
             </h2>
             <div className="features-grid">
-              {data.features.map((feat, i) => (
+              {(data.features || []).map((feat, i) => (
                 <div key={i} className="feature-item" style={{ position: 'relative' }}>
-                  <span className="feature-icon">{feat.icon}</span>
+                  <span className="feature-icon">{feat.icon || <FaCheck />}</span>
                   <span>{feat.label}</span>
                   {isEditMode && (
-                    <button style={{ position: 'absolute', right: '10px', background: 'none', border: 'none', color: 'red', cursor: 'pointer', opacity: 0.7 }}><FaTimes /></button>
+                    <button onClick={() => handleDeleteFeature(i)} style={{ position: 'absolute', right: '10px', background: 'none', border: 'none', color: 'red', cursor: 'pointer', opacity: 0.7 }}><FaTimes /></button>
                   )}
                 </div>
               ))}
             </div>
           </section>
+          )}
 
           {/* DYNAMIC SERVICES LIST (Rooms, Cars, Products) */}
+          {(isEditMode || (data.services && data.services.length > 0)) && (
           <section>
             <h2 className="section-title" style={{ display: 'flex', justifyContent: 'space-between' }}>
-              {type === 'hotel' ? 'Available Rooms & Suites' : type === 'transport' ? 'Our Fleet & Routes' : 'Artisan Products'}
-              {isEditMode && <button style={{ fontSize: '0.9rem', color: 'var(--lux-accent)', background: 'none', border: 'none', cursor: 'pointer' }}>+ Add Item</button>}
+              {providerType === 'hotel' ? 'Available Rooms & Suites' : providerType === 'transport' ? 'Our Fleet & Routes' : 'Artisan Products'}
+              {isEditMode && <button onClick={() => setShowAddModal(true)} style={{ fontSize: '0.9rem', color: 'var(--lux-accent)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: '600' }}>+ Add Item</button>}
             </h2>
             <div className="dynamic-lists">
               {data.services.map(svc => (
                 <div key={svc.id} className="dynamic-card" style={{ position: 'relative' }}>
                   <img src={getImageUrl(svc.image)} alt={svc.title} className="dynamic-img" />
                   {isEditMode && (
-                     <button style={{ position: 'absolute', top: '10px', left: '10px', background: '#fff', padding: '0.5rem', borderRadius: '8px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.8rem' }}><FaCamera /> Edit Image</button>
+                     <>
+                     <label style={{ position: 'absolute', top: '10px', left: '10px', background: '#fff', padding: '0.5rem', borderRadius: '8px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.8rem' }}>
+                        <FaCamera /> Edit Image
+                        <input type="file" style={{ display: 'none' }} accept="image/*" onChange={(e) => handleServiceImageUpload(e, svc.id)} />
+                     </label>
+                     <button onClick={() => handleDeleteService(svc.id)} style={{ position: 'absolute', top: '10px', right: '10px', background: 'rgba(255,255,255,0.9)', color: 'red', border: 'none', padding: '0.5rem', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.8rem' }}>
+                       <FaTimes /> Remove
+                     </button>
+                     </>
                   )}
                   <div className="dynamic-info">
                     <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.25rem' }}>
@@ -392,6 +673,7 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
               ))}
             </div>
           </section>
+          )}
 
           {/* REVIEWS */}
           {!isDashboard && (
@@ -457,6 +739,31 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
           </div>
         </div>
       </div>
+
+      {/* MODAL FOR ADDING SERVICE */}
+      {showAddModal && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ background: '#fff', padding: '2rem', borderRadius: '16px', width: '90%', maxWidth: '500px', display: 'flex', flexDirection: 'column', gap: '1rem', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
+            <h3 style={{ margin: 0, fontFamily: 'var(--font-serif)', fontSize: '1.5rem' }}>Add New Item</h3>
+            <input type="text" placeholder="Title" value={newItem.title} onChange={e => setNewItem({...newItem, title: e.target.value})} className="lux-input" />
+            <textarea placeholder="Description" value={newItem.description} onChange={e => setNewItem({...newItem, description: e.target.value})} className="lux-input" style={{ minHeight: '100px' }}></textarea>
+            <input type="number" placeholder="Price (MAD)" value={newItem.price} onChange={e => setNewItem({...newItem, price: e.target.value})} className="lux-input" />
+            <input type="file" accept="image/*" onChange={e => {
+              const file = e.target.files[0];
+              if (file) {
+                setNewItem({...newItem, imageFile: file, imagePreview: URL.createObjectURL(file)});
+              }
+            }} />
+            {newItem.imagePreview && <img src={newItem.imagePreview} alt="Preview" style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '8px' }} />}
+            <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+              <button onClick={() => setShowAddModal(false)} style={{ flex: 1, padding: '0.8rem', background: '#ccc', color: '#333', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}>Cancel</button>
+              <button onClick={handleAddService} disabled={addingItem} style={{ flex: 1, padding: '0.8rem', background: 'var(--lux-accent)', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}>
+                {addingItem ? 'Adding...' : 'Save Item'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 

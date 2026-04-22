@@ -156,45 +156,104 @@ const Register = () => {
   }
 
   return (
-    <div className="auth-page">
-      <div className="register-card">
-        <div className="auth-header">
-          <h1>{t('auth.register.title')}</h1>
-          <p>VibKech</p>
-        </div>
-
-        <RoleSelector activeRole={role} setRole={(r) => {
-          setRole(r);
-          // Optional: Clear form data when switching roles
-        }} />
-
-        <form onSubmit={handleSubmit}>
-          {error && (
-            <div className="login-error-msg" style={{ marginBottom: '1rem', color: '#ff4d4d', textAlign: 'center' }}>
-                <span>⚠</span> {error}
-            </div>
-          )}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={role}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              {renderForm()}
-            </motion.div>
-          </AnimatePresence>
-
-          <div style={{ marginTop: '2.5rem' }}>
-            <GradientButton loading={loading}>
-              {t('auth.register.submit')}
-            </GradientButton>
+    <div className="auth-page login-page register-page-split">
+      {/* Left Panel — decorative (Reuse from Login) */}
+      <div className="login-left-panel">
+        <div className="login-panel-overlay" />
+        <div className="login-panel-content">
+          <div className="login-brand">
+            <span className="login-brand-icon">✦</span>
+            <span className="login-brand-name">VibKech</span>
           </div>
-        </form>
+          <h2 className="login-panel-title">
+            Begin Your<br />
+            <em>Marrakech Story</em>
+          </h2>
+          <p className="login-panel-desc">
+            Join our community of explorers and hosts. 
+            Experience the soul of the Red City like never before.
+          </p>
+          <div className="login-panel-stats">
+            <div className="lp-stat">
+              <span>800+</span>
+              <small>Monuments</small>
+            </div>
+            <div className="lp-stat-divider" />
+            <div className="lp-stat">
+              <span>10M+</span>
+              <small>Tourists / Year</small>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        <div className="auth-footer" style={{ textAlign: 'center', marginTop: '2rem' }}>
-          <p>{t('auth.register.haveAccount')} <Link to="/login" style={{ color: 'var(--input-focus)', fontWeight: 'bold' }}>{t('auth.register.login')}</Link></p>
+      {/* Right Panel — form */}
+      <div className="login-right-panel">
+        <div className="login-form-card" style={{ maxWidth: '550px' }}>
+          <div className="login-form-header">
+            <div className="login-form-eyebrow">
+              <span className="lf-line" />
+              <span>JOIN THE EXPERIENCE</span>
+              <span className="lf-line" />
+            </div>
+            <h1>{t('auth.register.title')}</h1>
+            <p>VibKech — Luxury & Authenticity</p>
+          </div>
+
+          <RoleSelector activeRole={role} setRole={(r) => setRole(r)} />
+
+          <form onSubmit={handleSubmit} className="login-form">
+            {error && (
+              <div className="login-error-msg" style={{ marginBottom: '1.5rem' }}>
+                <span>⚠</span> {error}
+              </div>
+            )}
+            
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={role}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+              >
+                {renderForm()}
+              </motion.div>
+            </AnimatePresence>
+
+            <div style={{ marginTop: '2rem' }}>
+              <button
+                type="submit"
+                className="submit-btn"
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <div className="spinner" />
+                    {t('common.loading')}
+                  </>
+                ) : (
+                  <>
+                    {t('auth.register.submit')}
+                    <span style={{ fontSize: '1.1rem' }}>→</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </form>
+
+          <div className="login-divider">
+            <span />
+            <small>OR</small>
+            <span />
+          </div>
+
+          <p className="login-form-footer">
+            {t('auth.register.haveAccount')}{' '}
+            <Link to="/login" style={{ color: 'var(--input-focus)', fontWeight: '700', textDecoration: 'none' }}>
+              {t('auth.register.login')}
+            </Link>
+          </p>
         </div>
       </div>
     </div>

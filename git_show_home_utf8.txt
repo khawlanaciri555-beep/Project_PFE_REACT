@@ -1,0 +1,1882 @@
+﻿commit f774e48e864b3f9555f24520836f0c498d907471
+Author: koutar2006 <kawtarkawtar201912@gmail.com>
+Date:   Tue Apr 21 16:15:42 2026 +0100
+
+    modification de homme explor et lpanning
+
+diff --git a/public/about_hero.png b/public/about_hero.png
+new file mode 100644
+index 0000000..c535aac
+Binary files /dev/null and b/public/about_hero.png differ
+diff --git a/public/background/backExplore.mp4 b/public/background/backExplore.mp4
+new file mode 100644
+index 0000000..0b752e7
+Binary files /dev/null and b/public/background/backExplore.mp4 differ
+diff --git a/public/background/backHome.mp4 b/public/background/backHome.mp4
+index e0c1660..9cbba67 100644
+Binary files a/public/background/backHome.mp4 and b/public/background/backHome.mp4 differ
+diff --git a/public/background/zlige.png b/public/background/zlige.png
+new file mode 100644
+index 0000000..65fa2ef
+Binary files /dev/null and b/public/background/zlige.png differ
+diff --git a/public/koutoubia_hero.png b/public/koutoubia_hero.png
+new file mode 100644
+index 0000000..4798f3b
+Binary files /dev/null and b/public/koutoubia_hero.png differ
+diff --git a/src/App.jsx b/src/App.jsx
+index 87c9169..0ea99c4 100644
+--- a/src/App.jsx
++++ b/src/App.jsx
+@@ -6,6 +6,7 @@ import Login from './Pages/Login';
+ import Register from './Pages/Register';
+ import { AuthProvider } from './context/AuthContext';
+ import PlaceDetails from './Pages/PlaceDetails';
++import About from './Pages/About';
+ import Explore from './Pages/Explore';
+ import Planning from './Pages/Planning';
+ import Comments from './Pages/Comments';
+@@ -14,6 +15,7 @@ import Favorites from './Pages/Dashboard/Favorites';
+ import BookingRequests from './Pages/Dashboard/BookingRequests';
+ import MyBookings from './Pages/Dashboard/MyBookings';
+ import MyServices from './Pages/Dashboard/MyServices';
++import MyProperties from './Pages/Dashboard/MyProperties';
+ import Profile from './Pages/Dashboard/Profile';
+ // import ProtectedRoute from './Components/ProtectedRoute';
+ 
+@@ -33,6 +35,7 @@ function App() {
+           <Route path="/register" element={<Register />} />
+           <Route path="/place/:id" element={<PlaceDetails />} />
+           <Route path="/explore" element={<Explore />} />
++          <Route path="/about" element={<About />} />
+           <Route path="/planning" element={<Planning />} />
+           <Route path="/place/:id/comments" element={<Comments />} />
+           <Route path="/comments/:id" element={<Comments />} />
+@@ -50,6 +53,7 @@ function App() {
+           <Route path="/dashboard/bookings" element={<BookingRequests />} />
+           <Route path="/dashboard/my-bookings" element={<MyBookings />} />
+           <Route path="/dashboard/services" element={<MyServices />} />
++          <Route path="/dashboard/properties" element={<MyProperties />} />
+           <Route path="/dashboard/settings" element={<Profile />} />
+         </Routes>
+       </BrowserRouter>
+diff --git a/src/Components/Dashboard/Sidebar.jsx b/src/Components/Dashboard/Sidebar.jsx
+index ab2da67..21c4fd9 100644
+--- a/src/Components/Dashboard/Sidebar.jsx
++++ b/src/Components/Dashboard/Sidebar.jsx
+@@ -30,7 +30,7 @@ const Sidebar = () => {
+     hotel: [
+       { path: '/dashboard', label: 'Overview', icon: <FaHome /> },
+       { path: '/dashboard/bookings', label: 'Booking Requests', icon: <FaClipboardList /> },
+-      { path: '/dashboard/services', label: 'My Rooms/Services', icon: <FaBriefcase /> },
++      { path: '/dashboard/properties', label: 'My Properties', icon: <FaBriefcase /> },
+     ],
+     guide: [
+       { path: '/dashboard', label: 'Overview', icon: <FaHome /> },
+diff --git a/src/Components/Footer.css b/src/Components/Footer.css
+index 4cfd74b..e9678a0 100644
+--- a/src/Components/Footer.css
++++ b/src/Components/Footer.css
+@@ -1,97 +1,181 @@
+-.home-footer {
+-  background: #fff;
+-  padding: 3rem 5% 1.5rem;
+-  border-top: 1px solid #EBE9E1;
++.footer-premium {
++  background: var(--card-bg);
++  color: var(--text-dark);
++  padding: 6rem 8% 3rem;
++  font-family: var(--font-sans);
++  border-top: 1px solid var(--border-color);
++  transition: background-color 0.4s ease, border-color 0.4s ease;
++  position: relative;
++  overflow: hidden;
++  width: 100%;
+ }
+ 
+-.footer-top {
++body.dark-mode .footer-premium {
++  background: #0d0d0d;
++  color: #fff;
++  border-top: 1px solid #1a1a1a;
++}
++
++.footer-premium::before {
++  content: '';
++  position: absolute;
++  top: -50%;
++  left: -20%;
++  width: 60%;
++  height: 200%;
++  background: radial-gradient(circle, rgba(188, 73, 49, 0.08) 0%, transparent 70%);
++  pointer-events: none;
++}
++
++.footer-content {
+   display: grid;
+-  grid-template-columns: 2fr 1fr 1fr;
+-  gap: 3rem;
+-  margin-bottom: 2.5rem;
++  grid-template-columns: 1.2fr 2fr;
++  gap: 8rem;
++  position: relative;
++  z-index: 2;
++  max-width: 1400px;
++  margin: 0 auto 5rem;
+ }
+ 
+-.brand-col h3 {
+-  color: #BC4931; /* --primary */
+-  font-size: 1.5rem;
+-  margin: 0 0 1rem 0;
++.footer-brand {
++  display: flex;
++  flex-direction: column;
++  gap: 1.5rem;
+ }
+ 
+-.brand-col p {
+-  color: #524E4A; /* --text-light */
+-  line-height: 1.6;
+-  max-width: 350px;
+-  margin-bottom: 1.5rem;
++.footer-brand .logo-section {
++  display: flex;
++  align-items: center;
++  gap: 1rem;
+ }
+ 
+-.footer-logo {
+-  margin-bottom: 1.2rem;
++.footer-brand .logo-section img {
++  height: 48px;
++  width: auto;
+ }
+ 
+-.footer-logo .brand-logo {
+-  height: 80px;
++.footer-brand .brand-name {
++  font-size: 1.6rem;
++  font-weight: 800;
++  letter-spacing: 1px;
++  color: var(--primary);
+ }
+ 
+-.social-icons span {
+-  display: inline-flex;
+-  margin-right: 1rem;
+-  width: 35px;
+-  height: 35px;
+-  background: #F8F7F4; /* --bg-color */
+-  border-radius: 50%;
++.footer-brand p {
++  color: var(--text-light);
++  line-height: 1.8;
++  font-size: 0.95rem;
++  max-width: 420px;
++  margin: 0;
++}
++
++.social-links-premium {
++  display: flex;
++  gap: 1rem;
++  margin-top: 0.5rem;
++}
++
++.social-links-premium a {
++  width: 42px;
++  height: 42px;
++  background: var(--bg-color);
++  border: 1px solid var(--border-color);
++  border-radius: 12px;
++  display: flex;
+   align-items: center;
+   justify-content: center;
+-  cursor: pointer;
+-  transition: all 0.3s ease;
++  color: var(--text-light);
++  font-size: 1.1rem;
++  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
++  text-decoration: none;
+ }
+ 
+-.social-icons span:hover {
+-  background: #EBE9E1;
++.social-links-premium a:hover {
++  background: var(--primary);
++  color: #fff;
++  transform: translateY(-4px);
++  border-color: var(--primary);
++  box-shadow: 0 10px 20px rgba(188, 73, 49, 0.2);
+ }
+ 
+-.footer-col h4 {
+-  color: #BC4931; /* --primary */
+-  font-size: 1rem;
+-  margin: 0 0 1rem 0;
++.footer-links-grid {
++  display: grid;
++  grid-template-columns: repeat(3, 1fr);
++  gap: 3rem;
+ }
+ 
+-.footer-col ul {
+-  list-style: none;
+-  padding: 0;
+-  margin: 0;
++.footer-group h5 {
++  color: var(--primary);
++  font-size: 0.75rem;
++  font-weight: 800;
++  letter-spacing: 2px;
++  margin-bottom: 1.8rem;
++  text-transform: uppercase;
++  opacity: 0.8;
+ }
+ 
+-.footer-col ul li {
+-  margin-bottom: 0.6rem;
+-  color: #524E4A; /* --text-light */
+-  font-size: 0.85rem;
++.footer-group a {
++  display: block;
++  color: var(--text-light);
++  text-decoration: none;
++  font-size: 0.9rem;
++  margin-bottom: 0.9rem;
++  transition: 0.3s ease;
+ }
+ 
+-.footer-bottom {
+-  border-top: 1px solid #EBE9E1;
+-  padding-top: 1.5rem;
++.footer-group a:hover {
++  color: var(--primary);
++  padding-left: 4px;
++}
++
++.footer-legal {
++  border-top: 1px solid var(--border-color);
++  padding-top: 2rem;
+   display: flex;
+   justify-content: space-between;
+-  color: #524E4A; /* --text-light */
+-  font-size: 0.8rem;
++  align-items: center;
++  flex-wrap: wrap;
++  gap: 1.5rem;
++  max-width: 1400px;
++  margin: 0 auto;
++}
++
++.footer-legal p {
++  color: var(--text-light);
++  font-size: 0.85rem;
++  margin: 0;
++}
++
++.legal-links {
++  display: flex;
++  gap: 2rem;
+ }
+ 
+-.footer-bottom-links span {
+-  margin-left: 2rem;
++.legal-links a {
++  color: var(--text-light);
++  text-decoration: none;
++  font-size: 0.85rem;
++  transition: 0.3s;
+ }
+ 
+-@media (max-width: 768px) {
+-  .footer-top {
++.legal-links a:hover {
++  color: var(--primary);
++}
++
++@media (max-width: 1024px) {
++  .footer-content {
+     grid-template-columns: 1fr;
+-    gap: 2rem;
++    gap: 4rem;
+   }
+-  .footer-bottom {
++}
++
++@media (max-width: 640px) {
++  .footer-links-grid {
++    grid-template-columns: 1fr;
++    gap: 2.5rem;
++  }
++  .footer-legal {
+     flex-direction: column;
+-    gap: 1rem;
+-    align-items: center;
+     text-align: center;
+   }
+-  .footer-bottom-links span {
+-    margin: 0 1rem;
+-  }
+ }
+diff --git a/src/Components/Footer.jsx b/src/Components/Footer.jsx
+index c0cd83e..25421b5 100644
+--- a/src/Components/Footer.jsx
++++ b/src/Components/Footer.jsx
+@@ -1,47 +1,61 @@
+ import React from 'react';
+ import { Link } from 'react-router-dom';
+ import { useTranslation } from 'react-i18next';
++import { FaTwitter, FaGithub, FaLinkedinIn, FaInstagram } from 'react-icons/fa';
+ import './Footer.css';
+ 
+ const Footer = () => {
+   const { t } = useTranslation();
+   return (
+-    <footer className="home-footer">
+-      <div className="footer-top">
+-        <div className="footer-col brand-col">
+-          <div className="footer-logo">
+-            <img src="/logo picter/logo.png" alt="VibKech Logo" className="brand-logo" />
++    <footer className="footer-premium">
++      <div className="footer-content">
++        <div className="footer-brand">
++          <div className="logo-section">
++            <img src="/logo picter/logo.png" alt="VibKech" />
++            <span className="brand-name">VibKech</span>
+           </div>
+-          <p>Experience the soul of Marrakech with curated journeys that blend tradition and modern luxury.</p>
+-          <div className="social-icons">
+-            <span>­ƒîì</span>
+-            <span>­ƒöù</span>
+-            <span>Ô£ë´©Å</span>
++          <p>
++            VibKech provides a curated set of experiences and luxury planning tools to help you discover Marrakech 
++            in its most beautiful and authentic way, quickly and efficiently.
++          </p>
++          <div className="social-links-premium">
++            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"><FaTwitter /></a>
++            <a href="https://github.com" target="_blank" rel="noopener noreferrer"><FaGithub /></a>
++            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"><FaLinkedinIn /></a>
++            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
+           </div>
+         </div>
+-        <div className="footer-col">
+-          <h4>Contact Details</h4>
+-          <ul>
+-            <li>Ô£ë contact@alriad.com</li>
+-            <li>­ƒô× +212 524 430000</li>
+-            <li>­ƒôì Medina Quarter, Marrakech 44000</li>
+-          </ul>
+-        </div>
+-        <div className="footer-col">
+-          <h4>Useful Links</h4>
+-          <ul>
+-            <li><Link to="/home">{t('nav.home')}</Link></li>
+-            <li><Link to="/explore">{t('nav.explore')}</Link></li>
+-            <li><Link to="/planning">{t('nav.planning')}</Link></li>
+-            <li><Link to="/login">{t('nav.login')} / {t('nav.register')}</Link></li>
+-          </ul>
++
++        <div className="footer-links-grid">
++          <div className="footer-group">
++            <h5>{t('footer.product') || 'PRODUCT'}</h5>
++            <Link to="/explore">Features</Link>
++            <Link to="/planning">Pricing</Link>
++            <Link to="/services">Integrations</Link>
++            <Link to="/explore">Updates</Link>
++          </div>
++          <div className="footer-group">
++            <h5>{t('footer.company') || 'COMPANY'}</h5>
++            <Link to="/about">About</Link>
++            <Link to="/careers">Careers</Link>
++            <Link to="/blog">Blog</Link>
++            <Link to="/contact">Contact</Link>
++          </div>
++          <div className="footer-group">
++            <h5>{t('footer.resources') || 'RESOURCES'}</h5>
++            <Link to="/docs">Docs</Link>
++            <Link to="/community">Community</Link>
++            <Link to="/support">Support</Link>
++            <Link to="/security">Security</Link>
++          </div>
+         </div>
+       </div>
+-      <div className="footer-bottom">
+-        <div>┬® 2024 VibKech Marrakech. All rights reserved.</div>
+-        <div className="footer-bottom-links">
+-          <span>Majorelle Foundation Partner</span>
+-          <span>ISO 9001 Certified</span>
++
++      <div className="footer-legal">
++        <p>┬® 2024 VibKech Marrakech. All rights reserved.</p>
++        <div className="legal-links">
++          <Link to="/privacy">Privacy Policy</Link>
++          <Link to="/terms">Terms of Service</Link>
+         </div>
+       </div>
+     </footer>
+diff --git a/src/Components/Navbar.jsx b/src/Components/Navbar.jsx
+index d0726bc..74afc14 100644
+--- a/src/Components/Navbar.jsx
++++ b/src/Components/Navbar.jsx
+@@ -65,7 +65,7 @@ const Navbar = () => {
+         <Link to="/home" className={isHomePage ? 'active' : ''}>{t('nav.home')}</Link>
+         <Link to="/explore" className={location.pathname === '/explore' ? 'active' : ''}>{t('nav.explore')}</Link>
+         <Link to="/planning" className={location.pathname === '/planning' ? 'active' : ''}>{t('nav.planning')}</Link>
+-        <Link to="#">{t('nav.about')}</Link>
++        <Link to="/about" className={location.pathname === '/about' ? 'active' : ''}>{t('nav.about')}</Link>
+       </div>
+ 
+       <div className="nav-buttons desktop-only">
+@@ -112,7 +112,7 @@ const Navbar = () => {
+               <Link to="/home" onClick={toggleMobileMenu}>{t('nav.home')}</Link>
+               <Link to="/explore" onClick={toggleMobileMenu}>{t('nav.explore')}</Link>
+               <Link to="/planning" onClick={toggleMobileMenu}>{t('nav.planning')}</Link>
+-              <Link to="#" onClick={toggleMobileMenu}>{t('nav.about')}</Link>
++              <Link to="/about" onClick={toggleMobileMenu}>{t('nav.about')}</Link>
+               <button 
+                 onClick={toggleTheme} 
+                 style={{ background: 'transparent', border: 'none', color: 'var(--text-dark)', cursor: 'pointer', fontSize: '1.2rem', margin: '1rem 0', display: 'flex', alignItems: 'center', gap: '10px' }}
+diff --git a/src/Components/home.css b/src/Components/home.css
+index fe89b37..702c196 100644
+--- a/src/Components/home.css
++++ b/src/Components/home.css
+@@ -3,6 +3,22 @@
+   overflow-x: hidden;
+ }
+ 
++.destinations-section, .testimonials-section {
++  background-image: 
++    linear-gradient(rgba(248, 247, 244, 0.45), rgba(248, 247, 244, 0.45)),
++    url('/background/zlige.png');
++  background-attachment: fixed;
++  background-size: 600px;
++  background-repeat: repeat;
++}
++
++body.dark-mode .destinations-section, 
++body.dark-mode .testimonials-section {
++  background-image: 
++    linear-gradient(rgba(26, 26, 26, 0.65), rgba(26, 26, 26, 0.65)),
++    url('/background/zlige.png');
++}
++
+ /* Navbar and Footer styles moved to separate components */
+ /* =========================================
+    Hero Section
+@@ -31,6 +47,8 @@
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
++  transform: scale(1.15); /* Zoom in to hide watermarks at edges */
++  filter: contrast(1.1) brightness(0.8); 
+ }
+ 
+ .hero-video-overlay {
+@@ -39,7 +57,7 @@
+   left: 0;
+   width: 100%;
+   height: 100%;
+-  background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.5) 100%);
++  background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.7) 100%);
+   z-index: -1;
+ }
+ 
+@@ -391,10 +409,12 @@
+ }
+ 
+ .test-card {
+-  background: var(--card-bg);
+-  border-radius: 8px;
+-  padding: 0.5rem; /* reduced from 2.5rem */
+-  box-shadow: 0 10px 30px rgba(0,0,0,0.03);
++  background: rgba(255, 255, 255, 0.4); /* Transparent glass effect */
++  backdrop-filter: blur(5px);
++  border-radius: 12px;
++  padding: 1.5rem;
++  box-shadow: none; /* Removed borders/shadows */
++  border: none;
+ }
+ 
+ .user-info {
+@@ -440,7 +460,7 @@
+ .small.right-col-1 {
+   grid-column: 8 / 13;
+   grid-row: 1 / 2;
+-  background: #F4EBE6; /* Light pinkish */
++  background: rgba(244, 235, 230, 0.45); /* Glassy pinkish */
+ }
+ 
+ .small.block-bottom-left {
+@@ -451,7 +471,7 @@
+ .medium.block-bottom-right {
+   grid-column: 5 / 13;
+   grid-row: 2 / 4;
+-  background: #EFF3EA; /* Light greenishish */
++  background: rgba(239, 243, 234, 0.45); /* Glassy greenish */
+ }
+ 
+ .split-content {
+diff --git a/src/Pages/About.css b/src/Pages/About.css
+new file mode 100644
+index 0000000..d34adaa
+--- /dev/null
++++ b/src/Pages/About.css
+@@ -0,0 +1,307 @@
++@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600;800&display=swap');
++
++:root {
++  --primary-red: #BC4931;
++  --accent-gold: #C58A3A;
++  --bg-sand: #F4EBE6;
++  --glass-white: rgba(255, 255, 255, 0.85);
++  --glass-border: rgba(255, 255, 255, 0.4);
++  --font-serif: 'Playfair Display', serif;
++  --font-sans: 'Inter', sans-serif;
++}
++
++.about-page-container {
++  overflow-x: hidden;
++  background-color: var(--page-bg, #fff);
++  color: var(--text-color, #1A1A1A);
++  transition: all 0.3s ease;
++}
++
++:global(body.dark-mode) .about-page-container {
++  --page-bg: #0f172a;
++  --text-color: #f8fafc;
++  --bg-sand: #1e293b;
++}
++
++/* --- Hero Section (First Style) --- */
++.hero-about {
++  position: relative;
++  height: 85vh;
++  display: flex;
++  align-items: center;
++  justify-content: center;
++  background-attachment: fixed;
++  background-size: cover;
++  background-position: center;
++}
++
++.hero-glass-box {
++  background: rgba(255, 255, 255, 0.15);
++  backdrop-filter: blur(20px);
++  -webkit-backdrop-filter: blur(20px);
++  padding: 4rem 6rem;
++  border-radius: 40px;
++  border: 1px solid rgba(255, 255, 255, 0.3);
++  text-align: center;
++  color: #fff;
++  max-width: 900px;
++  box-shadow: 0 25px 50px rgba(0,0,0,0.2);
++}
++
++.hero-glass-box h1 {
++  font-family: var(--font-serif);
++  font-size: 4.5rem;
++  margin-bottom: 1.5rem;
++  line-height: 1.1;
++}
++
++.hero-glass-box p {
++  font-size: 1.4rem;
++  font-weight: 300;
++  letter-spacing: 2px;
++  text-transform: uppercase;
++}
++
++/* --- Alternating Sections (First Style) --- */
++.story-section {
++  padding: 10rem 10%;
++  display: grid;
++  grid-template-columns: 1fr 1fr;
++  gap: 8rem;
++  align-items: center;
++}
++
++.story-section.reverse {
++  direction: rtl;
++}
++.story-section.reverse .story-text {
++  direction: ltr;
++  text-align: left;
++}
++
++.story-text h2 {
++  font-family: var(--font-serif);
++  font-size: 3.5rem;
++  color: var(--primary-red);
++  margin-bottom: 2.5rem;
++}
++
++.story-text p {
++  font-size: 1.2rem;
++  line-height: 2;
++  color: #444;
++  margin-bottom: 2rem;
++}
++
++.story-img-wrap {
++  position: relative;
++  border-radius: 50px;
++  overflow: hidden;
++  box-shadow: 0 40px 80px rgba(0,0,0,0.1);
++  aspect-ratio: 4/5;
++}
++
++.story-img-wrap img {
++  width: 100%;
++  height: 100%;
++  object-fit: cover;
++}
++
++/* --- Values Grid (Glass Cards) --- */
++.values-wrapper {
++  background-color: var(--bg-sand);
++  padding: 10rem 5%;
++  text-align: center;
++}
++
++.values-title {
++  font-family: var(--font-serif);
++  font-size: 3.5rem;
++  margin-bottom: 5rem;
++}
++
++.values-grid {
++  display: grid;
++  grid-template-columns: repeat(3, 1fr);
++  gap: 3rem;
++  max-width: 1400px;
++  margin: 0 auto;
++}
++
++.value-glass-card {
++  background: var(--glass-white);
++  backdrop-filter: blur(10px);
++  padding: 4rem 2rem;
++  border-radius: 40px;
++  border: 1px solid var(--glass-border);
++  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
++}
++
++:global(body.dark-mode) .value-glass-card {
++  background: rgba(30, 41, 59, 0.8);
++  border-color: rgba(255, 255, 255, 0.1);
++  color: #fff;
++}
++
++.value-glass-card:hover {
++  transform: translateY(-20px) scale(1.02);
++  background: #fff;
++  box-shadow: 0 50px 100px rgba(188, 73, 49, 0.15);
++}
++
++/* --- Timeline Styles --- */
++.timeline-section {
++  padding: 10rem 5%;
++  background-color: #ffffff;
++  background-image: 
++    linear-gradient(rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.45)),
++    url("/background/zlige.png");
++  background-size: 600px;
++  background-repeat: repeat;
++  background-attachment: fixed;
++}
++
++:global(body.dark-mode) .timeline-section {
++  background-color: #0f172a;
++  background-image: 
++    linear-gradient(rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.6)),
++    url("/background/zlige.png");
++}
++
++.timeline-container {
++  max-width: 1100px;
++  margin: 0 auto;
++  position: relative;
++  padding: 4rem 0;
++}
++
++.timeline-line {
++  position: absolute;
++  left: 50%;
++  top: 0;
++  bottom: 0;
++  width: 2px;
++  background: linear-gradient(to bottom, transparent, var(--accent-gold), transparent);
++  transform: translateX(-50%);
++}
++
++.timeline-item {
++  width: 100%;
++  margin-bottom: 8rem;
++  display: flex;
++  justify-content: flex-end;
++  position: relative;
++}
++
++.timeline-item:nth-child(even) {
++  justify-content: flex-start;
++}
++
++.timeline-glass {
++  width: 42%;
++  background: var(--bg-sand);
++  padding: 3.5rem;
++  border-radius: 40px;
++  box-shadow: 0 20px 50px rgba(0,0,0,0.05);
++  position: relative;
++  border: 1px solid rgba(188, 73, 49, 0.1);
++  transition: background-color 0.3s ease;
++}
++
++:global(body.dark-mode) .timeline-glass {
++  background: #1e293b;
++  border-color: rgba(255, 255, 255, 0.05);
++}
++
++:global(body.dark-mode) .story-text p,
++:global(body.dark-mode) .timeline-glass p,
++:global(body.dark-mode) .timeline-glass ul {
++  color: #94a3b8 !important;
++}
++
++.timeline-dot {
++  position: absolute;
++  left: 50%;
++  top: 50%;
++  transform: translate(-50%, -50%);
++  width: 24px;
++  height: 24px;
++  background: #fff;
++  border: 5px solid var(--accent-gold);
++  border-radius: 50%;
++  z-index: 10;
++  box-shadow: 0 0 20px rgba(197, 138, 58, 0.4);
++}
++
++.timeline-date {
++  font-family: var(--font-serif);
++  font-size: 2.2rem;
++  color: var(--accent-gold);
++  margin-bottom: 1.5rem;
++  font-weight: 700;
++}
++
++/* --- Mission Banner --- */
++.mission-banner {
++  background: var(--primary-red);
++  color: #fff;
++  padding: 8rem 10%;
++  display: flex;
++  gap: 5rem;
++  align-items: center;
++  border-radius: 60px;
++  margin: 5rem 5%;
++}
++
++.mission-banner h2 {
++  font-family: var(--font-serif);
++  font-size: 4rem;
++  flex: 1;
++}
++
++.mission-banner p {
++  flex: 1.5;
++  font-size: 1.4rem;
++  line-height: 1.8;
++  opacity: 0.9;
++}
++
++/* --- CTA Button --- */
++.cta-full {
++  background-color: #1A1A1A;
++  padding: 12rem 5%;
++  text-align: center;
++  color: #fff;
++}
++
++.btn-premium-cta {
++  display: inline-block;
++  padding: 1.8rem 5rem;
++  background: linear-gradient(135deg, var(--accent-gold) 0%, #a36d22 100%);
++  border-radius: 100px;
++  color: #fff;
++  text-decoration: none;
++  font-weight: 700;
++  font-size: 1.4rem;
++  box-shadow: 0 20px 40px rgba(197, 138, 58, 0.3);
++  transition: all 0.4s ease;
++}
++
++.btn-premium-cta:hover {
++  transform: translateY(-8px) scale(1.05);
++  box-shadow: 0 30px 60px rgba(197, 138, 58, 0.5);
++}
++
++@media (max-width: 1100px) {
++  .story-section, .timeline-item, .mission-banner {
++    grid-template-columns: 1fr;
++    flex-direction: column;
++    text-align: center;
++    gap: 3rem;
++  }
++  .timeline-glass { width: 90%; margin: 0 auto; }
++  .timeline-line { left: 5%; }
++  .timeline-dot { left: 5%; }
++  .hero-glass-box h1 { font-size: 3rem; }
++  .values-grid { grid-template-columns: 1fr; }
++}
+diff --git a/src/Pages/About.jsx b/src/Pages/About.jsx
+new file mode 100644
+index 0000000..06acd6a
+--- /dev/null
++++ b/src/Pages/About.jsx
+@@ -0,0 +1,155 @@
++import React from 'react';
++import { motion, useScroll, useTransform } from 'framer-motion';
++import { Link } from 'react-router-dom';
++import { useTranslation } from 'react-i18next';
++import Layout from '../Components/Layout';
++import { FaCompass, FaGem, FaHandshake } from 'react-icons/fa';
++import getImageUrl from '../utils/imageUrl';
++import './About.css';
++
++const About = () => {
++  const { t, i18n } = useTranslation();
++  const isRTL = i18n.language === 'ar';
++  const { scrollY } = useScroll();
++  const yParallax = useTransform(scrollY, [0, 800], [0, 200]);
++
++  const slideUp = {
++    initial: { opacity: 0, y: 50 },
++    whileInView: { opacity: 1, y: 0 },
++    viewport: { once: true },
++    transition: { duration: 1, ease: [0.22, 1, 0.36, 1] }
++  };
++
++  const stagger = {
++    initial: { opacity: 0 },
++    whileInView: { 
++      opacity: 1,
++      transition: { staggerChildren: 0.2 }
++    },
++    viewport: { once: true }
++  };
++
++  return (
++    <Layout>
++      <div className={`about-page-container ${isRTL ? 'rtl-mode' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
++        
++        {/* --- Hero Section --- */}
++        <section 
++          className="hero-about" 
++          style={{ backgroundImage: 'url("/koutoubia_hero.png")' }}
++        >
++          <motion.div 
++            className="hero-glass-box"
++            initial={{ opacity: 0, scale: 0.9 }}
++            animate={{ opacity: 1, scale: 1 }}
++            transition={{ duration: 1.2, ease: "easeOut" }}
++          >
++            <h1 className="hero-title">{t('about.hero.title')}</h1>
++            <p>{t('about.hero.subtitle')}</p>
++          </motion.div>
++        </section>
++
++        {/* --- Our Story --- */}
++        <section className={`story-section ${isRTL ? 'reverse' : ''}`}>
++          <motion.div className="story-text" {...slideUp}>
++            <h2>{t('about.story.title')}</h2>
++            <p>{t('about.story.p1')}</p>
++            <p>{t('about.story.p2')}</p>
++          </motion.div>
++          <motion.div 
++            className="story-img-wrap"
++            initial={{ opacity: 0, x: isRTL ? -50 : 50 }}
++            whileInView={{ opacity: 1, x: 0 }}
++            viewport={{ once: true }}
++          >
++            <img src={getImageUrl('/storage/places/Place Jemaa el-Fna/WhatsApp Image 2026-04-06 at 4.09.59 PM (1).jpeg')} alt="VibKech Experience" />
++          </motion.div>
++        </section>
++
++        {/* --- Values --- */}
++        <section className="values-wrapper">
++          <h2 className="values-title">{t('about.values.title')}</h2>
++          <motion.div className="values-grid" variants={stagger} initial="initial" whileInView="whileInView">
++            <motion.div className="value-glass-card" variants={slideUp}>
++              <FaCompass className="feature-icon" style={{ fontSize: '3.5rem', color: 'var(--primary-red)', marginBottom: '2rem' }} />
++              <h3 style={{ fontSize: '1.8rem', marginBottom: '1.5rem', fontFamily: 'var(--font-serif)' }}>{t('about.values.v1.title')}</h3>
++              <p style={{ color: '#666', lineHeight: '1.7', opacity: 0.8 }}>{t('about.values.v1.desc')}</p>
++            </motion.div>
++            <motion.div className="value-glass-card" variants={slideUp}>
++              <FaGem className="feature-icon" style={{ fontSize: '3.5rem', color: 'var(--primary-red)', marginBottom: '2rem' }} />
++              <h3 style={{ fontSize: '1.8rem', marginBottom: '1.5rem', fontFamily: 'var(--font-serif)' }}>{t('about.values.v2.title')}</h3>
++              <p style={{ color: '#666', lineHeight: '1.7', opacity: 0.8 }}>{t('about.values.v2.desc')}</p>
++            </motion.div>
++            <motion.div className="value-glass-card" variants={slideUp}>
++              <FaHandshake className="feature-icon" style={{ fontSize: '3.5rem', color: 'var(--primary-red)', marginBottom: '2rem' }} />
++              <h3 style={{ fontSize: '1.8rem', marginBottom: '1.5rem', fontFamily: 'var(--font-serif)' }}>{t('about.values.v3.title')}</h3>
++              <p style={{ color: '#666', lineHeight: '1.7', opacity: 0.8 }}>{t('about.values.v3.desc')}</p>
++            </motion.div>
++          </motion.div>
++        </section>
++
++        {/* --- History Timeline --- */}
++        <section className="timeline-section">
++          <div style={{ textAlign: 'center', marginBottom: '6rem' }}>
++            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '4rem', color: 'inherit' }}>{t('about.timeline.title')}</h2>
++            <p style={{ letterSpacing: '4px', textTransform: 'uppercase', color: 'var(--accent-gold)' }}>{t('about.timeline.subtitle')}</p>
++          </div>
++          
++          <div className="timeline-container">
++            <div className="timeline-line" />
++            
++            <motion.div variants={stagger} initial="initial" whileInView="whileInView">
++              {[1, 2, 3, 4, 5, 6, 7].map((num) => {
++                const step = t(`about.timeline.step${num}`, { returnObjects: true });
++                return (
++                  <motion.div 
++                    key={num} 
++                    className="timeline-item"
++                    variants={slideUp}
++                  >
++                    <div className="timeline-dot" />
++                    <div className="timeline-glass">
++                      <div className="timeline-date">{step.date}</div>
++                      <h3 style={{ color: 'var(--primary-red)', marginBottom: '1rem', fontFamily: 'var(--font-serif)', fontSize: '1.8rem' }}>{step.title}</h3>
++                      <p style={{ fontSize: '1.1rem', lineHeight: '1.8', opacity: 0.9 }}>{step.desc}</p>
++                      <ul style={{ paddingRight: isRTL ? '1.5rem' : '0', paddingLeft: isRTL ? '0' : '1.5rem', marginTop: '1.2rem', opacity: 0.8, fontSize: '1rem', listStyle: 'none' }}>
++                        {(step.details || []).map((detail, idx) => (
++                          <li key={idx} style={{ marginBottom: '0.6rem' }}>­ƒö© {detail}</li>
++                        ))}
++                      </ul>
++                      {/* Optional images for some steps */}
++                      {num === 1 && <img src={getImageUrl('/about_hero.png')} alt="Foundation" style={{ width: '100%', marginTop: '2rem', borderRadius: '25px', height: '220px', objectFit: 'cover' }} />}
++                      {num === 3 && <img src={getImageUrl('/storage/places/Mosqu├®e Koutoubia/WhatsApp Image 2026-04-06 at 4.02.35 PM.jpeg')} alt="Koutoubia" style={{ width: '100%', marginTop: '2rem', borderRadius: '25px', height: '220px', objectFit: 'cover' }} />}
++                    </div>
++                  </motion.div>
++                );
++              })}
++            </motion.div>
++          </div>
++        </section>
++
++        {/* --- Vision Banner --- */}
++        <motion.section className="mission-banner" {...slideUp}>
++          <h2>{t('about.mission.title')}</h2>
++          <p>{t('about.mission.desc')}</p>
++        </motion.section>
++
++        {/* --- Final CTA --- */}
++        <section className="cta-full">
++          <motion.div {...slideUp}>
++            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '4.5rem', marginBottom: '2rem' }}>{t('about.cta.title')}</h2>
++            <p style={{ fontSize: '1.4rem', opacity: 0.8, maxWidth: '800px', margin: '0 auto 4rem' }}>
++              {t('about.cta.subtitle')}
++            </p>
++            <Link to="/explore" className="btn-premium-cta">
++              {t('about.cta.btn')}
++            </Link>
++          </motion.div>
++        </section>
++
++      </div>
++    </Layout>
++  );
++};
++
++export default About;
+diff --git a/src/Pages/Dashboard/MyProperties.jsx b/src/Pages/Dashboard/MyProperties.jsx
+new file mode 100644
+index 0000000..7abfee4
+--- /dev/null
++++ b/src/Pages/Dashboard/MyProperties.jsx
+@@ -0,0 +1,215 @@
++import React, { useState, useEffect } from 'react';
++import DashboardLayout from '../../Components/Dashboard/DashboardLayout';
++import { motion, AnimatePresence } from 'framer-motion';
++import { FaPlus, FaEllipsisV, FaTrash, FaEdit, FaMapMarkerAlt, FaBed, FaHotel } from 'react-icons/fa';
++import api from '../../api/axios';
++
++const MyProperties = () => {
++  const [properties, setProperties] = useState([]);
++  const [loading, setLoading] = useState(true);
++  const [error, setError] = useState(null);
++  const [isModalOpen, setIsModalOpen] = useState(false);
++  const [editingProperty, setEditingProperty] = useState(null);
++  
++  const [formData, setFormData] = useState({
++    type: 'hotel',
++    name: '',
++    phone: '',
++    email: '',
++    address: '',
++    price: '',
++    description: '',
++    image: ''
++  });
++
++  useEffect(() => {
++    fetchProperties();
++  }, []);
++
++  const fetchProperties = async () => {
++    try {
++      setLoading(true);
++      const response = await api.get('/my-hotels');
++      setProperties(response.data.data || []);
++      setError(null);
++    } catch (err) {
++      setError('Unable to load your properties.');
++      console.error(err);
++    } finally {
++      setLoading(false);
++    }
++  };
++
++  const handleSubmit = async (e) => {
++    e.preventDefault();
++    try {
++      if (editingProperty) {
++        await api.put(`/hotels/${editingProperty.id}`, formData);
++      } else {
++        await api.post('/hotels', formData);
++      }
++      fetchProperties();
++      setIsModalOpen(false);
++      resetForm();
++    } catch (err) {
++      alert('Error: ' + (err.response?.data?.message || 'Check your fields.'));
++    }
++  };
++
++  const handleDelete = async (id) => {
++    if (!window.confirm('Are you sure you want to delete this property?')) return;
++    try {
++      await api.delete(`/hotels/${id}`);
++      setProperties(properties.filter(p => p.id !== id));
++    } catch (err) {
++      alert('Delete failed.');
++    }
++  };
++
++  const openEdit = (property) => {
++    setEditingProperty(property);
++    setFormData({
++      type: property.type,
++      name: property.name || '',
++      phone: property.phone || '',
++      email: property.email || '',
++      address: property.address || '',
++      price: property.price || '',
++      description: property.description || '',
++      image: property.image || ''
++    });
++    setIsModalOpen(true);
++  };
++
++  const resetForm = () => {
++    setEditingProperty(null);
++    setFormData({ type: 'hotel', name: '', phone: '', email: '', address: '', price: '', description: '', image: '' });
++  };
++
++  return (
++    <DashboardLayout>
++      <div className="dashboard-title-section" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
++        <div>
++          <motion.h1 initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>My Hotels & Riads</motion.h1>
++          <p style={{ color: 'var(--dash-text-muted)' }}>Manage your establishments and keep your information up to date.</p>
++        </div>
++        <motion.button 
++          whileHover={{ scale: 1.05 }}
++          whileTap={{ scale: 0.95 }}
++          onClick={() => { resetForm(); setIsModalOpen(true); }}
++          style={{ 
++            background: 'var(--dash-accent)', 
++            color: '#fff', 
++            border: 'none', 
++            padding: '1rem 2rem', 
++            borderRadius: '12px', 
++            cursor: 'pointer',
++            display: 'flex',
++            alignItems: 'center',
++            gap: '0.75rem',
++            fontWeight: '600'
++          }}
++        >
++          <FaPlus /> Add New Property
++        </motion.button>
++      </div>
++
++      {loading ? (
++        <div style={{ textAlign: 'center', padding: '5rem' }}>Loading...</div>
++      ) : error ? (
++        <div style={{ color: 'red', textAlign: 'center' }}>{error}</div>
++      ) : (
++        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '2rem' }}>
++          {properties.map((property) => (
++            <motion.div 
++              key={property.id}
++              className="card-glass"
++              style={{ background: 'white', border: '1px solid #eee', borderRadius: '24px', overflow: 'hidden' }}
++            >
++              <div style={{ height: '200px', background: '#f0f0f0', position: 'relative' }}>
++                <img src={property.image} alt={property.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
++                <div style={{ position: 'absolute', top: '1rem', right: '1rem', display: 'flex', gap: '0.5rem' }}>
++                    <button onClick={() => openEdit(property)} style={{ background: 'white', border: 'none', padding: '0.5rem', borderRadius: '8px', cursor: 'pointer' }}><FaEdit /></button>
++                    <button onClick={() => handleDelete(property.id)} style={{ background: '#fee2e2', color: '#ef4444', border: 'none', padding: '0.5rem', borderRadius: '8px', cursor: 'pointer' }}><FaTrash /></button>
++                </div>
++              </div>
++              <div style={{ padding: '1.5rem' }}>
++                <span style={{ fontSize: '0.75rem', fontWeight: 'bold', textTransform: 'uppercase', color: 'var(--dash-accent)' }}>{property.type}</span>
++                <h3 style={{ margin: '0.5rem 0' }}>{property.name}</h3>
++                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#666', fontSize: '0.9rem' }}>
++                    <FaMapMarkerAlt /> {property.address}
++                </div>
++                <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid #eee', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
++                    <span style={{ fontWeight: 'bold', fontSize: '1.2rem' }}>{property.price} <small>MAD</small></span>
++                    <span style={{ color: property.availability ? '#10b981' : '#ef4444' }}>{property.availability ? 'Available' : 'Booked'}</span>
++                </div>
++              </div>
++            </motion.div>
++          ))}
++        </div>
++      )}
++
++      {/* Modal Form */}
++      <AnimatePresence>
++        {isModalOpen && (
++          <div style={{ position: 'fixed', inset: 0, zIndex: 2000, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(4px)' }}>
++            <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} style={{ background: 'white', padding: '2.5rem', borderRadius: '24px', width: '90%', maxWidth: '600px', maxHeight: '90vh', overflowY: 'auto' }}>
++                <h2>{editingProperty ? 'Edit Property' : 'Add New Property'}</h2>
++                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem', marginTop: '1.5rem' }}>
++                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
++                        <div>
++                            <label>Type</label>
++                            <select value={formData.type} onChange={e => setFormData({...formData, type: e.target.value})} style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', border: '1px solid #ddd' }}>
++                                <option value="hotel">Hotel</option>
++                                <option value="riad">Riad</option>
++                                <option value="villa">Villa</option>
++                            </select>
++                        </div>
++                        <div>
++                            <label>Price (MAD/Night)</label>
++                            <input type="number" required value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', border: '1px solid #ddd' }} />
++                        </div>
++                    </div>
++                    <div>
++                        <label>Name</label>
++                        <input type="text" required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', border: '1px solid #ddd' }} />
++                    </div>
++                    <div>
++                        <label>Image URL</label>
++                        <input type="text" required value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', border: '1px solid #ddd' }} />
++                    </div>
++                    <div>
++                        <label>Address</label>
++                        <input type="text" required value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', border: '1px solid #ddd' }} />
++                    </div>
++                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
++                        <div>
++                            <label>Phone</label>
++                            <input type="tel" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', border: '1px solid #ddd' }} />
++                        </div>
++                        <div>
++                            <label>Email</label>
++                            <input type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', border: '1px solid #ddd' }} />
++                        </div>
++                    </div>
++                    <div>
++                        <label>Description</label>
++                        <textarea rows="3" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', border: '1px solid #ddd' }} />
++                    </div>
++                    
++                    <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
++                        <button type="submit" style={{ flex: 1, background: 'var(--dash-accent)', color: 'white', border: 'none', padding: '1rem', borderRadius: '12px', fontWeight: 'bold', cursor: 'pointer' }}>
++                            {editingProperty ? 'Save Changes' : 'Create Property'}
++                        </button>
++                        <button type="button" onClick={() => setIsModalOpen(false)} style={{ background: '#f3f4f6', border: 'none', padding: '1rem 2rem', borderRadius: '12px', cursor: 'pointer' }}>Cancel</button>
++                    </div>
++                </form>
++            </motion.div>
++          </div>
++        )}
++      </AnimatePresence>
++    </DashboardLayout>
++  );
++};
++
++export default MyProperties;
+diff --git a/src/Pages/Explore.css b/src/Pages/Explore.css
+index a7d7b40..bfd2a73 100644
+--- a/src/Pages/Explore.css
++++ b/src/Pages/Explore.css
+@@ -1,9 +1,41 @@
+ .explore-page {
+   padding-bottom: 6rem;
+-  background-color: var(--bg-color);
++  background-image: 
++    linear-gradient(rgba(248, 247, 244, 0.45), rgba(248, 247, 244, 0.45)),
++    url('/background/zlige.png');
++  background-attachment: fixed;
++  background-size: 600px;
++  background-repeat: repeat;
+   min-height: 100vh;
+ }
+ 
++body.dark-mode .explore-page {
++    background-image: 
++        linear-gradient(rgba(26, 26, 26, 0.65), rgba(26, 26, 26, 0.65)),
++        url('/background/zlige.png');
++}
++
++/* Make cards readable over the background */
++.explore-page .new-card {
++    background: var(--card-bg);
++    border-radius: 1.5rem;
++    overflow: hidden;
++    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
++    height: 100%;
++    display: flex;
++    flex-direction: column;
++    border: 1px solid var(--border-color);
++}
++
++.explore-page .new-card-content {
++    padding: 1.5rem;
++    flex-grow: 1;
++}
++
++.explore-page .new-card-image-wrap {
++    border-radius: 1.5rem 1.5rem 0 0;
++}
++
+ .explore-hero {
+   height: 50vh;
+   min-height: 400px;
+@@ -17,6 +49,17 @@
+   position: relative;
+   text-align: center;
+   margin-bottom: 3rem;
++  overflow: hidden;
++}
++
++.explore-hero-video {
++  position: absolute;
++  top: 0;
++  left: 0;
++  width: 100%;
++  height: 100%;
++  object-fit: cover;
++  z-index: 1;
+ }
+ 
+ .explore-hero::after {
+@@ -26,7 +69,8 @@
+   left: 0;
+   width: 100%;
+   height: 100%;
+-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4));
++  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.6));
++  z-index: 2;
+ }
+ 
+ .max-container {
+@@ -34,7 +78,7 @@
+   width: 92%;
+   margin: 0 auto;
+   position: relative;
+-  z-index: 10;
++  z-index: 5;
+ }
+ 
+ .explore-hero-card {
+diff --git a/src/Pages/Explore.jsx b/src/Pages/Explore.jsx
+index 5125d04..f2c5a69 100644
+--- a/src/Pages/Explore.jsx
++++ b/src/Pages/Explore.jsx
+@@ -36,6 +36,9 @@ const Explore = () => {
+     <Layout>
+       <div className="explore-page">
+         <div className="explore-hero">
++          <video autoPlay loop muted playsInline className="explore-hero-video">
++            <source src="/background/backExplore.mp4" type="video/mp4" />
++          </video>
+           <div className="max-container">
+             <motion.div
+               initial={{ opacity: 0, y: 30 }}
+diff --git a/src/Pages/Home.jsx b/src/Pages/Home.jsx
+index dbde44b..9c0db6b 100644
+--- a/src/Pages/Home.jsx
++++ b/src/Pages/Home.jsx
+@@ -206,75 +206,7 @@ const Home = () => {
+           <Counter value="UNESCO" label={t('home.stats.heritage')} index={3} />
+       </section>
+ 
+-      {/* Testimonials Section */}
+-      <section className="testimonials-section">
+-        <div className="section-header-center">
+-            <span className="section-eyebrow">{t('home.testimonials.eyebrow')}</span>
+-            <h2 className="section-title">{t('home.testimonials.title')}</h2>
+-        </div>
+-
+-        <div className="testimonials-masonry">
+-           <div className="test-card large user-elara">
+-               <div className="user-info">
+-                   <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User" className="avatar"/>
+-                   <div>
+-                       <h4>Elara Rossi</h4>
+-                       <div className="stars">ÔÿàÔÿàÔÿàÔÿàÔÿà</div>
+-                   </div>
+-               </div>
+-               <p className="quote">
+-                 "Staying in a traditional Riad was a dream. The service was impeccable, and waking up to the sound of birds in the orange trees was the highlight of my year."
+-               </p>
+-           </div>
+-
+-           <div className="test-card small right-col-1 user-mark">
+-              <div className="user-info">
+-                   <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" className="avatar"/>
+-                   <div>
+-                       <h4>Mark Jenkins</h4>
+-                       <div className="stars">ÔÿàÔÿàÔÿàÔÿàÔÿà</div>
+-                   </div>
+-               </div>
+-               <p className="quote">
+-                 "The photography tours were mind-blowing. Our guide knew every hidden alley in the Medina!"
+-               </p>
+-           </div>
+-
+-           <div className="test-card small block-bottom-left user-aisha">
+-              <div className="user-info">
+-                   <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="User" className="avatar"/>
+-                   <div>
+-                       <h4>Aisha Mansour</h4>
+-                       <div className="stars">ÔÿàÔÿàÔÿàÔÿàÔÿà</div>
+-                   </div>
+-               </div>
+-               <p className="quote">
+-                 "Authentic, luxurious, and soul-stirring. VibKech is the perfect gateway to Marrakech culture."
+-               </p>
+-           </div>
+-
+-           <div className="test-card medium block-bottom-right user-david">
+-              <div className="user-info">
+-                   <img src="https://randomuser.me/api/portraits/men/46.jpg" alt="User" className="avatar"/>
+-                   <div>
+-                       <h4>David Chen</h4>
+-                       <div className="stars">ÔÿàÔÿàÔÿàÔÿàÔÿà</div>
+-                   </div>
+-               </div>
+-               <div className="split-content">
+-                 <p className="quote">
+-                   "The hospitality here is not just a service, it's an art form. From the tea ceremonies to the rooftop dinners, everything was magical."
+-                 </p>
+-                 <img src="https://images.unsplash.com/photo-1574751336422-790159fd4fc9?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Mint Tea" className="tea-pic"/>
+-               </div>
+-           </div>
+-        </div>
+-      </section>
+-
+       </div>
+-      <Link to="/comments/general" className="floating-general-comment" title="Discussion G├®n├®rale">
+-        <FaCommentDots size={28} />
+-      </Link>
+     </Layout>
+   );
+ };
+diff --git a/src/Pages/Planning.css b/src/Pages/Planning.css
+index 7ca4cb6..c07d8a6 100644
+--- a/src/Pages/Planning.css
++++ b/src/Pages/Planning.css
+@@ -4,12 +4,18 @@
+   --premium-terracotta: #BC4931;
+   --premium-sand: #F8F7F4;
+   --premium-dark: #1A1817;
+-  --premium-glass: rgba(255, 255, 255, 0.7);
+-  --premium-shadow: 0 20px 80px rgba(0, 0, 0, 0.08);
+-  --premium-glow: 0 0 20px rgba(188, 73, 49, 0.2);
++  --premium-glass: rgba(255, 255, 255, 0.1);
++  --premium-shadow: 0 40px 100px rgba(0, 0, 0, 0.05);
++  --premium-glow: 0 0 20px rgba(188, 73, 49, 0.15);
+ }
+ 
+ .planning-page.premium-theme {
++  background-image: 
++    linear-gradient(rgba(248, 247, 244, 0.3), rgba(248, 247, 244, 0.3)),
++    url('/background/zlige.png');
++  background-attachment: fixed;
++  background-size: 600px;
++  background-repeat: repeat;
+   background-color: var(--premium-sand);
+   min-height: 100vh;
+   padding: 8rem 5% 10rem;
+@@ -21,6 +27,12 @@
+   font-family: var(--font-serif);
+ }
+ 
++body.dark-mode .planning-page.premium-theme {
++    background-image: 
++        linear-gradient(rgba(26, 26, 26, 0.75), rgba(26, 26, 26, 0.75)),
++        url('/background/zlige.png');
++}
++
+ /* Floating Budget Bar */
+ .floating-budget-bar {
+   position: fixed;
+@@ -110,6 +122,49 @@
+   position: relative;
+ }
+ 
++.stepper-inner-path {
++  position: absolute;
++  left: 21px;
++  right: 21px;
++  top: 0;
++  bottom: 0;
++  pointer-events: none;
++  z-index: 5;
++}
++
++.stepper-plane {
++  position: absolute;
++  top: 0;
++  width: 42px;
++  height: 42px;
++  background: transparent;
++  color: var(--premium-terracotta);
++  display: flex;
++  align-items: center;
++  justify-content: center;
++  font-size: 1.5rem;
++  pointer-events: none;
++  transform: translateX(-50%);
++  z-index: 10;
++}
++
++.pro-plane-icon {
++  filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
++  transform: rotate(10deg); /* Slight default pitch */
++}
++
++.plane-trail {
++  position: absolute;
++  right: 100%;
++  width: 60px;
++  height: 2px;
++  background: linear-gradient(to left, var(--premium-terracotta), transparent);
++  border-radius: 100px;
++  transform-origin: right;
++  margin-right: -10px;
++  opacity: 0;
++}
++
+ .step-item {
+   display: flex;
+   flex-direction: column;
+@@ -157,24 +212,17 @@
+ }
+ 
+ .step-progress {
+-  flex: 1;
+-  height: 2px;
+-  background: #e7e5e4;
+-  margin-top: 22px;
+-  position: relative;
+-}
+-
+-.step-progress.active {
+-  background: var(--premium-terracotta);
++  display: none;
+ }
+ 
+ /* Cards & Grid Overhaul */
+ .planning-card {
+   background: var(--premium-glass);
+-  backdrop-filter: blur(20px);
++  backdrop-filter: blur(30px);
++  -webkit-backdrop-filter: blur(30px);
+   border-radius: 40px;
+   padding: 4rem;
+-  border: 1px solid rgba(255, 255, 255, 0.4);
++  border: 1px solid rgba(255, 255, 255, 0.3);
+   box-shadow: var(--premium-shadow);
+ }
+ 
+@@ -721,3 +769,97 @@
+   border: 2px dashed #e7e5e4;
+   border-radius: 20px;
+ }
++
++/* --- Description Bubble Styles --- */
++
++.description-wrapper-premium {
++  position: relative;
++}
++
++.card-footer-premium {
++  display: flex;
++  justify-content: space-between;
++  align-items: center;
++  margin-top: 0.8rem;
++}
++
++.description-btn-premium {
++  color: var(--premium-terracotta);
++  font-size: 1.3rem;
++  cursor: pointer;
++  display: flex;
++  align-items: center;
++  justify-content: center;
++  opacity: 0.8;
++  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
++}
++
++.description-btn-premium:hover {
++  opacity: 1;
++  transform: scale(1.2) rotate(15deg);
++}
++
++.description-bubble-premium {
++  position: absolute;
++  bottom: 100%;
++  right: -10px;
++  width: 260px;
++  z-index: 100;
++  margin-bottom: 20px;
++  filter: drop-shadow(0 15px 35px rgba(0,0,0,0.15));
++}
++
++.bubble-content {
++  background: var(--premium-sand);
++  background: rgba(248, 247, 244, 0.95);
++  backdrop-filter: blur(10px);
++  padding: 1.5rem;
++  border-radius: 20px;
++  border: 1px solid rgba(255, 255, 255, 0.8);
++  position: relative;
++  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.5);
++}
++
++.close-bubble-btn {
++  position: absolute;
++  top: 8px; right: 8px;
++  background: rgba(188, 73, 49, 0.1);
++  color: var(--premium-terracotta);
++  border: none;
++  width: 24px; height: 24px;
++  border-radius: 50%;
++  display: flex; align-items: center; justify-content: center;
++  font-size: 1rem;
++  cursor: pointer;
++  transition: 0.3s;
++}
++
++.close-bubble-btn:hover { background: var(--premium-terracotta); color: #fff; }
++
++.bubble-content p {
++  font-size: 0.9rem;
++  line-height: 1.6;
++  color: var(--premium-dark);
++  margin: 0;
++  font-weight: 500;
++  opacity: 0.9;
++}
++
++.bubble-arrow {
++  position: absolute;
++  bottom: -10px;
++  right: 20px;
++  width: 0; 
++  height: 0; 
++  border-left: 10px solid transparent;
++  border-right: 10px solid transparent;
++  border-top: 10px solid var(--premium-sand);
++  opacity: 0.95;
++}
++
++@media (max-width: 640px) {
++  .description-bubble-premium {
++    width: 200px;
++    right: -20px;
++  }
++}
+diff --git a/src/Pages/Planning.jsx b/src/Pages/Planning.jsx
+index 12b06f5..c71d518 100644
+--- a/src/Pages/Planning.jsx
++++ b/src/Pages/Planning.jsx
+@@ -4,7 +4,7 @@ import Layout from '../Components/Layout';
+ import api from '../api/axios';
+ import { useNavigate } from 'react-router-dom';
+ import { useTranslation } from 'react-i18next';
+-import { FaMapMarkerAlt, FaCalendarAlt, FaChevronRight, FaChevronLeft, FaCheckCircle, FaCar } from 'react-icons/fa';
++import { FaMapMarkerAlt, FaCalendarAlt, FaChevronRight, FaChevronLeft, FaCheckCircle, FaCar, FaInfoCircle, FaPlane } from 'react-icons/fa';
+ import ServiceMap from '../Components/Explore/ServiceMap';
+ import './Planning.css';
+ 
+@@ -29,6 +29,8 @@ const Planning = () => {
+     routeFrom: '',
+     routeTo: ''
+   });
++  const [showDescription, setShowDescription] = useState(null);
++  const [isFlying, setIsFlying] = useState(false);
+ 
+   // Calculate duration in nights
+   const nights = formData.startDate && formData.endDate 
+@@ -72,10 +74,16 @@ const Planning = () => {
+         alert(t('planning.step1.title'));
+         return;
+     }
++    setIsFlying(true);
+     setStep(step + 1);
++    setTimeout(() => setIsFlying(false), 2000);
+   };
+   
+-  const prevStep = () => setStep(step - 1);
++  const prevStep = () => {
++    setIsFlying(true);
++    setStep(step - 1);
++    setTimeout(() => setIsFlying(false), 2000);
++  };
+ 
+   // Animation Variants
+   const containerVariants = {
+@@ -133,6 +141,34 @@ const Planning = () => {
+             {/* Step Indicator (Stepper) */}
+             <div className="stepper-wrapper">
+               <div className="stepper">
++                {/* Internal path for perfect alignment */}
++                <div className="stepper-inner-path">
++                  {/* Animated Airplane - Only visible during flight */}
++                    <motion.div 
++                      className="stepper-plane"
++                      initial={{ opacity: 0, scale: 0 }}
++                      animate={{ 
++                        left: `${(step - 1) * 33.333}%`,
++                        opacity: isFlying ? [0, 1, 1, 0] : 0,
++                        scale: isFlying ? [0, 1.2, 1.2, 0] : 0,
++                        rotate: 0,
++                        y: 0,
++                      }}
++                      transition={{ 
++                        duration: 2, 
++                        ease: [0.45, 0.05, 0.55, 0.95], // Premium smooth easing
++                        times: [0, 0.15, 0.85, 1]
++                      }}
++                    >
++                      <FaPlane className="pro-plane-icon" />
++                      {/* Suble Trail Effect */}
++                      <motion.div 
++                        className="plane-trail" 
++                        animate={{ opacity: isFlying ? [0, 0.4, 0] : 0, scaleX: isFlying ? [0, 1, 0] : 0 }}
++                      />
++                    </motion.div>
++                </div>
++
+                 {steps.map((s) => (
+                   <React.Fragment key={s.id}>
+                     <div className={`step-item ${step >= s.id ? 'active' : ''} ${step === s.id ? 'current' : ''}`}>
+@@ -220,7 +256,40 @@ const Planning = () => {
+                             </div>
+                             <div className="place-card-body-premium">
+                               <h3>{place.name || place.title}</h3>
+-                              <p><FaMapMarkerAlt /> {place.address?.split(',')[0] || 'Marrakech'}</p>
++                              <div className="card-footer-premium">
++                                <p><FaMapMarkerAlt /> {place.address?.split(',')[0] || 'Marrakech'}</p>
++                                <div className="description-wrapper-premium">
++                                  <motion.div 
++                                    className="description-btn-premium"
++                                    whileHover={{ scale: 1.2, rotate: 15 }}
++                                    whileTap={{ scale: 0.9 }}
++                                    onClick={(e) => {
++                                      e.stopPropagation();
++                                      setShowDescription(showDescription?.id === place.id ? null : place);
++                                    }}
++                                  >
++                                    <FaInfoCircle />
++                                  </motion.div>
++
++                                  <AnimatePresence>
++                                    {showDescription?.id === place.id && (
++                                      <motion.div 
++                                        className="description-bubble-premium"
++                                        initial={{ opacity: 0, scale: 0.5, y: 20, x: 20 }}
++                                        animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
++                                        exit={{ opacity: 0, scale: 0.5, y: 20, x: 20 }}
++                                        onClick={(e) => e.stopPropagation()}
++                                      >
++                                        <div className="bubble-content">
++                                          <button className="close-bubble-btn" onClick={() => setShowDescription(null)}>&times;</button>
++                                          <p>{place.description || "D├®couvrez l'essence de cet endroit magnifique, impr├®gn├® d'histoire et de culture marocaine."}</p>
++                                        </div>
++                                        <div className="bubble-arrow" />
++                                      </motion.div>
++                                    )}
++                                  </AnimatePresence>
++                                </div>
++                              </div>
+                             </div>
+                           </motion.div>
+                         ))}
+diff --git a/src/Pages/Register.jsx b/src/Pages/Register.jsx
+index a4c33fb..d08a36e 100644
+--- a/src/Pages/Register.jsx
++++ b/src/Pages/Register.jsx
+@@ -11,6 +11,7 @@ import {
+ } from '../Components/Register/RegisterForms';
+ import { GradientButton } from '../Components/Register/UIComponents';
+ import { FaCheckCircle } from 'react-icons/fa';
++import api from '../api/axios';
+ import './Auth.css';
+ 
+ const Register = () => {
+@@ -51,15 +52,41 @@ const Register = () => {
+     e.preventDefault();
+     setLoading(true);
+ 
+-    // Simulate API call
+-    console.log('Submitting for role:', role);
+-    console.log('Form data:', formData);
+-    console.log('Files:', files);
++    try {
++      // Map names based on role
++      let name = formData.name || '';
++      if (role === 'hotel') name = formData.hotelName;
++      if (role === 'transporteur') name = formData.company;
++      if (role === 'cooperative') name = formData.cooperativeName;
++      if (role === 'tourist') name = formData.name || formData.email.split('@')[0];
++
++      const payload = {
++        name: name,
++        email: formData.email,
++        password: formData.password,
++        password_confirmation: formData.password, // Frontend uses same password for confirmation for simplicity
++        role: role === 'tourist' ? 'tourist' : role, // Match Laravel enum ['tourist', 'guide', 'hotel', 'coop', 'admin']
++      };
++
++      // Correct role mapping for Laravel enum
++      if (payload.role === 'cooperative') payload.role = 'coop';
++      if (payload.role === 'transporteur') payload.role = 'transport';
++
++      const response = await api.post('/register', payload);
++      
++      console.log('Registration successful:', response.data);
++      
++      // Store token
++      localStorage.setItem('auth_token', response.data.access_token);
++      localStorage.setItem('user', JSON.stringify(response.data.user));
+ 
+-    setTimeout(() => {
+-      setLoading(false);
+       setSubmitted(true);
+-    }, 2000);
++    } catch (err) {
++      console.error('Registration failed:', err);
++      alert('Registration failed: ' + (err.response?.data?.message || 'Check your information and try again.'));
++    } finally {
++      setLoading(false);
++    }
+   };
+ 
+   const renderForm = () => {
+diff --git a/src/i18n/locales/ar.json b/src/i18n/locales/ar.json
+index bcced8c..91c6fd2 100644
+--- a/src/i18n/locales/ar.json
++++ b/src/i18n/locales/ar.json
+@@ -137,5 +137,42 @@
+     "confirm": "Ï¬Ïú┘â┘èÏ»",
+     "perNight": "Ï»Ï▒┘ç┘à/┘ä┘è┘äÏ®",
+     "mad": "Ï»Ï▒┘ç┘à"
++  },
++  "about": {
++    "hero": {
++      "title": "Ïº┘âÏ¬Ï┤┘ü ┘àÏ▒Ïº┘âÏ┤ ┘àÏ╣ VibKech",
++      "subtitle": "Ï▒Ï¡┘äÏ® Ï╣Ï¿Ï▒ Ïº┘äÏ▓┘à┘å ┘êÏº┘äÏú┘ä┘êÏº┘å"
++    },
++    "story": {
++      "title": "Ï┤Ï║┘ü Ï¿Ïº┘äÏºÏ│Ï¬┘âÏ┤Ïº┘ü Ïº┘äÏúÏÁ┘è┘ä",
++      "p1": "┘ê┘Å┘äÏ» VibKech ┘à┘å Ï¡Ï¿ Ï╣┘à┘è┘é ┘ä┘ä┘àÏ»┘è┘åÏ® Ïº┘äÏ¡┘àÏ▒ÏºÏíÏî ┘ä┘èÏ¼Ï│┘æÏ▒ Ïº┘ä┘üÏ¼┘êÏ® Ï¿┘è┘å Ïº┘ä┘àÏ│Ïº┘üÏ▒ ┘êÏúÏ│Ï▒ÏºÏ▒ ┘àÏ▒Ïº┘âÏ┤ Ïº┘äÏ«┘ü┘èÏ®. ┘åÏ¡┘å ┘åÏñ┘à┘å Ï¿Ïú┘å Ïº┘äÏº┘âÏ¬Ï┤Ïº┘ü Ïº┘äÏ¡┘é┘è┘é┘è ┘èÏ¡Ï»Ï½ Ï╣┘åÏ»┘àÏº Ï¬Ï¿Ï¬Ï╣Ï» Ï╣┘å Ïº┘äÏ▓Ï¡Ïº┘à ┘êÏ¬Ï»Ï«┘ä ┘ü┘è ┘é┘äÏ¿ Ïº┘äÏ½┘éÏº┘üÏ®.",
++      "p2": "┘à┘åÏÁÏ¬┘åÏº Ï¬Ï¼┘àÏ╣ ┘â┘ä ┘àÏº Ï¬Ï¡Ï¬ÏºÏ¼┘ç: Ïº┘ä┘àÏ╣Ïº┘ä┘à Ïº┘äÏúÏ│ÏÀ┘êÏ▒┘èÏ®Ïî Ïº┘äÏ▒┘èÏºÏÂÏºÏ¬ Ïº┘ä┘üÏºÏ«Ï▒Ï® Ï░ÏºÏ¬ Ïº┘äÏ¬ÏºÏ▒┘èÏ« Ïº┘äÏ╣Ï▒┘è┘éÏî ┘êÏº┘ä┘àÏ║Ïº┘àÏ▒ÏºÏ¬ Ïº┘äÏúÏÁ┘è┘äÏ® ┘ü┘è ┘â┘å┘êÏ▓ Ïº┘ä┘àÏ»┘è┘åÏ® Ïº┘äÏ╣Ï¬┘è┘éÏ®."
++    },
++    "values": {
++      "title": "┘ä┘àÏºÏ░Ïº Ï¬Ï«Ï¬ÏºÏ▒ VibKechÏƒ",
++      "v1": { "title": "Ï¬Ï¼ÏºÏ▒Ï¿ ┘à┘å┘éÏ¡Ï®", "desc": "┘åÏ¡┘å ┘äÏº ┘åÏ»Ï▒Ï¼ Ïº┘äÏú┘àÏº┘â┘å ┘üÏ¡Ï│Ï¿Ïø Ï¿┘ä ┘åÏ«Ï¬ÏºÏ▒ Ïº┘äÏ¬Ï¼ÏºÏ▒Ï¿ Ïº┘äÏ¬┘è Ï¬┘äÏº┘àÏ│ Ïº┘äÏ▒┘êÏ¡ Ïº┘äÏ¡┘é┘è┘é┘èÏ® ┘ä┘ä┘àÏ║Ï▒Ï¿." },
++      "v2": { "title": "Ï¼┘êÏ»Ï® ┘à┘àÏ¬ÏºÏ▓Ï®", "desc": "┘à┘å Ïº┘äÏ▒┘èÏºÏÂÏºÏ¬ Ïº┘ä┘üÏºÏ«Ï▒Ï® ÏÑ┘ä┘ë Ïº┘äÏ¼┘ê┘äÏºÏ¬ Ïº┘äÏ¡ÏÁÏ▒┘èÏ®Ïî ┘åÏÂ┘à┘å Ïú┘å ┘â┘ä Ï¬┘üÏÁ┘è┘ä ┘è┘äÏ¿┘è ÏúÏ╣┘ä┘ë ┘àÏ╣Ïº┘è┘èÏ▒ Ïº┘äÏ¬┘à┘èÏ▓." },
++      "v3": { "title": "Ïº┘ä┘àÏ¼Ï¬┘àÏ╣ Ïº┘ä┘àÏ¡┘ä┘è", "desc": "┘åÏ¡┘å ┘åÏ╣┘à┘ä ┘àÏ¿ÏºÏ┤Ï▒Ï® ┘àÏ╣ Ïº┘ä┘àÏ▒Ï┤Ï»┘è┘å ┘êÏº┘äÏ¡Ï▒┘ü┘è┘è┘å Ïº┘ä┘àÏ¡┘ä┘è┘è┘å ┘äÏ»Ï╣┘à Ïº┘äÏº┘éÏ¬ÏÁÏºÏ» ┘êÏÂ┘àÏº┘å Ïº┘äÏúÏÁÏº┘äÏ®." }
++    },
++    "timeline": {
++      "title": "┘àÏ▒Ïº┘âÏ┤ Ï╣Ï¿Ï▒ Ïº┘äÏ╣ÏÁ┘êÏ▒",
++      "subtitle": "Ï¬ÏºÏ▒┘èÏ« Ïº┘ä┘àÏ»┘è┘åÏ® Ïº┘äÏ¡┘àÏ▒ÏºÏí Ïº┘äÏ╣Ï▒┘è┘é",
++      "step1": { "date": "1070┘à", "title": "Ï¬ÏúÏ│┘èÏ│ ┘àÏ▒Ïº┘âÏ┤", "desc": "Ï¬ÏúÏ│Ï│Ï¬ ┘àÏ▒Ïº┘âÏ┤ Ï╣┘ä┘ë ┘èÏ» ┘è┘êÏ│┘ü Ï¿┘å Ï¬ÏºÏ┤┘ü┘è┘åÏî Ï▓Ï╣┘è┘à Ï»┘ê┘äÏ® Ïº┘ä┘àÏ▒ÏºÏ¿ÏÀ┘è┘å. ÏºÏ«Ï¬ÏºÏ▒ ┘çÏ░Ïº Ïº┘ä┘à┘ê┘éÏ╣ Ïº┘äÏºÏ│Ï¬Ï▒ÏºÏ¬┘èÏ¼┘è ┘âÏ¿┘êÏºÏ¿Ï® ┘ä┘äÏÁÏ¡Ï▒ÏºÏí ┘ê┘å┘éÏÀÏ® Ï╣Ï¿┘êÏ▒ ┘ä┘äÏ¬Ï¼ÏºÏ▒Ï®.", "details": ["Ïº┘äÏúÏ│┘êÏºÏ▒ Ïº┘äÏ¡┘àÏ▒ÏºÏí Ïº┘äÏ┤┘ç┘èÏ▒Ï®", "Ï¬ÏúÏ│┘èÏ│ Ïº┘ä┘àÏ│ÏºÏ¼Ï» Ïº┘äÏú┘ê┘ä┘ë", "┘åÏ©Ïº┘à Ïº┘äÏ│┘é┘è 'Ïº┘äÏ«ÏÀ┘æÏºÏ▒ÏºÏ¬'"] },
++      "step2": { "date": "Ïº┘ä┘éÏ▒┘å 11-12", "title": "Ï╣ÏÁÏ▒ Ïº┘ä┘àÏ▒ÏºÏ¿ÏÀ┘è┘å", "desc": "ÏúÏÁÏ¿Ï¡Ï¬ ┘àÏ▒Ïº┘âÏ┤ Ï╣ÏºÏÁ┘àÏ® ┘é┘ê┘èÏ® ┘ê┘àÏ▒┘âÏ▓Ïº┘ï Ï¬Ï¼ÏºÏ▒┘èÏº┘ï Ï╣Ïº┘ä┘à┘èÏº┘ï ┘ä┘äÏ░┘çÏ¿ ┘êÏº┘ä┘à┘äÏ¡ ┘êÏº┘äÏ¬┘êÏºÏ¿┘äÏî ┘êÏº┘àÏ¬Ï▓Ï¼Ï¬ ┘ü┘è┘çÏº Ïº┘äÏ½┘éÏº┘üÏºÏ¬.", "details": ["┘àÏ▒┘âÏ▓ Ïº┘ä┘é┘êÏ® Ïº┘äÏ│┘èÏºÏ│┘èÏ®", "ÏºÏ▓Ï»┘çÏºÏ▒ Ïº┘äÏ¬Ï¼ÏºÏ▒Ï® Ïº┘äÏ╣ÏºÏ¿Ï▒Ï® ┘ä┘äÏÁÏ¡Ï▒ÏºÏí", "Ï¿Ï»Ïº┘èÏ® Ïº┘äÏÑÏ┤Ï╣ÏºÏ╣ Ïº┘ä┘àÏ╣┘àÏºÏ▒┘è"] },
++      "step3": { "date": "Ïº┘ä┘éÏ▒┘å 12-13", "title": "Ï╣ÏÁÏ▒ Ïº┘ä┘à┘êÏ¡Ï»┘è┘å", "desc": "Ï¬Ï¡┘é┘é Ï¬ÏÀ┘êÏ▒ ┘âÏ¿┘èÏ▒ ┘àÏ╣ Ï¿┘åÏºÏí ÏÁ┘ê┘àÏ╣Ï® Ïº┘ä┘âÏ¬Ï¿┘èÏ® ┘êÏ¬┘êÏ│┘èÏ╣ Ïº┘ä┘àÏ»┘è┘åÏ® ┘êÏ¬ÏÀ┘ê┘èÏ▒ Ïº┘äÏ╣┘àÏºÏ▒Ï®Ïî ┘äÏ¬ÏÁÏ¿Ï¡ ┘àÏ▒┘âÏ▓Ïº┘ï Ï╣┘ä┘à┘èÏº┘ï ┘êÏ½┘éÏº┘ü┘èÏº┘ï.", "details": ["Ï¿┘åÏºÏí ÏÁ┘ê┘àÏ╣Ï® Ïº┘ä┘âÏ¬Ï¿┘èÏ®", "Ï¬┘êÏ│┘èÏ╣ ÏúÏ│┘êÏºÏ▒ Ïº┘ä┘àÏ»┘è┘åÏ®", "Ï¬ÏÀ┘ê┘èÏ▒ Ïº┘äÏ¡Ï»ÏºÏª┘é ┘êÏº┘ä┘àÏ╣Ïº┘ä┘à"] },
++      "step4": { "date": "Ïº┘ä┘éÏ▒┘å 13-15", "title": "Ï╣ÏÁÏ▒ Ïº┘ä┘àÏ▒┘è┘å┘è┘è┘å", "desc": "Ïº┘åÏ¬┘é┘äÏ¬ Ïº┘äÏ╣ÏºÏÁ┘àÏ® ÏÑ┘ä┘ë ┘üÏºÏ│Ïî ┘êÏ▒Ï║┘à Ï¬Ï▒ÏºÏ¼Ï╣ Ïº┘äÏú┘ç┘à┘èÏ® Ïº┘äÏ│┘èÏºÏ│┘èÏ®Ïî Ï©┘äÏ¬ ┘àÏ▒Ïº┘âÏ┤ ┘àÏ▒┘âÏ▓Ïº┘ï Ï¬Ï¼ÏºÏ▒┘èÏº┘ï ┘êÏº┘éÏ¬ÏÁÏºÏ»┘èÏº┘ï Ï¡┘è┘ê┘èÏº┘ï.", "details": ["ÏºÏ│Ï¬┘àÏ▒ÏºÏ▒ Ïº┘ä┘åÏ┤ÏºÏÀ Ïº┘äÏº┘éÏ¬ÏÁÏºÏ»┘è", "Ïº┘äÏ¡┘üÏºÏ© Ï╣┘ä┘ë Ïº┘ä┘ç┘ê┘èÏ® Ïº┘ä┘àÏ╣┘àÏºÏ▒┘èÏ®", "┘å┘éÏÀÏ® Ï▒Ï¿ÏÀ Ï¿┘è┘å Ïº┘äÏ┤┘àÏº┘ä ┘êÏº┘äÏ¼┘å┘êÏ¿"] },
++      "step5": { "date": "Ïº┘ä┘éÏ▒┘å 16", "title": "Ï╣ÏÁÏ▒ Ïº┘äÏ│Ï╣Ï»┘è┘è┘å", "desc": "ÏºÏ▓Ï»┘çÏ▒Ï¬ ┘àÏ▒Ïº┘âÏ┤ ┘à┘å Ï¼Ï»┘èÏ» ┘àÏ╣ Ï¿┘åÏºÏí Ïº┘ä┘éÏÁ┘êÏ▒ ┘êÏ¬ÏÀ┘ê┘èÏ▒ ┘éÏ¿┘êÏ▒ Ïº┘äÏ│Ï╣Ï»┘è┘è┘åÏî ┘êÏºÏ▓Ï»┘çÏ▒Ï¬ Ïº┘äÏ¬Ï¼ÏºÏ▒Ï® ┘àÏ╣ ÏÑ┘üÏ▒┘è┘é┘èÏº.", "details": ["Ï¿┘åÏºÏí ┘éÏ¿┘êÏ▒ Ïº┘äÏ│Ï╣Ï»┘è┘è┘å", "┘éÏÁÏ▒ Ïº┘äÏ¿Ï»┘èÏ╣ Ïº┘ä┘üÏºÏ«Ï▒", "Ïº┘äÏ║┘å┘ë ┘êÏº┘ä┘é┘êÏ® Ïº┘äÏº┘éÏ¬ÏÁÏºÏ»┘èÏ®"] },
++      "step6": { "date": "Ïº┘ä┘éÏ▒┘å 17 ÏÑ┘ä┘ë Ïº┘ä┘è┘ê┘à", "title": "Ï╣ÏÁÏ▒ Ïº┘äÏ╣┘ä┘ê┘è┘è┘å", "desc": "ÏºÏ│Ï¬┘àÏ▒ Ïº┘äÏºÏ│Ï¬┘éÏ▒ÏºÏ▒ ┘êÏ¬Ï¡┘ê┘äÏ¬ ┘àÏ▒Ïº┘âÏ┤ ÏÑ┘ä┘ë ┘àÏ»┘è┘åÏ® Ï¬ÏºÏ▒┘èÏ«┘èÏ® ┘à┘ç┘àÏ® ┘ê┘àÏ▒┘âÏ▓ Ï│┘èÏºÏ¡┘è Ï╣Ïº┘ä┘à┘è.", "details": ["┘àÏ▒┘âÏ▓ Ï│┘èÏºÏ¡┘è Ï╣Ïº┘ä┘à┘è", "Ï¬Ï▒┘à┘è┘à Ïº┘ä┘àÏ╣Ïº┘ä┘à Ïº┘äÏ¬ÏºÏ▒┘èÏ«┘èÏ®", "Ï¡Ï»ÏºÏª┘é Ïº┘ä┘à┘åÏºÏ▒Ï® ┘êÏú┘âÏ»Ïº┘ä"] },
++      "step7": { "date": "Ïº┘ä┘è┘ê┘à", "title": "┘àÏ▒Ïº┘âÏ┤ Ïº┘ä┘àÏ╣ÏºÏÁÏ▒Ï®", "desc": "┘àÏ▒Ïº┘âÏ┤ Ïº┘ä┘è┘ê┘à ┘ç┘è ┘àÏ▓┘èÏ¼ ┘üÏ▒┘èÏ» Ï¿┘è┘å Ïº┘äÏ¬ÏºÏ▒┘èÏ« ┘êÏº┘äÏ½┘éÏº┘üÏ® ┘êÏº┘äÏ│┘èÏºÏ¡Ï® Ïº┘äÏ¡Ï»┘èÏ½Ï®.", "details": ["Ï│ÏºÏ¡Ï® Ï¼Ïº┘àÏ╣ Ïº┘ä┘ü┘åÏº", "Ï¡Ï»ÏºÏª┘é ┘àÏºÏ¼┘êÏ▒┘è┘ä", "Ïº┘äÏúÏ│┘êÏº┘é Ïº┘äÏ¬┘é┘ä┘èÏ»┘èÏ® Ïº┘ä┘åÏºÏ¿ÏÂÏ®"] }
++    },
++    "mission": {
++      "title": "Ï▒Ïñ┘èÏ¬┘åÏº ┘ä┘àÏ▒Ïº┘âÏ┤",
++      "desc": "┘é┘èÏºÏ»Ï® Ïº┘ä┘å┘çÏÂÏ® Ïº┘äÏ▒┘é┘à┘èÏ® ┘äÏÂ┘èÏº┘üÏ® ┘àÏ▒Ïº┘âÏ┤Ïî ┘äÏ¬┘â┘ê┘å Ïº┘ä┘êÏ¼┘çÏ® Ïº┘äÏú┘âÏ½Ï▒ Ï¬┘éÏ»┘àÏº┘ï Ï¬┘é┘å┘èÏº┘ï ┘êÏº┘äÏú┘âÏ½Ï▒ Ï¡┘üÏºÏ©Ïº┘ï Ï╣┘ä┘ë Ïº┘äÏ¬Ï▒ÏºÏ½ ┘ü┘è Ïº┘äÏ╣Ïº┘ä┘à. ┘åÏ¡┘å ┘å┘êÏ¡Ï» Ïº┘äÏ«Ï¿Ï▒Ï® Ïº┘ä┘àÏ¡┘ä┘èÏ® ┘àÏ╣ Ïº┘ä┘àÏ╣Ïº┘è┘èÏ▒ Ïº┘äÏ╣Ïº┘ä┘à┘èÏ®."
++    },
++    "cta": {
++      "title": "ÏºÏ«Ï¬Ï¿Ï▒ ┘àÏ▒Ïº┘âÏ┤ Ï¿┘äÏº Ï¡Ï»┘êÏ»",
++      "subtitle": "Ï▒Ï¡┘äÏ¬┘â ÏÑ┘ä┘ë ┘é┘äÏ¿ Ïº┘ä┘àÏ»┘è┘åÏ® Ïº┘äÏ¡┘àÏ▒ÏºÏí Ï¬Ï¿Ï»Ïú ┘à┘å ┘ç┘åÏº.",
++      "btn": "ÏºÏ│Ï¬┘âÏ┤┘ü Ïº┘äÏó┘å"
++    }
+   }
+ }
+diff --git a/src/i18n/locales/en.json b/src/i18n/locales/en.json
+index 2f3f775..368f386 100644
+--- a/src/i18n/locales/en.json
++++ b/src/i18n/locales/en.json
+@@ -134,7 +134,43 @@
+     "delete": "Delete",
+     "edit": "Edit",
+     "confirm": "Confirm",
+-    "perNight": "MAD/night",
+     "mad": "MAD"
++  },
++  "about": {
++    "hero": {
++      "title": "Discover Marrakech with VibKech",
++      "subtitle": "A Journey Through Time and Color"
++    },
++    "story": {
++      "title": "A Passion for Authentic Discovery",
++      "p1": "Born from a deep love for the Ochre City, VibKech was created to bridge the gap between a traveler and the hidden secrets of Marrakech. We believe that true discovery happens when you step away from the crowds and into the heart of a culture.",
++      "p2": "Our platform centralizes everything you need: legendary monuments, luxury Riads with centuries of history, and authentic adventures in the hidden gems of the Medina."
++    },
++    "values": {
++      "title": "Why Choose VibKech?",
++      "v1": { "title": "Curated Experiences", "desc": "We don't just list places; we select experiences that resonate with the true spirit of Morocco." },
++      "v2": { "title": "Premium Quality", "desc": "From luxury riads to exclusive tours, we ensure every detail meets the highest standard of excellence." },
++      "v3": { "title": "Local Community", "desc": "We work directly with local guides and artisans to support the economy and ensure authenticity." }
++    },
++    "timeline": {
++      "title": "Marrakech Through the Ages",
++      "subtitle": "Chronicles of the Red City",
++      "step1": { "date": "1070 AD", "title": "The Foundation", "desc": "Marrakech was founded by Youssef Ibn Tachfine, leader of the Almoravid dynasty. He chose this strategic location as a gateway to the Sahara and a trading hub between Africa and Europe.", "details": ["Red walls (The Red City)", "First mosques founded", "Khattarat irrigation system"] },
++      "step2": { "date": "11-12th Century", "title": "Almoravid Era", "desc": "Marrakech became a powerful capital and a global commercial center for gold, salt, and spices, blending cultures from Africa and Andalusia.", "details": ["Political power center", "Trans-Saharan trade boom", "Architectural brilliance"] },
++      "step3": { "date": "12-13th Century", "title": "Almohad Era", "desc": "Significant progress was made. Construction of the Koutoubia Mosque, expansion of the city, and development of architecture.", "details": ["Koutoubia Mosque built", "City walls expanded", "Gardens and monuments"] },
++      "step4": { "date": "13-15th Century", "title": "The Merinids", "desc": "The capital moved to Fez, and political importance decreased, but the city remained a vital commercial and economic center.", "details": ["Economic activity continued", "Architectural identity kept", "North-South hub"] },
++      "step5": { "date": "16th Century", "title": "The Saadians", "desc": "Marrakech flourished again. Construction of the Saadian Tombs, development of palaces, and prosperous trade with Africa.", "details": ["Saadian Tombs built", "El Badi Palace", "Wealth and Power"] },
++      "step6": { "date": "17th Century to Today", "title": "The Alaouites", "desc": "Stability continued. Marrakech evolved into a global historic city and a world-class tourism hub.", "details": ["Global tourism center", "Restoration of monuments", "Agdal and Menara gardens"] },
++      "step7": { "date": "Today", "title": "Contemporary Marrakech", "desc": "Marrakech today is a unique blend of history, culture, and modern tourism.", "details": ["Jemaa el-Fnaa Square", "Jardin Majorelle", "Vibrant Souks"] }
++    },
++    "mission": {
++      "title": "Our Vision for Marrakech",
++      "desc": "To lead the digital renaissance of Marrakech hospitality, making it the most technologically advanced and traditionally preserved destination in the world. We unify local expertise with global standards for an unforgettable journey."
++    },
++    "cta": {
++      "title": "Experience Marrakech Beyond Limits",
++      "subtitle": "Your journey into the heart of the Ochre City starts here.",
++      "btn": "Explore Now"
++    }
+   }
+ }

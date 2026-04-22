@@ -61,6 +61,7 @@ const Counter = ({ value, label, index }) => {
 const Home = () => {
   const sliderRef = useRef(null);
   const [places, setPlaces] = useState([]);
+  const [hotels, setHotels] = useState([]);
   const { scrollY } = useScroll();
   const { t } = useTranslation();
   
@@ -80,7 +81,20 @@ const Home = () => {
         console.error("failed to load places", err);
       }
     };
+
+    const fetchHotels = async () => {
+      try {
+        const response = await api.get('/hotels');
+        const result = response.data;
+        // Just take the first 4 for the home page showcase
+        setHotels((result.data || []).slice(0, 4));
+      } catch (err) {
+        console.error("failed to load hotels", err);
+      }
+    };
+
     fetchPlaces();
+    fetchHotels();
 
     const interval = setInterval(() => {
       if (sliderRef.current) {
@@ -148,7 +162,6 @@ const Home = () => {
           </motion.p>
         </motion.div>
       </section>
-
       {/* Destinations Section */}
       <section className="destinations-section">
         <div className="section-header">
@@ -174,7 +187,6 @@ const Home = () => {
                     <h3 className="new-card-title">{place.title}</h3>
                   </div>
                 </div>
-                {/* pour afficher la carte du pluce */}
                 <div className="new-card-content">
                   <div style={{ marginBottom: '0.8rem' }}>
                     <RatingStars rating={place.rating_avg} showCount={false} size={14} />
@@ -198,6 +210,43 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Luxury Stays Section (New from Laravel) */}
+      <section className="hotels-showcase-section" style={{ padding: '6rem 8%', background: 'var(--bg-color)' }}>
+        <div className="section-header-center" style={{ marginBottom: '4rem', textAlign: 'center' }}>
+            <span className="section-eyebrow" style={{ color: 'var(--primary)', letterSpacing: '3px', fontWeight: 'bold' }}>EXCEPTIONAL LIVING</span>
+            <h2 className="section-title" style={{ fontSize: '2.5rem', marginTop: '1rem' }}>Luxury Stays & Riads</h2>
+        </div>
+        <div className="hotels-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '2.5rem' }}>
+           {hotels.length > 0 ? (
+             hotels.map(hotel => (
+               <motion.div 
+                 key={hotel.id} 
+                 className="hotel-card-premium"
+                 whileHover={{ y: -10 }}
+                 style={{ background: 'white', borderRadius: '20px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.05)' }}
+               >
+                 <div style={{ height: '220px', overflow: 'hidden' }}>
+                    <img src={getImageUrl(hotel.image)} alt={hotel.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                 </div>
+                 <div style={{ padding: '1.5rem' }}>
+                    <span style={{ fontSize: '0.7rem', fontWeight: 'bold', color: 'var(--primary)', textTransform: 'uppercase' }}>{hotel.type}</span>
+                    <h3 style={{ margin: '0.5rem 0', fontSize: '1.2rem' }}>{hotel.name}</h3>
+                    <p style={{ color: '#666', fontSize: '0.85rem', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', minHeight: '2.5rem' }}>
+                      {hotel.description}
+                    </p>
+                    <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #eee', paddingTop: '1rem' }}>
+                       <span style={{ fontWeight: 'bold' }}>{hotel.price} <small>MAD</small></span>
+                       <Link to="/explore" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 'bold', fontSize: '0.8rem' }}>Check Details &rarr;</Link>
+                    </div>
+                 </div>
+               </motion.div>
+             ))
+           ) : (
+             <div style={{ textAlign: 'center', gridColumn: '1 / -1', padding: '3rem' }}>Discovering exceptional stays...</div>
+           )}
+        </div>
+      </section>
+
       {/* Statistics Section */}
       <section className="stats-section">
           <Counter value="1062" label={t('home.stats.founded')} index={0} />
@@ -207,8 +256,12 @@ const Home = () => {
       </section>
 
       </div>
+      <Link to="/comments/general" className="floating-general-comment" title="Discussion Générale">
+        <FaCommentDots size={28} />
+      </Link>
     </Layout>
   );
 };
 
 export default Home;
+      

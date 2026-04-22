@@ -36,7 +36,7 @@ const Icons = {
   )
 };
 
-const ServiceCard = ({ id, title, hotel_type, type, description, price, rating, image, index, onBook }) => (
+const ServiceCard = ({ id, title, hotel_type, type, description, price, rating, image, index, onBook, provider_id, provider_type, is_provider_only }) => (
   <motion.div 
     initial={{ opacity: 0, y: 30 }}
     animate={{ opacity: 1, y: 0 }}
@@ -54,22 +54,24 @@ const ServiceCard = ({ id, title, hotel_type, type, description, price, rating, 
         <RatingStars rating={rating} size={14} showCount={false} />
       </div>
       
-      <div className="card-price-tag">{price} MAD</div>
+      {price > 0 && <div className="card-price-tag">{price} MAD</div>}
       
       <h3 className="card-name-bold">{title}</h3>
       
       <p className="card-desc-small">{description?.substring(0, 120)}...</p>
       
       <div className="card-bottom-actions">
-        <Link to={`/service/${id}`} className="details-link-arrow">
+        <Link to={provider_id && provider_type ? `/provider/${provider_type}/${provider_id}` : `#`} className="details-link-arrow">
           Détails &rarr;
         </Link>
-        <button 
-          className="book-btn-direct"
-          onClick={() => onBook({ id, title, price, type })}
-        >
-          Réserver
-        </button>
+        {!is_provider_only && (
+          <button 
+            className="book-btn-direct"
+            onClick={() => onBook({ id, title, price, type })}
+          >
+            Réserver
+          </button>
+        )}
       </div>
     </div>
   </motion.div>

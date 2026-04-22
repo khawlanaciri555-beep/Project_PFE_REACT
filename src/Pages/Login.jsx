@@ -79,7 +79,7 @@ const Login = () => {
                             <span className="lf-line" />
                         </div>
                         <h1>{t('auth.login.title')}</h1>
-                        <p>{t('auth.login.title')}</p>
+                        <p>VibKech — Enter your credentials to access your account.</p>
                     </div>
 
                     {/* Error */}

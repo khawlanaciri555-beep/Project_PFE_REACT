@@ -23,7 +23,22 @@ body {
   font-family: var(--font-sans);
   color: var(--lux-text);
   padding-bottom: 5rem;
-  background-color: var(--lux-bg);
+  background-color: transparent;
+  position: relative;
+  z-index: 1;
+}
+
+.provider-page::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: url('/background/zlige.png');
+  background-size: 350px;
+  background-repeat: repeat;
+  background-attachment: fixed;
+  opacity: 0.3;
+  z-index: -1;
+  pointer-events: none;
 }
 
 /* Hero Section */
@@ -94,12 +109,16 @@ body {
 /* Layout */
 .provider-container {
   max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 2rem;
+  margin: 3rem auto;
+  padding: 3rem;
   display: grid;
   grid-template-columns: 1fr 380px;
   gap: 4rem;
-  margin-top: 3rem;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(16px);
+  border-radius: 32px;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.08);
 }
 
 @media (max-width: 992px) {
@@ -171,8 +190,8 @@ body {
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  background: var(--lux-surface);
-  border: 1px solid var(--lux-border);
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(212, 175, 55, 0.15);
   border-radius: 16px;
   font-weight: 500;
   transition: all 0.3s ease;
@@ -198,10 +217,10 @@ body {
 
 .dynamic-card {
   display: flex;
-  background: var(--lux-surface);
+  background: rgba(255, 255, 255, 0.85);
   border-radius: 20px;
   overflow: hidden;
-  border: 1px solid var(--lux-border);
+  border: 1px solid rgba(212, 175, 55, 0.15);
   transition: all 0.3s ease;
 }
 
@@ -277,11 +296,11 @@ body {
 .booking-card {
   position: sticky;
   top: 100px;
-  background: var(--lux-surface);
+  background: rgba(255, 255, 255, 0.85);
   padding: 2.5rem;
   border-radius: 24px;
   box-shadow: var(--lux-shadow-lg);
-  border: 1px solid rgba(212, 175, 55, 0.2);
+  border: 1px solid rgba(212, 175, 55, 0.3);
 }
 
 .booking-price {
@@ -348,9 +367,9 @@ body {
 .contact-box {
   margin-top: 2rem;
   padding: 2rem;
-  background: var(--lux-surface);
+  background: rgba(255, 255, 255, 0.85);
   border-radius: 24px;
-  border: 1px solid var(--lux-border);
+  border: 1px solid rgba(212, 175, 55, 0.15);
 }
 
 .contact-item {

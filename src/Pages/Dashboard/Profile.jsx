@@ -1,35 +1,72 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import DashboardLayout from '../../Components/Dashboard/DashboardLayout';
 import { AuthContext } from '../../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaUser, FaLock, FaBell, FaCamera, FaSave, FaCheckCircle, FaTrash } from 'react-icons/fa';
 import ProviderProfile from '../ProviderProfile';
+import api from '../../api/axios';
 
 const Profile = () => {
   const { user } = useContext(AuthContext);
   const [activeTab, setActiveTab] = useState('account');
   const [isSaved, setIsSaved] = useState(false);
-
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
-    name: user?.name || 'Ahmed El Amrani',
-    email: user?.email || 'ahmed@example.com',
-    phone: '+212 6 00 00 00 00',
-    bio: 'Tour guide and Marrakech enthusiast.',
-    role: user?.role || 'tourist'
+    name: '',
+    email: '',
+    phone: '',
+    bio: '',
   });
 
-  const handleSave = (e) => {
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        setLoading(true);
+        const response = await api.get('/dashboard/profile');
+        const { user: userData } = response.data;
+        setFormData({
+          name: userData.name || '',
+          email: userData.email || '',
+          phone: userData.phone || '',
+          bio: userData.bio || '',
+        });
+      } catch (err) {
+        console.error('Failed to fetch profile', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProfile();
+  }, []);
+
+  const handleSave = async (e) => {
     e.preventDefault();
-    setIsSaved(true);
-    setTimeout(() => setIsSaved(false), 3000);
+    setLoading(true);
+    try {
+      await api.put('/dashboard/profile', {
+        name: formData.name,
+        phone: formData.phone,
+        address: '', // Address not fully used for tourists yet
+        description: formData.bio, // Using bio as description in DB update
+      });
+      setIsSaved(true);
+      setTimeout(() => setIsSaved(false), 3000);
+    } catch (err) {
+      alert('Failed to save profile changes.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const tabs = [
     { id: 'account', label: 'Account Info', icon: <FaUser /> },
-    { id: 'gallery', label: 'Gallery & Media', icon: <FaCamera />, hideForTourist: true },
     { id: 'security', label: 'Security', icon: <FaLock /> },
     { id: 'notifications', label: 'Notifications', icon: <FaBell /> },
   ];
+
+  if (loading && !isSaved) {
+    return <DashboardLayout><div style={{ textAlign: 'center', padding: '5rem' }}>Loading Profile...</div></DashboardLayout>;
+  }
 
   return (
     <DashboardLayout>
@@ -58,11 +95,11 @@ const Profile = () => {
       <div 
         className="card-glass" 
         style={{ 
-          background: 'white', 
-          border: '1px solid var(--glass-border)', 
-          padding: '3rem', 
+          background: activeTab === 'account' && user?.role !== 'tourist' ? 'transparent' : 'white', 
+          border: activeTab === 'account' && user?.role !== 'tourist' ? 'none' : '1px solid var(--glass-border)', 
+          padding: activeTab === 'account' && user?.role !== 'tourist' ? '0' : '3rem', 
           borderRadius: '32px',
-          boxShadow: 'var(--shadow-md)',
+          boxShadow: activeTab === 'account' && user?.role !== 'tourist' ? 'none' : 'var(--shadow-md)',
           width: '100%'
         }}
       >
@@ -158,42 +195,6 @@ const Profile = () => {
               </motion.div>
             )}
 
-            {activeTab === 'gallery' && (
-              <motion.div 
-                key="gallery"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                   <h2>Business Gallery</h2>
-                   <button style={{ background: 'var(--dash-accent)', color: '#fff', border: 'none', padding: '0.8rem 1.5rem', borderRadius: '12px', fontWeight: 'bold', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <FaCamera /> Upload Photos
-                   </button>
-                </div>
-                <p style={{ color: 'var(--dash-text-muted)', marginBottom: '2rem' }}>
-                   Add high-quality photos of your place, services, or products to attract more tourists.
-                </p>
-
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1.5rem' }}>
-                   {/* Upload Area Box */}
-                   <div style={{ border: '2px dashed var(--glass-border)', borderRadius: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '180px', color: 'var(--dash-text-muted)', cursor: 'pointer', background: '#fcfcfc', transition: '0.3s' }} onMouseEnter={(e) => e.currentTarget.style.borderColor='var(--dash-accent)'} onMouseLeave={(e) => e.currentTarget.style.borderColor='var(--glass-border)'}>
-                      <FaCamera size={30} style={{ marginBottom: '1rem', color: 'var(--dash-accent)' }} />
-                      <span style={{ fontWeight: '600' }}>Click to Browse</span>
-                   </div>
-
-                   {/* Mock Images */}
-                   {[1, 2, 3].map(i => (
-                     <div key={i} style={{ position: 'relative', borderRadius: '16px', overflow: 'hidden', height: '180px', background: '#EEE' }}>
-                        <img src={`https://images.unsplash.com/photo-1542314831-c6a4d14b9868?w=300&h=300&fit=crop`} alt="Gallery item" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                        <button style={{ position: 'absolute', top: '10px', right: '10px', background: 'rgba(255,255,255,0.8)', border: 'none', width: '30px', height: '30px', borderRadius: '50%', color: 'red', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 5px rgba(0,0,0,0.2)' }}>
-                           <FaTrash size={12} />
-                        </button>
-                     </div>
-                   ))}
-                </div>
-              </motion.div>
-            )}
 
             {activeTab === 'security' && (
               <motion.div 
