@@ -36,7 +36,7 @@ const Icons = {
   )
 };
 
-const ServiceCard = ({ id, title, hotel_type, type, description, price, rating, image, index, onBook, provider_id, provider_type, is_provider_only }) => (
+const ServiceCard = ({ id, title, hotel_type, type, description, price, rating, image, gallery, index, onBook, onViewGallery, provider_id, provider_type, is_provider_only }) => (
   <motion.div 
     initial={{ opacity: 0, y: 30 }}
     animate={{ opacity: 1, y: 0 }}
@@ -61,9 +61,19 @@ const ServiceCard = ({ id, title, hotel_type, type, description, price, rating, 
       <p className="card-desc-small">{description?.substring(0, 120)}...</p>
       
       <div className="card-bottom-actions">
-        <Link to={provider_id && provider_type ? `/provider/${provider_type}/${provider_id}` : `#`} className="details-link-arrow">
-          Détails &rarr;
-        </Link>
+        {(gallery && gallery.length > 1) || (['Activity', 'Experience', 'Workshop', 'Tour'].includes(type) && image) ? (
+          <button 
+            onClick={() => onViewGallery({ title, gallery: gallery || [image], description })}
+            className="details-link-arrow"
+            style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: 'var(--primary)', fontWeight: '600' }}
+          >
+            Détails &rarr;
+          </button>
+        ) : (
+          <Link to={provider_id && provider_type ? `/provider/${provider_type}/${provider_id}` : `#`} className="details-link-arrow">
+            Détails &rarr;
+          </Link>
+        )}
         {!is_provider_only && (
           <button 
             className="book-btn-direct"
@@ -113,6 +123,7 @@ const PlaceDetails = () => {
   const [isServicesOpen, setIsServicesOpen] = useState(false);
   const [hotelTypeFilter, setHotelTypeFilter] = useState('Tous'); // 'Tous', 'Hôtel', 'Riad'
   const [selectedService, setSelectedService] = useState(null);
+  const [selectedGalleryService, setSelectedGalleryService] = useState(null);
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const [isMapVisible, setIsMapVisible] = useState(false);
 
@@ -418,6 +429,7 @@ const PlaceDetails = () => {
                               key={`${activeTab}-${service.id}-${index}`}
                               index={index}
                               onBook={handleBookClick}
+                              onViewGallery={setSelectedGalleryService}
                               {...service}
                             />
                           ))
@@ -444,6 +456,37 @@ const PlaceDetails = () => {
             onConfirm={handleConfirmBooking}
           />
         )}
+
+        <AnimatePresence>
+          {selectedGalleryService && (
+            <motion.div 
+              className="gallery-modal-overlay"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedGalleryService(null)}
+            >
+              <motion.div 
+                className="gallery-modal-content"
+                initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button className="close-gallery-btn" onClick={() => setSelectedGalleryService(null)}>&times;</button>
+                <h2 className="gallery-modal-title">{selectedGalleryService.title}</h2>
+                <div className="gallery-grid-main">
+                  {selectedGalleryService.gallery.slice(0, 4).map((img, i) => (
+                    <div key={i} className={`gallery-item-wrap item-${i}`}>
+                      <img src={getImageUrl(img)} alt={`Gallery ${i}`} />
+                    </div>
+                  ))}
+                </div>
+                <p className="gallery-modal-desc">{selectedGalleryService.description}</p>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </Layout>
   );

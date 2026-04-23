@@ -185,11 +185,9 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
               reviewsCount: 0,
               location: providerProfile.address || 'Location not set',
               description: providerProfile.description || 'No description provided.',
-              images: providerProfile.image 
-                ? [providerProfile.image]
-                : [mockProviderData.hotel.images[0]],
+              images: providerProfile.image ? [providerProfile.image] : [],
               gallery: providerProfile.gallery || [],
-              features: mockProviderData[providerType]?.features || [],
+              features: providerProfile.features || [],
               services: providerProfile.services ? providerProfile.services.filter(s => !s.is_deleted).map(s => ({
                 id: s.id,
                 title: s.title,
@@ -203,13 +201,10 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
                 email: providerProfile.email || userData.email 
               }
             });
-          } else {
-             // Fallback for safety
-             setData(mockProviderData[providerType]);
           }
         } catch (err) {
           console.error('Failed to fetch dashboard profile', err);
-          setData(mockProviderData[providerType]);
+          setData(null);
         } finally {
           setLoading(false);
         }
@@ -230,18 +225,21 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
           const response = await api.get(endpoint);
           const providerProfile = response.data.data || response.data;
           
+          if (!providerProfile || Array.isArray(providerProfile)) {
+            setData(null);
+            return;
+          }
+
           setData({
-            name: providerProfile.name || 'Provider',
+            name: providerProfile.name || providerProfile.user?.name || 'Provider',
             type: providerProfile.type || 'Provider',
             rating: 4.8, 
             reviewsCount: 0,
             location: providerProfile.address || 'Location not set',
             description: providerProfile.description || 'No description provided.',
-            images: providerProfile.image 
-              ? [providerProfile.image]
-              : [mockProviderData[providerType].images[0]],
+            images: providerProfile.image ? [providerProfile.image] : [],
             gallery: providerProfile.gallery || [],
-            features: mockProviderData[providerType]?.features || [],
+            features: providerProfile.features || [], 
             services: providerProfile.services ? providerProfile.services.filter(s => !s.is_deleted).map(s => ({
               id: s.id,
               title: s.title,
@@ -257,7 +255,8 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
           });
         } catch (err) {
           console.error('Failed to fetch public profile', err);
-          setData(mockProviderData[providerType]);
+          // Don't set mock data anymore, let it show loading or empty
+          setData(null);
         } finally {
           setLoading(false);
         }
@@ -373,35 +372,46 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
     if (!newItem.title) return alert('Please add a title');
     try {
       setAddingItem(true);
-      let imagePath = null;
+      
+      // 1. Get current profile to ensure we have the correct IDs
+      const profileRes = await api.get('/dashboard/profile');
+      const profile = profileRes.data.profile;
+      
+      if (!profile) {
+        alert('Provider profile not found. Please make sure your profile is set up.');
+        setAddingItem(false);
+        return;
+      }
 
-      // Upload image first if provided
+      let imagePath = null;
+      // 2. Upload image first if provided
       if (newItem.imageFile) {
         const formData = new FormData();
         formData.append('image', newItem.imageFile);
         formData.append('folder', 'services');
-        const uploadRes = await api.post('/upload', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+        const uploadRes = await api.post('/upload', formData, { 
+          headers: { 'Content-Type': 'multipart/form-data' } 
+        });
         imagePath = uploadRes.data.path;
       }
 
-      // Get the provider's entity ID from the dashboard profile
-      const profileRes = await api.get('/dashboard/profile');
-      const providerProfile = profileRes.data.profile;
-
+      // 3. Construct payload with all necessary foreign keys
       const payload = {
         title: newItem.title,
         description: newItem.description || '',
         price: newItem.price || 0,
         image: imagePath,
-        ...(providerType === 'hotel' && { hotel_id: providerProfile?.id }),
-        ...(providerType === 'coop' && { cooperative_id: providerProfile?.id }),
-        ...(providerType === 'transport' && { transport_id: providerProfile?.id }),
+        type: providerType, // helpful for filtering
+        place_id: profile.place_id, // Link to the same location
+        hotel_id: providerType === 'hotel' ? profile.id : null,
+        cooperative_id: (providerType === 'coop' || providerType === 'cooperative') ? profile.id : null,
+        transport_id: providerType === 'transport' ? profile.id : null,
       };
 
       const res = await api.post('/services', payload);
       const created = res.data.data || res.data;
 
-      // Add to local state
+      // 4. Update local state
       setData(prev => ({
         ...prev,
         services: [...(prev.services || []), {
@@ -413,12 +423,13 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
         }]
       }));
 
-      // Reset modal
+      // 5. Reset and close
       setShowAddModal(false);
       setNewItem({ title: '', description: '', price: '', imageFile: null, imagePreview: null });
     } catch (err) {
-      console.error('Failed to add item', err);
-      alert('Error adding item. Please try again.');
+      console.error('Failed to add item:', err.response?.data || err.message);
+      const errorMsg = err.response?.data?.message || 'Error adding item. Please check your connection and try again.';
+      alert(errorMsg);
     } finally {
       setAddingItem(false);
     }
@@ -466,7 +477,19 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
     return isDashboard ? loaderContent : <Layout>{loaderContent}</Layout>;
   }
 
-  if (!data) return null;
+  if (!data) {
+    const errorContent = (
+      <div style={{ height: isDashboard ? '50vh' : '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '1rem' }}>
+        <FaTimes size={48} style={{ color: '#ef4444' }} />
+        <h2 style={{ fontFamily: 'var(--font-serif)' }}>Profile Not Found</h2>
+        <p style={{ color: 'var(--lux-text-muted)' }}>The requested provider profile could not be loaded.</p>
+        <button onClick={() => navigate('/home')} style={{ padding: '0.8rem 1.5rem', background: 'var(--lux-accent)', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}>
+           Back to Home
+        </button>
+      </div>
+    );
+    return isDashboard ? errorContent : <Layout>{errorContent}</Layout>;
+  }
 
   const content = (
     <div className="provider-page" style={isDashboard ? { borderRadius: '24px', overflow: 'hidden' } : {}}>
@@ -515,11 +538,24 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
       <div className="provider-container">
         
         {/* LEFT MAIN CONTENT */}
-        <div className="provider-main-content">
+        <motion.div 
+          className="provider-main-content"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { opacity: 1, transition: { staggerChildren: 0.15 } }
+          }}
+        >
           
           {/* GALLERY */}
           {((data.gallery && data.gallery.length > 0) || isEditMode) && (
-            <section>
+            <motion.section 
+              variants={{ hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } } }}
+              viewport={{ once: true, margin: "-50px" }}
+              whileInView="visible"
+              initial="hidden"
+            >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                 <h2 className="section-title" style={{ marginBottom: 0 }}>Gallery</h2>
                 {isEditMode && (
@@ -533,8 +569,8 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
                 <div style={{ gridRow: '1 / 3', borderRadius: '16px', overflow: 'hidden' }}>
                   {(data.gallery || [])[0] ? (
                     <img
-                      src={getImageUrl(data.gallery[0].url)}
-                      alt={data.gallery[0].name || 'Photo 1'}
+                      src={getImageUrl(typeof data.gallery[0] === 'string' ? data.gallery[0] : data.gallery[0].url)}
+                      alt={typeof data.gallery[0] === 'string' ? 'Photo 1' : (data.gallery[0].name || 'Photo 1')}
                       style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s', display: 'block' }}
                       onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.04)'}
                       onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
@@ -556,8 +592,8 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
                 <div style={{ borderRadius: '16px', overflow: 'hidden' }}>
                   {(data.gallery || [])[1] ? (
                     <img
-                      src={getImageUrl(data.gallery[1].url)}
-                      alt={data.gallery[1].name || 'Photo 2'}
+                      src={getImageUrl(typeof data.gallery[1] === 'string' ? data.gallery[1] : data.gallery[1].url)}
+                      alt={typeof data.gallery[1] === 'string' ? 'Photo 2' : (data.gallery[1].name || 'Photo 2')}
                       style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s', display: 'block' }}
                       onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.04)'}
                       onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
@@ -579,8 +615,8 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
                 <div style={{ borderRadius: '16px', overflow: 'hidden' }}>
                   {(data.gallery || [])[2] ? (
                     <img
-                      src={getImageUrl(data.gallery[2].url)}
-                      alt={data.gallery[2].name || 'Photo 3'}
+                      src={getImageUrl(typeof data.gallery[2] === 'string' ? data.gallery[2] : data.gallery[2].url)}
+                      alt={typeof data.gallery[2] === 'string' ? 'Photo 3' : (data.gallery[2].name || 'Photo 3')}
                       style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s', display: 'block' }}
                       onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.04)'}
                       onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
@@ -598,54 +634,88 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
                   ) : null}
                 </div>
               </div>
-            </section>
+            </motion.section>
           )}
 
           {/* DESCRIPTION */}
-          <section>
+          <motion.section 
+            variants={{ hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } } }}
+            viewport={{ once: true, margin: "-50px" }}
+            whileInView="visible"
+            initial="hidden"
+          >
             <h2 className="section-title">About the Experience</h2>
-            <EditableField 
-              isEditMode={isEditMode} 
-              value={data.description} 
-              onSave={(val) => handleUpdate('description', val)} 
-              multiline 
-              textComponent="p" 
-              className="description-text" 
-            />
-          </section>
+            <div style={{ background: 'rgba(255,255,255,0.4)', padding: '2rem', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.6)' }}>
+               <EditableField 
+                 isEditMode={isEditMode} 
+                 value={data.description} 
+                 onSave={(val) => handleUpdate('description', val)} 
+                 multiline 
+                 textComponent="p" 
+                 className="description-text" 
+                 style={{ margin: 0 }}
+               />
+            </div>
+          </motion.section>
 
           {/* FEATURES - only show if there are features */}
           {(isEditMode || (data.features && data.features.length > 0)) && (
-          <section>
+          <motion.section 
+            variants={{ hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } } }}
+            viewport={{ once: true, margin: "-50px" }}
+            whileInView="visible"
+            initial="hidden"
+          >
             <h2 className="section-title" style={{ display: 'flex', justifyContent: 'space-between' }}>
               Amenities & Features
               {isEditMode && <button onClick={handleAddFeature} style={{ fontSize: '0.9rem', color: 'var(--lux-accent)', background: 'none', border: 'none', cursor: 'pointer' }}>+ Add Feature</button>}
             </h2>
             <div className="features-grid">
               {(data.features || []).map((feat, i) => (
-                <div key={i} className="feature-item" style={{ position: 'relative' }}>
+                <motion.div 
+                  key={i} 
+                  className="feature-item" 
+                  style={{ position: 'relative' }}
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
                   <span className="feature-icon">{feat.icon || <FaCheck />}</span>
                   <span>{feat.label}</span>
                   {isEditMode && (
                     <button onClick={() => handleDeleteFeature(i)} style={{ position: 'absolute', right: '10px', background: 'none', border: 'none', color: 'red', cursor: 'pointer', opacity: 0.7 }}><FaTimes /></button>
                   )}
-                </div>
+                </motion.div>
               ))}
             </div>
-          </section>
+          </motion.section>
           )}
 
           {/* DYNAMIC SERVICES LIST (Rooms, Cars, Products) */}
           {(isEditMode || (data.services && data.services.length > 0)) && (
-          <section>
+          <motion.section 
+            variants={{ hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } } }}
+            viewport={{ once: true, margin: "-50px" }}
+            whileInView="visible"
+            initial="hidden"
+          >
             <h2 className="section-title" style={{ display: 'flex', justifyContent: 'space-between' }}>
               {providerType === 'hotel' ? 'Available Rooms & Suites' : providerType === 'transport' ? 'Our Fleet & Routes' : 'Artisan Products'}
               {isEditMode && <button onClick={() => setShowAddModal(true)} style={{ fontSize: '0.9rem', color: 'var(--lux-accent)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: '600' }}>+ Add Item</button>}
             </h2>
             <div className="dynamic-lists">
               {data.services.map(svc => (
-                <div key={svc.id} className="dynamic-card" style={{ position: 'relative' }}>
-                  <img src={getImageUrl(svc.image)} alt={svc.title} className="dynamic-img" />
+                <motion.div 
+                  key={svc.id} 
+                  className="dynamic-card" 
+                  style={{ position: 'relative' }}
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                >
+                  <div style={{ overflow: 'hidden', width: '250px', flexShrink: 0 }}>
+                    <img src={getImageUrl(svc.image)} alt={svc.title} className="dynamic-img" style={{ transition: 'transform 0.6s ease', height: '100%', width: '100%', objectFit: 'cover' }} onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.1)'} onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'} />
+                  </div>
                   {isEditMode && (
                      <>
                      <label style={{ position: 'absolute', top: '10px', left: '10px', background: '#fff', padding: '0.5rem', borderRadius: '8px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.8rem' }}>
@@ -658,29 +728,41 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
                      </>
                   )}
                   <div className="dynamic-info">
-                    <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.25rem' }}>
+                    <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.4rem', fontFamily: 'var(--font-serif)' }}>
                       <EditableField isEditMode={isEditMode} value={svc.title} onSave={(val) => handleUpdateService(svc.id, 'title', val)} />
                     </h3>
                     <div style={{ color: 'var(--lux-text-muted)', marginBottom: '1.5rem', lineHeight: 1.6, width: '100%' }}>
                       <EditableField isEditMode={isEditMode} value={svc.desc} onSave={(val) => handleUpdateService(svc.id, 'desc', val)} multiline textComponent="p" />
                     </div>
-                    <div className="dynamic-price" style={{ display: 'flex', alignItems: 'center' }}>
+                    <div className="dynamic-price" style={{ display: 'flex', alignItems: 'center', background: 'rgba(212, 175, 55, 0.1)', padding: '0.5rem 1rem', borderRadius: '8px', width: 'fit-content' }}>
                       <EditableField isEditMode={isEditMode} value={svc.price} onSave={(val) => handleUpdateService(svc.id, 'price', val)} type="number" />
-                      <span style={{ fontSize: '1rem', color: 'var(--lux-text-muted)', fontWeight: 400, marginLeft: '0.5rem' }}>MAD</span>
+                      <span style={{ fontSize: '1.1rem', color: 'var(--lux-accent)', fontWeight: 600, marginLeft: '0.5rem' }}>MAD</span>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
-          </section>
+          </motion.section>
           )}
 
           {/* REVIEWS */}
           {!isDashboard && (
-            <section>
+            <motion.section 
+              variants={{ hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } } }}
+              viewport={{ once: true, margin: "-50px" }}
+              whileInView="visible"
+              initial="hidden"
+            >
               <h2 className="section-title">Guest Reviews</h2>
-              {[1, 2].map((r) => (
-                <div key={r} className="review-card">
+              {[1, 2].map((r, i) => (
+                <motion.div 
+                  key={r} 
+                  className="review-card"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.2, duration: 0.5 }}
+                >
                   <div className="review-header">
                     <div className="review-avatar">M</div>
                     <div>
@@ -692,15 +774,20 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
                     <span style={{ marginLeft: 'auto', color: 'var(--lux-text-muted)', fontSize: '0.9rem' }}>2 weeks ago</span>
                   </div>
                   <p style={{ margin: 0, color: 'var(--lux-text)' }}>"An absolutely magical experience. The attention to detail and hospitality was second to none. We will definitely be returning next year!"</p>
-                </div>
+                </motion.div>
               ))}
-            </section>
+            </motion.section>
           )}
 
-        </div>
+        </motion.div>
 
         {/* RIGHT SIDEBAR (STICKY CARD) */}
-        <div className="booking-card-wrapper">
+        <motion.div 
+          className="booking-card-wrapper"
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+        >
           <div className="booking-card">
             <h3 className="booking-price" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <EditableField isEditMode={isEditMode} value={data.priceStarts} onSave={(val) => handleUpdate('priceStarts', val)} type="number" />
@@ -737,7 +824,7 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
               <EditableField isEditMode={isEditMode} value={data.contact.email} onSave={(val) => handleUpdateContact('email', val)} type="email" />
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
 
       {/* MODAL FOR ADDING SERVICE */}
