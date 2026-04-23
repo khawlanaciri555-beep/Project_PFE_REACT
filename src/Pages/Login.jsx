@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
+import { FaArrowLeft } from 'react-icons/fa';
 import './Auth.css';
 
 const Login = () => {
@@ -37,10 +38,10 @@ const Login = () => {
             <div className="login-left-panel">
                 <div className="login-panel-overlay" />
                 <div className="login-panel-content">
-                    <div className="login-brand">
+                    <Link to="/home" className="login-brand" style={{ textDecoration: 'none' }}>
                         <span className="login-brand-icon">✦</span>
                         <span className="login-brand-name">VibKech</span>
-                    </div>
+                    </Link>
                     <h2 className="login-panel-title">
                         Welcome Back to<br />
                         <em>the Red City</em>
@@ -69,7 +70,10 @@ const Login = () => {
             </div>
 
             {/* Right Panel — form */}
-            <div className="login-right-panel">
+            <div className="login-right-panel" style={{ position: 'relative' }}>
+                <Link to="/home" style={{ position: 'absolute', top: '2.5rem', left: '2.5rem', display: 'flex', alignItems: 'center', gap: '8px', color: '#CA5A3D', textDecoration: 'none', fontWeight: '600', fontSize: '1.05rem' }}>
+                    <FaArrowLeft /> Retour
+                </Link>
                 <div className="login-form-card">
                     {/* Header */}
                     <div className="login-form-header">

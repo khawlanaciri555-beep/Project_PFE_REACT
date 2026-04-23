@@ -61,7 +61,7 @@
     },
     "step3": {
       "title": "Hébergement & Logistique",
-      "luxuryRetreats": "Retraites de Luxe",
+      "luxuryRetreats": "Hébergements (Hôtels & Riads)",
       "elegantMobility": "Mobilité Élégante",
       "pickupLocation": "Lieu de ramassage",
       "finalDestination": "Destination finale",
@@ -74,7 +74,7 @@
       "destinations": "Destinations",
       "experiences": "Expériences Choisies",
       "accommodation": "Hébergement Prestige",
-      "noHotel": "Veuillez sélectionner un hôtel",
+      "noHotel": "Veuillez sélectionner un hébergement",
       "totalInvestment": "INVESTISSEMENT TOTAL",
       "adjust": "Ajuster",
       "confirm": "Confirmer mon Évasion",

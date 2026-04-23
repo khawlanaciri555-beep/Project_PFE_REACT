@@ -44,9 +44,21 @@ export const TouristForm = ({ data, onChange }) => (
 
 export const HotelForm = ({ data, onChange, onFileChange, places }) => (
   <>
+    <CustomSelect
+      icon={FaBuilding}
+      label="Type d'hébergement"
+      name="accommodationType"
+      value={data.accommodationType || 'hotel'}
+      onChange={onChange}
+      options={[
+        { value: 'hotel', label: 'Hôtel' },
+        { value: 'riad', label: 'Riad' }
+      ]}
+      required
+    />
     <FloatingInput
       icon={FaBuilding}
-      label="Hotel Name"
+      label="Nom de l'hébergement"
       name="hotelName"
       value={data.hotelName}
       onChange={onChange}

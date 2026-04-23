@@ -61,7 +61,7 @@
     },
     "step3": {
       "title": "الإقامة والخدمات اللوجستية",
-      "luxuryRetreats": "منتجعات فاخرة",
+      "luxuryRetreats": "أماكن الإقامة (فنادق ورياض)",
       "elegantMobility": "تنقل أنيق",
       "pickupLocation": "موقع الاستلام",
       "finalDestination": "الوجهة النهائية",
@@ -74,7 +74,7 @@
       "destinations": "الوجهات",
       "experiences": "التجارب المختارة",
       "accommodation": "إقامة فاخرة",
-      "noHotel": "الرجاء اختيار فندق",
+      "noHotel": "الرجاء اختيار مكان إقامة",
       "totalInvestment": "إجمالي الاستثمار",
       "adjust": "تعديل",
       "confirm": "تأكيد رحلتي",
