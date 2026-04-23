@@ -18,6 +18,7 @@ import MyServices from './Pages/Dashboard/MyServices';
 import MyProperties from './Pages/Dashboard/MyProperties';
 import Profile from './Pages/Dashboard/Profile';
 import ProviderProfile from './Pages/ProviderProfile';
+import ActivityDetail from './Pages/ActivityDetail';
 import Images from './Pages/Dashboard/Images';
 
 import './App.css';
@@ -41,6 +42,7 @@ function App() {
           <Route path="/place/:id/comments" element={<Comments />} />
           <Route path="/provider" element={<ProviderProfile />} />
           <Route path="/provider/:type/:id" element={<ProviderProfile />} />
+          <Route path="/activity/:id" element={<ActivityDetail />} />
           <Route path="/comments/:id" element={<Comments />} />
 
           {/* Protected Dashboard Routes */}

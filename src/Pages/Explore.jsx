@@ -15,6 +15,7 @@ const Explore = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState('grid');
+  const [searchQuery, setSearchQuery] = useState('');
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -98,6 +99,47 @@ const Explore = () => {
         </div>
 
         <div className="max-container">
+          {/* Search Bar */}
+          <div style={{ padding: '2rem 0 0.5rem 0' }}>
+            <div style={{
+              position: 'relative',
+              maxWidth: '520px',
+              margin: '0 auto'
+            }}>
+              <svg style={{ position: 'absolute', left: '1.1rem', top: '50%', transform: 'translateY(-50%)', width: '18px', height: '18px', color: '#999', pointerEvents: 'none' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input
+                type="text"
+                placeholder="Search a place... (e.g. Majorelle, Medina)"
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '0.85rem 1.25rem 0.85rem 2.8rem',
+                  borderRadius: '50px',
+                  border: '2px solid #e5e7eb',
+                  fontSize: '0.95rem',
+                  outline: 'none',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+                  transition: 'border-color 0.2s',
+                  background: '#fff',
+                  boxSizing: 'border-box'
+                }}
+                onFocus={e => e.target.style.borderColor = 'var(--primary)'}
+                onBlur={e => e.target.style.borderColor = '#e5e7eb'}
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#999', fontSize: '1.1rem', lineHeight: 1 }}
+                >
+                  &times;
+                </button>
+              )}
+            </div>
+          </div>
+
           {loading ? (
             <div style={{ display: 'flex', justifyContent: 'center', padding: '5rem' }}>
                <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }} style={{ width: '50px', height: '50px', border: '5px solid var(--primary)', borderTopColor: 'transparent', borderRadius: '50%' }} />
@@ -117,7 +159,7 @@ const Explore = () => {
               }}
               className="explore-grid"
             >
-              {items.map((place) => (
+              {items.filter(p => !searchQuery || (p.title || p.name || '').toLowerCase().includes(searchQuery.toLowerCase())).map((place) => (
                 <Link
                   key={place.id}
                   to={`/place/${place.id}`}

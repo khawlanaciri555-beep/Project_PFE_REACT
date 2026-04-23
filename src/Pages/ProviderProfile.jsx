@@ -745,39 +745,8 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
           </motion.section>
           )}
 
-          {/* REVIEWS */}
-          {!isDashboard && (
-            <motion.section 
-              variants={{ hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } } }}
-              viewport={{ once: true, margin: "-50px" }}
-              whileInView="visible"
-              initial="hidden"
-            >
-              <h2 className="section-title">Guest Reviews</h2>
-              {[1, 2].map((r, i) => (
-                <motion.div 
-                  key={r} 
-                  className="review-card"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.2, duration: 0.5 }}
-                >
-                  <div className="review-header">
-                    <div className="review-avatar">M</div>
-                    <div>
-                      <h4 style={{ margin: 0 }}>Marie Dubois</h4>
-                      <div style={{ display: 'flex', gap: '2px', color: 'var(--lux-accent)', marginTop: '0.25rem', fontSize: '0.8rem' }}>
-                        <FaStar /><FaStar /><FaStar /><FaStar /><FaStar />
-                      </div>
-                    </div>
-                    <span style={{ marginLeft: 'auto', color: 'var(--lux-text-muted)', fontSize: '0.9rem' }}>2 weeks ago</span>
-                  </div>
-                  <p style={{ margin: 0, color: 'var(--lux-text)' }}>"An absolutely magical experience. The attention to detail and hospitality was second to none. We will definitely be returning next year!"</p>
-                </motion.div>
-              ))}
-            </motion.section>
-          )}
+
+
 
         </motion.div>
 

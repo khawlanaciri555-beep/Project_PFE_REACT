@@ -1,0 +1,310 @@
+/* ============================================
+   ACTIVITY DETAIL PAGE — Premium Light Theme
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+.activity-detail-page {
+  background: #f5f3ef;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ── HERO ── */
+.act-hero {
+  height: 88vh;
+  min-height: 480px;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 5% 6rem;
+}
+
+.act-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.02) 0%,
+    rgba(0,0,0,0.15) 40%,
+    rgba(0,0,0,0.75) 80%,
+    rgba(245,243,239,1) 100%
+  );
+}
+
+.act-hero-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.act-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255,255,255,0.35);
+  color: #fff;
+  padding: 0.65rem 1.4rem;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  margin-bottom: 2.5rem;
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+}
+
+.act-back-btn:hover {
+  background: #fff;
+  color: #333;
+  transform: translateX(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+.act-type-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #c8a96e, #a07c3e);
+  color: #fff;
+  padding: 0.38rem 1.1rem;
+  border-radius: 50px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 4px 20px rgba(200,169,110,0.45);
+}
+
+.act-title {
+  color: #ffffff;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+  font-weight: 700;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.1;
+  text-shadow: 0 4px 24px rgba(0,0,0,0.35);
+  max-width: 680px;
+}
+
+.act-price-badge {
+  display: inline-block;
+  background: #fff;
+  color: #222;
+  padding: 0.55rem 1.7rem;
+  border-radius: 50px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.15);
+}
+
+/* ── BODY ── */
+.act-body {
+  padding: 3rem 1.5rem 6rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ── SECTIONS ── */
+.act-section {
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 24px;
+  padding: 2.8rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+}
+
+.act-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #c8a96e 0%, #f0e0b8 60%, transparent 100%);
+  border-radius: 24px 24px 0 0;
+}
+
+.act-section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 1.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.act-description {
+  line-height: 1.9;
+  color: #555;
+  font-size: 1.05rem;
+  font-weight: 400;
+  white-space: pre-line;
+  margin: 0;
+}
+
+/* ── PHOTO GRID ── */
+.act-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.2rem;
+}
+
+.act-photo-card {
+  border-radius: 16px;
+  overflow: hidden;
+  height: 220px;
+  position: relative;
+  cursor: pointer;
+  background: #eee;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  transition: box-shadow 0.3s ease;
+}
+
+.act-photo-featured {
+  grid-column: span 2;
+  height: 320px;
+}
+
+.act-photo-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  display: block;
+}
+
+.act-photo-card:hover img {
+  transform: scale(1.07);
+}
+
+.act-photo-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.55) 0%,
+    rgba(0,0,0,0.1) 50%,
+    transparent 100%
+  );
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  gap: 0.6rem;
+}
+
+.act-photo-card:hover .act-photo-overlay {
+  opacity: 1;
+}
+
+.act-photo-zoom-icon {
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(10px);
+  border: 1.5px solid rgba(255,255,255,0.4);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s, background 0.3s;
+}
+
+.act-photo-card:hover .act-photo-zoom-icon {
+  transform: scale(1.12);
+  background: rgba(200,169,110,0.5);
+}
+
+.act-photo-num {
+  color: rgba(255,255,255,0.9);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+
+/* ── LIGHTBOX ── */
+.act-lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(15,12,8,0.96);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.act-lightbox img {
+  max-width: 92%;
+  max-height: 88vh;
+  border-radius: 14px;
+  object-fit: contain;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+}
+
+.act-lightbox-close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-size: 1.4rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  line-height: 1;
+}
+
+.act-lightbox-close:hover {
+  background: #c8a96e;
+  border-color: #c8a96e;
+  transform: rotate(90deg);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .act-hero {
+    height: 70vh;
+    background-attachment: scroll;
+    padding-bottom: 3.5rem;
+  }
+  .act-title {
+    font-size: 2.1rem;
+  }
+  .act-section {
+    padding: 1.8rem 1.4rem;
+  }
+  .act-photo-featured {
+    grid-column: span 1;
+    height: 220px;
+  }
+  .act-photo-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
