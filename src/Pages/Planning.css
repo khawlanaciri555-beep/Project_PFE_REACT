@@ -799,6 +799,23 @@ body.dark-mode .planning-page.premium-theme {
   transform: scale(1.2) rotate(15deg);
 }
 
+.act-details-btn-premium {
+  flex: 1;
+  padding: 1rem;
+  border-radius: 16px;
+  border: 1px solid #e7e5e4;
+  background: #fff;
+  font-weight: 800;
+  cursor: pointer;
+  transition: 0.3s;
+  color: var(--premium-dark);
+}
+
+.act-details-btn-premium:hover {
+  border-color: var(--premium-terracotta);
+  color: var(--premium-terracotta);
+}
+
 .description-bubble-premium {
   position: absolute;
   bottom: 100%;

@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { FaMapMarkerAlt, FaCalendarAlt, FaChevronRight, FaChevronLeft, FaCheckCircle, FaCar, FaInfoCircle, FaPlane } from 'react-icons/fa';
 import ServiceMap from '../Components/Explore/ServiceMap';
+import getImageUrl from '../utils/imageUrl';
 import './Planning.css';
 
 const Planning = () => {
@@ -30,6 +31,7 @@ const Planning = () => {
     routeTo: ''
   });
   const [showDescription, setShowDescription] = useState(null);
+  const [selectedGalleryService, setSelectedGalleryService] = useState(null);
   const [isFlying, setIsFlying] = useState(false);
 
   // Calculate duration in nights
@@ -247,7 +249,7 @@ const Planning = () => {
                             }}
                           >
                             <div className="place-card-img-premium">
-                              <img src={place.image || '/logo picter/placeholder.jpg'} alt={place.name || place.title} />
+                              <img src={getImageUrl(place.image) || '/logo picter/placeholder.jpg'} alt={place.name || place.title} />
                               <div className="premium-overlay" />
                               <div className="selection-indicator">
                                 {formData.selectedPlaces.some(p => p.id === place.id) ? <FaCheckCircle /> : <div className="plus-icon">+</div>}
@@ -363,7 +365,7 @@ const Planning = () => {
                             className={`activity-card-premium ${formData.selectedActivities.some(a => a.id === service.id) ? 'selected' : ''}`}
                           >
                             <div className="act-img-wrap">
-                               <img src={service.image || '/logo picter/placeholder.jpg'} alt={service.title} />
+                               <img src={getImageUrl(service.image) || '/logo picter/placeholder.jpg'} alt={service.title} />
                                <span className="act-tag">{service.type}</span>
                             </div>
                             <div className="act-info-premium">
@@ -372,19 +374,32 @@ const Planning = () => {
                                  <span className="act-price-label">{service.price} {t('common.mad')}</span>
                                  <div className="act-rating-premium">★ {service.rating}</div>
                               </div>
-                              <button 
-                                className={`act-toggle-btn ${formData.selectedActivities.some(a => a.id === service.id) ? 'active' : ''}`}
-                                onClick={() => {
-                                  const isSelected = formData.selectedActivities.some(a => a.id === service.id);
-                                  if (isSelected) {
-                                    setFormData({...formData, selectedActivities: formData.selectedActivities.filter(a => a.id !== service.id)});
-                                  } else {
-                                    setFormData({...formData, selectedActivities: [...formData.selectedActivities, service]});
-                                  }
-                                }}
-                              >
-                                {formData.selectedActivities.some(a => a.id === service.id) ? t('planning.step2.selected') : t('planning.step2.book')}
-                              </button>
+                              <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
+                                {(service.gallery || service.image) && (
+                                  <button 
+                                    className="act-details-btn-premium"
+                                    onClick={() => setSelectedGalleryService({
+                                      ...service,
+                                      gallery: service.gallery || [service.image]
+                                    })}
+                                  >
+                                    Détails
+                                  </button>
+                                )}
+                                <button 
+                                  className={`act-toggle-btn ${formData.selectedActivities.some(a => a.id === service.id) ? 'active' : ''}`}
+                                  onClick={() => {
+                                    const isSelected = formData.selectedActivities.some(a => a.id === service.id);
+                                    if (isSelected) {
+                                      setFormData({...formData, selectedActivities: formData.selectedActivities.filter(a => a.id !== service.id)});
+                                    } else {
+                                      setFormData({...formData, selectedActivities: [...formData.selectedActivities, service]});
+                                    }
+                                  }}
+                                >
+                                  {formData.selectedActivities.some(a => a.id === service.id) ? t('planning.step2.selected') : t('planning.step2.book')}
+                                </button>
+                              </div>
                             </div>
                           </motion.div>
                       ))}
@@ -570,6 +585,37 @@ const Planning = () => {
             )}
           </div>
         </div>
+        <AnimatePresence>
+          {selectedGalleryService && (
+            <motion.div 
+              className="gallery-modal-overlay"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedGalleryService(null)}
+              style={{ zIndex: 3000 }}
+            >
+              <motion.div 
+                className="gallery-modal-content"
+                initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button className="close-gallery-btn" onClick={() => setSelectedGalleryService(null)}>&times;</button>
+                <h2 className="gallery-modal-title">{selectedGalleryService.title}</h2>
+                <div className="gallery-grid-main">
+                  {selectedGalleryService.gallery.slice(0, 4).map((img, i) => (
+                    <div key={i} className={`gallery-item-wrap item-${i}`}>
+                      <img src={getImageUrl(img)} alt={`Gallery ${i}`} />
+                    </div>
+                  ))}
+                </div>
+                <p className="gallery-modal-desc">{selectedGalleryService.description}</p>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </Layout>
   );
