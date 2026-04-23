@@ -12,7 +12,7 @@ import {
   CooperativeForm
 } from '../Components/Register/RegisterForms';
 import { GradientButton } from '../Components/Register/UIComponents';
-import { FaCheckCircle } from 'react-icons/fa';
+import { FaCheckCircle, FaArrowLeft } from 'react-icons/fa';
 import './Auth.css';
 
 const Register = () => {
@@ -45,6 +45,7 @@ const Register = () => {
     password: '',
     password_confirmation: '',
     phone: '',
+    accommodationType: 'hotel',
     hotelName: '',
     address: '',
     place_id: '',
@@ -96,6 +97,10 @@ const Register = () => {
       dataToSend.append('address', formData.address);
       dataToSend.append('place_id', formData.place_id);
       dataToSend.append('description', formData.description);
+
+      if (role === 'hotel') {
+        dataToSend.append('accommodation_type', formData.accommodationType);
+      }
 
       // Add Files
       if (files.images && files.images[0]) {
@@ -156,105 +161,66 @@ const Register = () => {
   }
 
   return (
-    <div className="auth-page login-page register-page-split">
-      {/* Left Panel — decorative (Reuse from Login) */}
-      <div className="login-left-panel">
-        <div className="login-panel-overlay" />
-        <div className="login-panel-content">
-          <div className="login-brand">
-            <span className="login-brand-icon">✦</span>
-            <span className="login-brand-name">VibKech</span>
-          </div>
-          <h2 className="login-panel-title">
-            Begin Your<br />
-            <em>Marrakech Story</em>
-          </h2>
-          <p className="login-panel-desc">
-            Join our community of explorers and hosts. 
-            Experience the soul of the Red City like never before.
-          </p>
-          <div className="login-panel-stats">
-            <div className="lp-stat">
-              <span>800+</span>
-              <small>Monuments</small>
-            </div>
-            <div className="lp-stat-divider" />
-            <div className="lp-stat">
-              <span>10M+</span>
-              <small>Tourists / Year</small>
-            </div>
-          </div>
+    <div className="auth-page" style={{ position: 'relative' }}>
+      <Link to="/home" style={{ position: 'absolute', top: '2.5rem', left: '2.5rem', zIndex: 50, display: 'flex', alignItems: 'center', gap: '8px', color: '#CA5A3D', textDecoration: 'none', fontWeight: '600', fontSize: '1.05rem' }}>
+          <FaArrowLeft /> Retour
+      </Link>
+      <div className="register-card" style={{ maxWidth: '550px', margin: '0 auto', textAlign: 'center', background: '#fff', borderRadius: '16px', padding: '2.5rem' }}>
+        <div className="auth-header">
+          <Link to="/home" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', textDecoration: 'none', marginBottom: '1rem' }}>
+             <span style={{ color: '#C58A3A', fontSize: '1.2rem' }}>✦</span>
+             <span style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: '1.4rem', fontWeight: 'bold', color: '#1a1008', textTransform: 'uppercase', letterSpacing: '3px' }}>VibKech</span>
+          </Link>
+          <h1 style={{ color: '#C55A3A', fontSize: '2.2rem', marginBottom: '0.5rem', fontWeight: 'bold' }}>{t('auth.register.title')}</h1>
+          <p style={{ color: '#64748b' }}>Join the experience</p>
         </div>
-      </div>
 
-      {/* Right Panel — form */}
-      <div className="login-right-panel">
-        <div className="login-form-card" style={{ maxWidth: '550px' }}>
-          <div className="login-form-header">
-            <div className="login-form-eyebrow">
-              <span className="lf-line" />
-              <span>JOIN THE EXPERIENCE</span>
-              <span className="lf-line" />
+        <RoleSelector activeRole={role} setRole={(r) => setRole(r)} />
+
+        <form onSubmit={handleSubmit} style={{ textAlign: 'left' }}>
+          {error && (
+            <div className="login-error-msg" style={{ marginBottom: '1.5rem', color: '#cc3232', background: 'rgba(204, 50, 50, 0.08)', padding: '10px', borderRadius: '8px' }}>
+              <span>⚠</span> {error}
             </div>
-            <h1>{t('auth.register.title')}</h1>
-            <p>VibKech — Luxury & Authenticity</p>
+          )}
+          
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={role}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+            >
+              {renderForm()}
+            </motion.div>
+          </AnimatePresence>
+
+          <div style={{ marginTop: '2rem' }}>
+            <button
+              type="submit"
+              className="submit-btn"
+              disabled={loading}
+              style={{ background: '#CA5A3D', color: '#fff', width: '100%', padding: '14px', borderRadius: '12px', border: 'none', cursor: 'pointer', fontSize: '1.1rem', fontWeight: 'bold' }}
+            >
+              {loading ? (
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                  <div className="spinner" />
+                  {t('common.loading')}
+                </div>
+              ) : (
+                t('auth.register.submit')
+              )}
+            </button>
           </div>
+        </form>
 
-          <RoleSelector activeRole={role} setRole={(r) => setRole(r)} />
-
-          <form onSubmit={handleSubmit} className="login-form">
-            {error && (
-              <div className="login-error-msg" style={{ marginBottom: '1.5rem' }}>
-                <span>⚠</span> {error}
-              </div>
-            )}
-            
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={role}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3 }}
-              >
-                {renderForm()}
-              </motion.div>
-            </AnimatePresence>
-
-            <div style={{ marginTop: '2rem' }}>
-              <button
-                type="submit"
-                className="submit-btn"
-                disabled={loading}
-              >
-                {loading ? (
-                  <>
-                    <div className="spinner" />
-                    {t('common.loading')}
-                  </>
-                ) : (
-                  <>
-                    {t('auth.register.submit')}
-                    <span style={{ fontSize: '1.1rem' }}>→</span>
-                  </>
-                )}
-              </button>
-            </div>
-          </form>
-
-          <div className="login-divider">
-            <span />
-            <small>OR</small>
-            <span />
-          </div>
-
-          <p className="login-form-footer">
-            {t('auth.register.haveAccount')}{' '}
-            <Link to="/login" style={{ color: 'var(--input-focus)', fontWeight: '700', textDecoration: 'none' }}>
-              {t('auth.register.login')}
-            </Link>
-          </p>
-        </div>
+        <p className="login-form-footer" style={{ marginTop: '2rem', textAlign: 'center', color: '#1e293b' }}>
+          Already have an account?{' '}
+          <Link to="/login" style={{ color: '#CA5A3D', fontWeight: '700', textDecoration: 'underline' }}>
+            Sign in
+          </Link>
+        </p>
       </div>
     </div>
   );

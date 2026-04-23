@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { Link } from 'react-router-dom';
+import getImageUrl from '../../utils/imageUrl';
 
 // Fix for default Leaflet icon issue in React
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
@@ -58,7 +59,7 @@ const MapBounds = ({ items }) => {
   return null;
 };
 
-const ServiceMap = ({ items }) => {
+const ServiceMap = ({ items = [] }) => {
   const defaultCenter = [31.6295, -7.9811]; // Medina, Marrakech
 
   return (
@@ -76,7 +77,7 @@ const ServiceMap = ({ items }) => {
         />
         <MapBounds items={items} />
         
-        {items.map((item) => {
+        {(items || []).map((item) => {
           let lat = 31.63;
           let lng = -7.98;
           if (item.coordinates && typeof item.coordinates === 'string') {
@@ -108,7 +109,7 @@ const ServiceMap = ({ items }) => {
                 <div className="premium-popup-content">
                   <div className="popup-img-wrap">
                     <img 
-                      src={item.image || '/logo picter/placeholder.jpg'} 
+                      src={item.image ? getImageUrl(item.image) : '/logo picter/placeholder.jpg'} 
                       alt={item.title} 
                     />
                     <div className="popup-badge">Premium</div>

@@ -699,7 +699,7 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
             initial="hidden"
           >
             <h2 className="section-title" style={{ display: 'flex', justifyContent: 'space-between' }}>
-              {providerType === 'hotel' ? 'Available Rooms & Suites' : providerType === 'transport' ? 'Our Fleet & Routes' : 'Artisan Products'}
+              {providerType === 'hotel' ? 'Chambres & Suites (Hébergement)' : providerType === 'transport' ? 'Our Fleet & Routes' : 'Artisan Products'}
               {isEditMode && <button onClick={() => setShowAddModal(true)} style={{ fontSize: '0.9rem', color: 'var(--lux-accent)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: '600' }}>+ Add Item</button>}
             </h2>
             <div className="dynamic-lists">

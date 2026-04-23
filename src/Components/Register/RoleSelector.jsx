@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 const roles = [
   { id: 'tourist', label: 'Tourist' },
-  { id: 'hotel', label: 'Hotel' },
+  { id: 'hotel', label: 'Hébergement' },
   { id: 'transporteur', label: 'Transporteur' },
   { id: 'cooperative', label: 'Cooperative' }
 ];

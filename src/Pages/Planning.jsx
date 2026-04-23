@@ -439,8 +439,8 @@ const Planning = () => {
                               onClick={() => setFormData({...formData, selectedHotel: hotel})}
                             >
                               <div className="h-img-wrap">
-                                 <img src={getImageUrl(hotel.image) || '/logo picter/placeholder.jpg'} alt={hotel.name} />
-                                 <div className="h-badge-premium">{hotel.type || 'Boutique'}</div>
+                                 <img src={hotel.image || '/logo picter/placeholder.jpg'} alt={hotel.name} />
+                                 <div className="h-badge-premium">{hotel.type === 'riad' ? 'Riad' : 'Hôtel'}</div>
                               </div>
                               <div className="hotel-info-premium">
                                 <h5>{hotel.name}</h5>

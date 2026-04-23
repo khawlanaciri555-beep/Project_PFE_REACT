@@ -61,7 +61,7 @@
     },
     "step3": {
       "title": "Accommodation & Logistics",
-      "luxuryRetreats": "Luxury Retreats",
+      "luxuryRetreats": "Accommodations (Hotels & Riads)",
       "elegantMobility": "Elegant Mobility",
       "pickupLocation": "Pickup location",
       "finalDestination": "Final destination",
@@ -74,7 +74,7 @@
       "destinations": "Destinations",
       "experiences": "Chosen Experiences",
       "accommodation": "Prestige Accommodation",
-      "noHotel": "Please select a hotel",
+      "noHotel": "Please select an accommodation",
       "totalInvestment": "TOTAL INVESTMENT",
       "adjust": "Adjust",
       "confirm": "Confirm my Escape",
