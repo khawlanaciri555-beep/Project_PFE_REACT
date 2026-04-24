@@ -9,6 +9,7 @@ import RatingStars from '../Components/RatingStars';
 import BookingModal from '../Components/BookingModal';
 import { Link } from 'react-router-dom';
 import { FaCommentDots } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 import './PlaceDetails.css';
 import getImageUrl from '../utils/imageUrl';
 
@@ -24,11 +25,6 @@ const Icons = {
       <circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 1 0-16 0"/>
     </svg>
   ),
-  Restaurants: () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>
-    </svg>
-  ),
   Transport: () => (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <rect x="1" y="3" width="22" height="13" rx="2"/><path d="M7 21h0"/><path d="M17 21h0"/><path d="M5 21a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2"/><path d="M2 10h20"/>
@@ -36,7 +32,9 @@ const Icons = {
   )
 };
 
-const ServiceCard = ({ id, title, hotel_type, type, description, price, rating, image, gallery, index, onBook, onViewGallery, provider_id, provider_type, is_provider_only }) => (
+const ServiceCard = ({ id, title, hotel_type, type, description, price, rating, image, gallery, index, onBook, onViewGallery, provider_id, provider_type, is_provider_only }) => {
+  const { t } = useTranslation();
+  return (
   <motion.div 
     initial={{ opacity: 0, y: 30 }}
     animate={{ opacity: 1, y: 0 }}
@@ -67,11 +65,11 @@ const ServiceCard = ({ id, title, hotel_type, type, description, price, rating, 
             className="details-link-arrow"
             style={{ textDecoration: 'none', color: 'var(--primary)', fontWeight: '600' }}
           >
-            Détails &rarr;
+            {t('places.details')} &rarr;
           </Link>
         ) : (
           <Link to={provider_id && provider_type ? `/provider/${provider_type}/${provider_id}` : `#`} className="details-link-arrow">
-            Détails &rarr;
+            {t('places.details')} &rarr;
           </Link>
         )}
         {!is_provider_only && (
@@ -79,13 +77,14 @@ const ServiceCard = ({ id, title, hotel_type, type, description, price, rating, 
             className="book-btn-direct"
             onClick={() => onBook({ id, title, price, type })}
           >
-            Réserver
+            {t('places.book')}
           </button>
         )}
       </div>
     </div>
   </motion.div>
-);
+  );
+};
 
 const TabButton = ({ label, active, onClick, IconComponent }) => (
   <motion.button
@@ -116,6 +115,7 @@ const PlaceDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
+  const { t } = useTranslation();
   
   const [place, setPlace] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -195,18 +195,17 @@ const PlaceDetails = () => {
     return (
       <Layout>
         <div className="not-found" style={{ textAlign: 'center', padding: '10rem 0' }}>
-          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '2.5rem', marginBottom: '1.5rem', color: 'var(--primary)' }}>Lieu non trouvé.</h2>
-          <button onClick={() => navigate('/')} className="new-btn-detail" style={{ padding: '1rem 2rem' }}>Retour à l'accueil</button>
+          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '2.5rem', marginBottom: '1.5rem', color: 'var(--primary)' }}>{t('places.notFound')}</h2>
+          <button onClick={() => navigate('/')} className="new-btn-detail" style={{ padding: '1rem 2rem' }}>{t('places.backHome')}</button>
         </div>
       </Layout>
     );
   }
 
   const tabs = [
-    { id: 'hotels', label: 'Hébergement', icon: Icons.Hotels },
-    { id: 'activites', label: 'Activités', icon: Icons.Activites },
-    { id: 'restaurants', label: 'Restaurants', icon: Icons.Restaurants },
-    { id: 'transport', label: 'Transport', icon: Icons.Transport }
+    { id: 'hotels', label: t('places.tabs.accommodation'), icon: Icons.Hotels },
+    { id: 'activites', label: t('places.tabs.activities'), icon: Icons.Activites },
+    { id: 'transport', label: t('places.tabs.transport'), icon: Icons.Transport }
   ];
 
   let currentServices = place.services?.[activeTab] || [];
@@ -241,7 +240,7 @@ const PlaceDetails = () => {
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
               </svg>
-              <span>Explorer Marrakech</span>
+              <span>{t('places.back')}</span>
             </motion.button>
           </header>
 
@@ -307,7 +306,7 @@ const PlaceDetails = () => {
                       />
                       {place.user_rating && (
                         <p style={{ fontSize: '0.8rem', color: 'var(--primary)', marginTop: '0.4rem', fontWeight: '600' }}>
-                          Votre note : {place.user_rating} / 5
+                          {t('places.yourRating')} : {place.user_rating} / 5
                         </p>
                       )}
                     </div>
@@ -325,8 +324,8 @@ const PlaceDetails = () => {
                         </svg>
                       </div>
                       <div className="box-text">
-                        <span className="box-label">Localisation</span>
-                        <span className="box-val">{isMapVisible ? 'Masquer la carte' : 'Voir sur la carte'}</span>
+                        <span className="box-label">{t('places.location')}</span>
+                        <span className="box-val">{isMapVisible ? t('places.hideMap') : t('places.showMap')}</span>
                       </div>
                     </motion.div>
                   </div>
@@ -367,7 +366,7 @@ const PlaceDetails = () => {
                 viewport={{ once: true }}
                 className="section-head"
               >
-                <h2 className="section-subtitle">Découvrez nos services</h2>
+                <h2 className="section-subtitle">{t('places.discoverServices')}</h2>
                 <div className="section-line" />
               </motion.div>
               
@@ -397,9 +396,9 @@ const PlaceDetails = () => {
                             }}
                             className="invisible-tab-select"
                         >
-                            <option value="Tous">Tous</option>
-                            <option value="Hôtel">Hôtels</option>
-                            <option value="Riad">Riads</option>
+                            <option value="Tous">{t('places.filters.all')}</option>
+                            <option value="Hôtel">{t('places.filters.hotels')}</option>
+                            <option value="Riad">{t('places.filters.riads')}</option>
                         </select>
                     )}
                   </div>
@@ -436,7 +435,7 @@ const PlaceDetails = () => {
                         ) : (
                           <div className="empty-services">
                             <div className="empty-icon">🏜️</div>
-                            <p>Aucun service disponible dans cette place</p>
+                            <p>{t('places.noServices')}</p>
                           </div>
                         )}
                       </motion.div>

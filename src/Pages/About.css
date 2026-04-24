@@ -274,6 +274,19 @@
   color: #fff;
 }
 
+.cta-title {
+  font-family: var(--font-serif);
+  font-size: 4.5rem;
+  margin-bottom: 2rem;
+}
+
+.cta-subtitle {
+  font-size: 1.4rem;
+  opacity: 0.8;
+  max-width: 800px;
+  margin: 0 auto 4rem;
+}
+
 .btn-premium-cta {
   display: inline-block;
   padding: 1.8rem 5rem;
@@ -292,6 +305,60 @@
   box-shadow: 0 30px 60px rgba(197, 138, 58, 0.5);
 }
 
+/* --- New Helper Classes for Dark Mode --- */
+.value-card-title {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  font-family: var(--font-serif);
+}
+
+.value-card-desc {
+  line-height: 1.7;
+  opacity: 0.8;
+  color: #666;
+}
+
+:global(body.dark-mode) .value-card-desc {
+  color: #94a3b8;
+}
+
+.timeline-header {
+  text-align: center;
+  margin-bottom: 6rem;
+}
+
+.timeline-main-title {
+  font-family: var(--font-serif);
+  font-size: 4rem;
+  color: inherit;
+}
+
+.timeline-subtitle {
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+}
+
+.timeline-item-title {
+  color: var(--primary-red);
+  margin-bottom: 1rem;
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+}
+
+.timeline-item-desc {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  opacity: 0.9;
+}
+
+.timeline-item-list {
+  margin-top: 1.2rem;
+  opacity: 0.8;
+  font-size: 1rem;
+  list-style: none;
+}
+
 @media (max-width: 1100px) {
   .story-section, .timeline-item, .mission-banner {
     grid-template-columns: 1fr;
@@ -304,4 +371,5 @@
   .timeline-dot { left: 5%; }
   .hero-glass-box h1 { font-size: 3rem; }
   .values-grid { grid-template-columns: 1fr; }
+  .cta-title { font-size: 3rem; }
 }

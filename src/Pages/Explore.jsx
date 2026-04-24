@@ -52,7 +52,7 @@ const Explore = () => {
                 <div>
                     <h1 className="explore-title">{t('explore.title')}</h1>
                     <p className="explore-subtitle">
-                        Des palais impériaux aux jardins secrets, découvrez chaque recoin de la ville ocre.
+                        {t('explore.subtitle')}
                     </p>
                 </div>
                 <div className="view-toggle-container" style={{ background: 'rgba(255,255,255,0.1)', padding: '0.4rem', borderRadius: '12px', display: 'flex', border: '1px solid rgba(255,255,255,0.2)' }}>
@@ -111,7 +111,7 @@ const Explore = () => {
               </svg>
               <input
                 type="text"
-                placeholder="Search a place... (e.g. Majorelle, Medina)"
+                placeholder={t('explore.search')}
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
                 style={{

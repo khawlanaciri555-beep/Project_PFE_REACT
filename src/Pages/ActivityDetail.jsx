@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import Layout from '../Components/Layout';
+import { useTranslation } from 'react-i18next';
 import api from '../api/axios';
 import getImageUrl from '../utils/imageUrl';
 import './ActivityDetail.css';
@@ -9,6 +10,7 @@ import './ActivityDetail.css';
 const ActivityDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [service, setService] = useState(null);
   const [loading, setLoading] = useState(true);
   const [lightboxImg, setLightboxImg] = useState(null);
@@ -46,8 +48,8 @@ const ActivityDetail = () => {
     return (
       <Layout>
         <div style={{ textAlign: 'center', padding: '10rem 0' }}>
-          <h2>Activity not found</h2>
-          <button onClick={() => navigate(-1)} className="act-back-btn">← Go Back</button>
+          <h2>{t('activity.notFound')}</h2>
+          <button onClick={() => navigate(-1)} className="act-back-btn">← {t('activity.back')}</button>
         </div>
       </Layout>
     );
@@ -78,7 +80,7 @@ const ActivityDetail = () => {
               onClick={() => navigate(-1)}
               className="act-back-btn"
             >
-              ← Back
+              ← {t('activity.back')}
             </motion.button>
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -104,7 +106,7 @@ const ActivityDetail = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
             >
-              <h2 className="act-section-title">About this activity</h2>
+              <h2 className="act-section-title">{t('activity.about')}</h2>
               <p className="act-description">{service.description}</p>
             </motion.section>
           )}
@@ -117,7 +119,7 @@ const ActivityDetail = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
             >
-              <h2 className="act-section-title">🖼️ Galerie d'images</h2>
+              <h2 className="act-section-title">🖼️ {t('activity.gallery')}</h2>
               <div className="act-photo-grid">
                 {gallery.map((img, i) => (
                   <motion.div
@@ -137,7 +139,7 @@ const ActivityDetail = () => {
                           <line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
                         </svg>
                       </div>
-                      <span className="act-photo-num">Photo {i + 1}</span>
+                      <span className="act-photo-num">{t('activity.photo')} {i + 1}</span>
                     </div>
                   </motion.div>
                 ))}

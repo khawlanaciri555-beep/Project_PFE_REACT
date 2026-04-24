@@ -6,9 +6,64 @@ import Layout from '../Components/Layout';
 import api from '../api/axios';
 import FavoriteButton from '../Components/FavoriteButton';
 import RatingStars from '../Components/RatingStars';
-import { FaCommentDots } from 'react-icons/fa';
+import { FaCommentDots, FaQuoteLeft, FaUserCircle } from 'react-icons/fa';
 import '../Components/home.css';
 import getImageUrl from '../utils/imageUrl';
+
+const TestimonialCard = ({ role, name, content, iconColor }) => {
+  const { t } = useTranslation();
+  return (
+    <motion.div 
+      whileHover={{ y: -10 }}
+      className="testimonial-card-premium"
+      style={{ 
+        background: 'var(--card-bg)', 
+        borderRadius: '24px', 
+        padding: '2.5rem', 
+        boxShadow: '0 20px 40px rgba(0,0,0,0.04)',
+        border: '1px solid var(--border-color)',
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1.5rem'
+      }}
+    >
+      <div style={{ color: 'var(--primary)', opacity: 0.2, position: 'absolute', top: '2rem', right: '2rem', fontSize: '2rem' }}>
+        <FaQuoteLeft />
+      </div>
+      
+      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        <div style={{ 
+          width: '50px', 
+          height: '50px', 
+          borderRadius: '16px', 
+          background: iconColor || 'rgba(188, 73, 49, 0.1)', 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center',
+          color: 'var(--primary)',
+          fontSize: '1.5rem'
+        }}>
+          <FaUserCircle />
+        </div>
+        <div>
+          <h4 style={{ margin: 0, fontSize: '1.1rem', fontWeight: '800', color: 'var(--text-dark)' }}>{name}</h4>
+          <span style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '1px' }}>{role}</span>
+        </div>
+      </div>
+
+      <p style={{ 
+        color: 'var(--text-light)', 
+        fontSize: '0.95rem', 
+        lineHeight: '1.7', 
+        fontStyle: 'italic',
+        margin: 0
+      }}>
+        "{content}"
+      </p>
+    </motion.div>
+  );
+};
 
 // Counter Component for Statistics
 const Counter = ({ value, label, index }) => {
@@ -62,6 +117,7 @@ const Home = () => {
   const sliderRef = useRef(null);
   const [places, setPlaces] = useState([]);
   const [hotels, setHotels] = useState([]);
+  const [generalComments, setGeneralComments] = useState([]);
   const { scrollY } = useScroll();
   const { t } = useTranslation();
   
@@ -93,8 +149,19 @@ const Home = () => {
       }
     };
 
+    const fetchGeneralComments = async () => {
+      try {
+        const response = await api.get('/places/general/comments');
+        // Just show the latest 3
+        setGeneralComments((response.data.data || []).slice(0, 3));
+      } catch (err) {
+        console.error("failed to load general comments", err);
+      }
+    };
+
     fetchPlaces();
     fetchHotels();
+    fetchGeneralComments();
 
     const interval = setInterval(() => {
       if (sliderRef.current) {
@@ -191,7 +258,7 @@ const Home = () => {
                   <div style={{ marginBottom: '0.8rem' }}>
                     <RatingStars rating={place.rating_avg} showCount={false} size={14} />
                   </div>
-                  <Link to={`/place/${place.id}`} className="new-btn-detail">Voir détail &rarr;</Link>
+                  <Link to={`/place/${place.id}`} className="new-btn-detail">{t('home.destinations.viewDetail')}</Link>
                 </div>
               </div>
             ))
@@ -210,39 +277,51 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Luxury Stays Section (New from Laravel) */}
-      <section className="hotels-showcase-section" style={{ padding: '6rem 8%', background: 'var(--bg-color)' }}>
-        <div className="section-header-center" style={{ marginBottom: '4rem', textAlign: 'center' }}>
-            <span className="section-eyebrow" style={{ color: 'var(--primary)', letterSpacing: '3px', fontWeight: 'bold' }}>EXCEPTIONAL LIVING</span>
-            <h2 className="section-title" style={{ fontSize: '2.5rem', marginTop: '1rem' }}>Luxury Stays & Riads</h2>
+      {/* Testimonials Section (Community Voices) */}
+      <section className="testimonials-section" style={{ padding: '8rem 8%' }}>
+        <div className="section-header-center" style={{ marginBottom: '5rem', textAlign: 'center' }}>
+            <motion.span 
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              className="section-eyebrow" 
+              style={{ color: 'var(--primary)', letterSpacing: '4px', fontWeight: '800' }}
+            >
+              {t('home.testimonials.eyebrow')}
+            </motion.span>
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="section-title" 
+              style={{ fontSize: '3rem', marginTop: '1rem', color: '#1A1817' }}
+            >
+              {t('home.testimonials.title')}
+            </motion.h2>
         </div>
-        <div className="hotels-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '2.5rem' }}>
-           {hotels.length > 0 ? (
-             hotels.map(hotel => (
-               <motion.div 
-                 key={hotel.id} 
-                 className="hotel-card-premium"
-                 whileHover={{ y: -10 }}
-                 style={{ background: 'white', borderRadius: '20px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.05)' }}
-               >
-                 <div style={{ height: '220px', overflow: 'hidden' }}>
-                    <img src={getImageUrl(hotel.image)} alt={hotel.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                 </div>
-                 <div style={{ padding: '1.5rem' }}>
-                    <span style={{ fontSize: '0.7rem', fontWeight: 'bold', color: 'var(--primary)', textTransform: 'uppercase' }}>{hotel.type}</span>
-                    <h3 style={{ margin: '0.5rem 0', fontSize: '1.2rem' }}>{hotel.name}</h3>
-                    <p style={{ color: '#666', fontSize: '0.85rem', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', minHeight: '2.5rem' }}>
-                      {hotel.description}
-                    </p>
-                    <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #eee', paddingTop: '1rem' }}>
-                       <span style={{ fontWeight: 'bold' }}>{hotel.price} <small>MAD</small></span>
-                       <Link to="/explore" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 'bold', fontSize: '0.8rem' }}>Check Details &rarr;</Link>
-                    </div>
-                 </div>
-               </motion.div>
+        
+        <div className="testimonials-grid" style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
+          gap: '2.5rem' 
+        }}>
+           {generalComments.length > 0 ? (
+             generalComments.map(comment => (
+               <TestimonialCard 
+                  key={comment.id}
+                  role={comment.user?.role || t('home.testimonials.roles.tourist')} 
+                  name={comment.user?.name || 'Anonymous'} 
+                  content={comment.content}
+                  iconColor={
+                    comment.user?.role === 'hotel' ? "rgba(16, 185, 129, 0.1)" :
+                    comment.user?.role === 'transport' ? "rgba(245, 158, 11, 0.1)" :
+                    "rgba(59, 130, 246, 0.1)"
+                  }
+               />
              ))
            ) : (
-             <div style={{ textAlign: 'center', gridColumn: '1 / -1', padding: '3rem' }}>Discovering exceptional stays...</div>
+             <div style={{ textAlign: 'center', gridColumn: '1 / -1', padding: '3rem', color: '#888', fontStyle: 'italic' }}>
+               {t('comments.noComments')}
+             </div>
            )}
         </div>
       </section>
@@ -256,7 +335,7 @@ const Home = () => {
       </section>
 
       </div>
-      <Link to="/comments/general" className="floating-general-comment" title="Discussion Générale">
+      <Link to="/comments/general" className="floating-general-comment" title={t('comments.generalDiscussion')}>
         <FaCommentDots size={28} />
       </Link>
     </Layout>

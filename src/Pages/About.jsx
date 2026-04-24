@@ -72,27 +72,27 @@ const About = () => {
           <motion.div className="values-grid" variants={stagger} initial="initial" whileInView="whileInView">
             <motion.div className="value-glass-card" variants={slideUp}>
               <FaCompass className="feature-icon" style={{ fontSize: '3.5rem', color: 'var(--primary-red)', marginBottom: '2rem' }} />
-              <h3 style={{ fontSize: '1.8rem', marginBottom: '1.5rem', fontFamily: 'var(--font-serif)' }}>{t('about.values.v1.title')}</h3>
-              <p style={{ color: '#666', lineHeight: '1.7', opacity: 0.8 }}>{t('about.values.v1.desc')}</p>
+              <h3 className="value-card-title">{t('about.values.v1.title')}</h3>
+              <p className="value-card-desc">{t('about.values.v1.desc')}</p>
             </motion.div>
             <motion.div className="value-glass-card" variants={slideUp}>
               <FaGem className="feature-icon" style={{ fontSize: '3.5rem', color: 'var(--primary-red)', marginBottom: '2rem' }} />
-              <h3 style={{ fontSize: '1.8rem', marginBottom: '1.5rem', fontFamily: 'var(--font-serif)' }}>{t('about.values.v2.title')}</h3>
-              <p style={{ color: '#666', lineHeight: '1.7', opacity: 0.8 }}>{t('about.values.v2.desc')}</p>
+              <h3 className="value-card-title">{t('about.values.v2.title')}</h3>
+              <p className="value-card-desc">{t('about.values.v2.desc')}</p>
             </motion.div>
             <motion.div className="value-glass-card" variants={slideUp}>
               <FaHandshake className="feature-icon" style={{ fontSize: '3.5rem', color: 'var(--primary-red)', marginBottom: '2rem' }} />
-              <h3 style={{ fontSize: '1.8rem', marginBottom: '1.5rem', fontFamily: 'var(--font-serif)' }}>{t('about.values.v3.title')}</h3>
-              <p style={{ color: '#666', lineHeight: '1.7', opacity: 0.8 }}>{t('about.values.v3.desc')}</p>
+              <h3 className="value-card-title">{t('about.values.v3.title')}</h3>
+              <p className="value-card-desc">{t('about.values.v3.desc')}</p>
             </motion.div>
           </motion.div>
         </section>
 
         {/* --- History Timeline --- */}
         <section className="timeline-section">
-          <div style={{ textAlign: 'center', marginBottom: '6rem' }}>
-            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '4rem', color: 'inherit' }}>{t('about.timeline.title')}</h2>
-            <p style={{ letterSpacing: '4px', textTransform: 'uppercase', color: 'var(--accent-gold)' }}>{t('about.timeline.subtitle')}</p>
+          <div className="timeline-header">
+            <h2 className="timeline-main-title">{t('about.timeline.title')}</h2>
+            <p className="timeline-subtitle">{t('about.timeline.subtitle')}</p>
           </div>
           
           <div className="timeline-container">
@@ -110,9 +110,9 @@ const About = () => {
                     <div className="timeline-dot" />
                     <div className="timeline-glass">
                       <div className="timeline-date">{step.date}</div>
-                      <h3 style={{ color: 'var(--primary-red)', marginBottom: '1rem', fontFamily: 'var(--font-serif)', fontSize: '1.8rem' }}>{step.title}</h3>
-                      <p style={{ fontSize: '1.1rem', lineHeight: '1.8', opacity: 0.9 }}>{step.desc}</p>
-                      <ul style={{ paddingRight: isRTL ? '1.5rem' : '0', paddingLeft: isRTL ? '0' : '1.5rem', marginTop: '1.2rem', opacity: 0.8, fontSize: '1rem', listStyle: 'none' }}>
+                      <h3 className="timeline-item-title">{step.title}</h3>
+                      <p className="timeline-item-desc">{step.desc}</p>
+                      <ul className="timeline-item-list" style={{ paddingRight: isRTL ? '1.5rem' : '0', paddingLeft: isRTL ? '0' : '1.5rem' }}>
                         {(step.details || []).map((detail, idx) => (
                           <li key={idx} style={{ marginBottom: '0.6rem' }}>🔸 {detail}</li>
                         ))}
@@ -137,8 +137,8 @@ const About = () => {
         {/* --- Final CTA --- */}
         <section className="cta-full">
           <motion.div {...slideUp}>
-            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '4.5rem', marginBottom: '2rem' }}>{t('about.cta.title')}</h2>
-            <p style={{ fontSize: '1.4rem', opacity: 0.8, maxWidth: '800px', margin: '0 auto 4rem' }}>
+            <h2 className="cta-title">{t('about.cta.title')}</h2>
+            <p className="cta-subtitle">
               {t('about.cta.subtitle')}
             </p>
             <Link to="/explore" className="btn-premium-cta">

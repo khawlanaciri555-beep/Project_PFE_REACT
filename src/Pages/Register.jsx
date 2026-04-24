@@ -12,7 +12,9 @@ import {
   CooperativeForm
 } from '../Components/Register/RegisterForms';
 import { GradientButton } from '../Components/Register/UIComponents';
-import { FaCheckCircle, FaArrowLeft } from 'react-icons/fa';
+import { FaCheckCircle, FaArrowLeft, FaSun, FaMoon } from 'react-icons/fa';
+import LanguageSwitcher from '../Components/LanguageSwitcher/LanguageSwitcher';
+import AnimatedBackground from '../Components/Auth/AnimatedBackground';
 import './Auth.css';
 
 const Register = () => {
@@ -24,6 +26,22 @@ const Register = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [places, setPlaces] = useState([]);
+  
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    return localStorage.getItem('theme') === 'dark';
+  });
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.body.classList.add('dark-mode');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.body.classList.remove('dark-mode');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [isDarkMode]);
+
+  const toggleTheme = () => setIsDarkMode(!isDarkMode);
 
   useEffect(() => {
     const fetchPlaces = async () => {
@@ -162,17 +180,25 @@ const Register = () => {
 
   return (
     <div className="auth-page" style={{ position: 'relative' }}>
+      <AnimatedBackground />
+      <div className="auth-top-controls" style={{ position: 'absolute', top: '2.5rem', right: '2.5rem', display: 'flex', alignItems: 'center', gap: '1.5rem', zIndex: 60 }}>
+          <button onClick={toggleTheme} className="theme-toggle-btn" style={{ background: 'transparent', border: 'none', color: 'var(--premium-terracotta)', cursor: 'pointer', fontSize: '1.2rem', display: 'flex', alignItems: 'center' }}>
+              {isDarkMode ? <FaSun color="#F59E0B" /> : <FaMoon />}
+          </button>
+          <LanguageSwitcher />
+      </div>
+
       <Link to="/home" style={{ position: 'absolute', top: '2.5rem', left: '2.5rem', zIndex: 50, display: 'flex', alignItems: 'center', gap: '8px', color: '#CA5A3D', textDecoration: 'none', fontWeight: '600', fontSize: '1.05rem' }}>
-          <FaArrowLeft /> Retour
+          <FaArrowLeft /> {t('auth.back')}
       </Link>
-      <div className="register-card" style={{ maxWidth: '550px', margin: '0 auto', textAlign: 'center', background: '#fff', borderRadius: '16px', padding: '2.5rem' }}>
+      <div className="register-card premium-glass-card" style={{ maxWidth: '550px', margin: '0 auto', textAlign: 'center', padding: '2.5rem' }}>
         <div className="auth-header">
           <Link to="/home" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', textDecoration: 'none', marginBottom: '1rem' }}>
              <span style={{ color: '#C58A3A', fontSize: '1.2rem' }}>✦</span>
              <span style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: '1.4rem', fontWeight: 'bold', color: '#1a1008', textTransform: 'uppercase', letterSpacing: '3px' }}>VibKech</span>
           </Link>
           <h1 style={{ color: '#C55A3A', fontSize: '2.2rem', marginBottom: '0.5rem', fontWeight: 'bold' }}>{t('auth.register.title')}</h1>
-          <p style={{ color: '#64748b' }}>Join the experience</p>
+          <p style={{ color: '#64748b' }}>{t('auth.register.subtitle')}</p>
         </div>
 
         <RoleSelector activeRole={role} setRole={(r) => setRole(r)} />
@@ -215,10 +241,10 @@ const Register = () => {
           </div>
         </form>
 
-        <p className="login-form-footer" style={{ marginTop: '2rem', textAlign: 'center', color: '#1e293b' }}>
-          Already have an account?{' '}
+        <p className="login-form-footer" style={{ marginTop: '2rem', textAlign: 'center', color: 'var(--text-dark)' }}>
+          {t('auth.register.haveAccount')}{' '}
           <Link to="/login" style={{ color: '#CA5A3D', fontWeight: '700', textDecoration: 'underline' }}>
-            Sign in
+            {t('auth.register.login')}
           </Link>
         </p>
       </div>

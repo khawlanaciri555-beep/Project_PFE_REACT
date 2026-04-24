@@ -2,7 +2,8 @@ import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
-import { FaArrowLeft } from 'react-icons/fa';
+import { FaArrowLeft, FaSun, FaMoon } from 'react-icons/fa';
+import LanguageSwitcher from '../Components/LanguageSwitcher/LanguageSwitcher';
 import './Auth.css';
 
 const Login = () => {
@@ -13,6 +14,22 @@ const Login = () => {
     const { login } = useContext(AuthContext);
     const navigate = useNavigate();
     const { t } = useTranslation();
+    
+    const [isDarkMode, setIsDarkMode] = useState(() => {
+        return localStorage.getItem('theme') === 'dark';
+    });
+
+    useEffect(() => {
+        if (isDarkMode) {
+            document.body.classList.add('dark-mode');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            document.body.classList.remove('dark-mode');
+            localStorage.setItem('theme', 'light');
+        }
+    }, [isDarkMode]);
+
+    const toggleTheme = () => setIsDarkMode(!isDarkMode);
 
     const handleChange = (e) => {
         setCredentials({ ...credentials, [e.target.name]: e.target.value });
@@ -33,156 +50,107 @@ const Login = () => {
     };
 
     return (
-        <div className="auth-page login-page">
-            {/* Left Panel — decorative */}
-            <div className="login-left-panel">
-                <div className="login-panel-overlay" />
-                <div className="login-panel-content">
-                    <Link to="/home" className="login-brand" style={{ textDecoration: 'none' }}>
-                        <span className="login-brand-icon">✦</span>
-                        <span className="login-brand-name">VibKech</span>
-                    </Link>
-                    <h2 className="login-panel-title">
-                        Welcome Back to<br />
-                        <em>the Red City</em>
-                    </h2>
-                    <p className="login-panel-desc">
-                        Sign in to continue your Marrakech journey — 
-                        discover hidden riads, vibrant souks, and timeless experiences.
-                    </p>
-                    <div className="login-panel-stats">
-                        <div className="lp-stat">
-                            <span>800+</span>
-                            <small>Monuments</small>
-                        </div>
-                        <div className="lp-stat-divider" />
-                        <div className="lp-stat">
-                            <span>10M+</span>
-                            <small>Tourists / Year</small>
-                        </div>
-                        <div className="lp-stat-divider" />
-                        <div className="lp-stat">
-                            <span>UNESCO</span>
-                            <small>Heritage</small>
-                        </div>
-                    </div>
-                </div>
+        <div className="auth-page login-page-custom">
+            <div className="login-full-bg">
+                <img src="/background/bglogin .jpeg" alt="Background" />
+                <div className="login-bg-overlay" />
             </div>
 
-            {/* Right Panel — form */}
-            <div className="login-right-panel" style={{ position: 'relative' }}>
-                <Link to="/home" style={{ position: 'absolute', top: '2.5rem', left: '2.5rem', display: 'flex', alignItems: 'center', gap: '8px', color: '#CA5A3D', textDecoration: 'none', fontWeight: '600', fontSize: '1.05rem' }}>
-                    <FaArrowLeft /> Retour
-                </Link>
-                <div className="login-form-card">
-                    {/* Header */}
-                    <div className="login-form-header">
-                        <div className="login-form-eyebrow">
-                            <span className="lf-line" />
-                            <span>SECURE LOGIN</span>
-                            <span className="lf-line" />
+            {/* Content Container */}
+            <div className="login-content-container">
+                {/* Left Side: Welcome Text */}
+                <div className="login-welcome-side">
+                    <motion.div
+                        initial={{ opacity: 0, x: -30 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.8 }}
+                    >
+                        <Link to="/home" className="login-brand-minimal">
+                            <span className="brand-dot">✦</span>
+                            <span>VibKech</span>
+                        </Link>
+                        <h1 className="welcome-title">{t('auth.login.subtitle').split(' ')[0]} <br/> {t('auth.login.subtitle').split(' ').slice(1).join(' ')}</h1>
+                        <p className="welcome-desc">{t('auth.login.description')}</p>
+                        
+                        <div className="login-social-icons">
+                            <button className="social-icon-btn"><FaSun /></button>
+                            <button className="social-icon-btn"><FaMoon /></button>
                         </div>
-                        <h1>{t('auth.login.title')}</h1>
-                        <p>VibKech — Enter your credentials to access your account.</p>
-                    </div>
+                    </motion.div>
+                </div>
 
-                    {/* Error */}
-                    {error && (
-                        <div className="login-error-msg">
-                            <span>⚠</span> {error}
-                        </div>
-                    )}
-
-                    {/* Form */}
-                    <form onSubmit={handleSubmit} className="login-form">
-                        {/* Email */}
-                        <div className="floating-group">
-                            <span className="input-icon">✉</span>
-                            <input
-                                className="floating-input"
-                                type="email"
-                                name="email"
-                                placeholder=" "
-                                value={credentials.email}
-                                onChange={handleChange}
-                                required
-                                id="login-email"
-                            />
-                            <label className="floating-label" htmlFor="login-email">
-                                {t('auth.login.email')}
-                            </label>
-                        </div>
-
-                        {/* Password */}
-                        <div className="floating-group">
-                            <span className="input-icon">🔒</span>
-                            <input
-                                className="floating-input"
-                                type={showPassword ? 'text' : 'password'}
-                                name="password"
-                                placeholder=" "
-                                value={credentials.password}
-                                onChange={handleChange}
-                                required
-                                id="login-password"
-                            />
-                            <label className="floating-label" htmlFor="login-password">
-                                {t('auth.login.password')}
-                            </label>
-                            <button
-                                type="button"
-                                className="password-toggle"
-                                onClick={() => setShowPassword(!showPassword)}
-                                tabIndex={-1}
-                            >
-                                {showPassword ? '🙈' : '👁'}
+                {/* Right Side: Login Form */}
+                <div className="login-form-side">
+                    <motion.div 
+                        className="login-glass-form"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                    >
+                        <div className="auth-top-controls-inline">
+                            <button onClick={toggleTheme} className="theme-toggle-btn-minimal">
+                                {isDarkMode ? <FaSun color="#F59E0B" /> : <FaMoon />}
                             </button>
+                            <LanguageSwitcher />
                         </div>
 
-                        {/* Forgot password */}
-                        <div className="login-forgot">
-                            <a href="#" id="forgot-password-link">Mot de passe oublié ?</a>
+                        <div className="form-header-minimal">
+                            <h2>{t('auth.login.title')}</h2>
                         </div>
 
-                        {/* Submit */}
-                        <button
-                            type="submit"
-                            className="submit-btn"
-                            disabled={loading}
-                            id="login-submit-btn"
-                        >
-                            {loading ? (
-                                <>
-                                    <div className="spinner" />
-                                    {t('common.loading')}
-                                </>
-                            ) : (
-                                <>
-                                    {t('auth.login.submit')}
-                                    <span style={{ fontSize: '1.1rem' }}>→</span>
-                                </>
-                            )}
-                        </button>
-                    </form>
+                        {error && (
+                            <div className="login-error-msg-minimal">
+                                {error}
+                            </div>
+                        )}
 
-                    {/* Divider */}
-                    <div className="login-divider">
-                        <span />
-                        <small>—</small>
-                        <span />
-                    </div>
+                        <form onSubmit={handleSubmit} className="minimal-form">
+                            <div className="minimal-group">
+                                <label>{t('auth.login.email')}</label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={credentials.email}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
 
-                    {/* Social placeholders */}
-                    <div className="login-social">
-                        <button className="social-btn" id="google-login-btn">🌐 Google</button>
-                        <button className="social-btn" id="facebook-login-btn">f Facebook</button>
-                    </div>
+                            <div className="minimal-group">
+                                <label>{t('auth.login.password')}</label>
+                                <input
+                                    type={showPassword ? 'text' : 'password'}
+                                    name="password"
+                                    value={credentials.password}
+                                    onChange={handleChange}
+                                    required
+                                />
+                                <button
+                                    type="button"
+                                    className="minimal-pass-toggle"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                >
+                                    {showPassword ? '🙈' : '👁'}
+                                </button>
+                            </div>
 
-                    {/* Footer */}
-                    <p className="login-form-footer">
-                        {t('auth.login.noAccount')}{' '}
-                        <Link to="/register" id="go-to-register">{t('auth.login.register')}</Link>
-                    </p>
+                            <div className="minimal-form-options">
+                                <label className="remember-me">
+                                    <input type="checkbox" /> {t('auth.login.rememberMe') || 'Remember Me'}
+                                </label>
+                                <a href="#" className="forgot-link">{t('auth.login.forgotPassword')}</a>
+                            </div>
+
+                            <button type="submit" className="minimal-submit-btn" disabled={loading}>
+                                {loading ? t('common.loading') : t('auth.login.submit')}
+                            </button>
+                        </form>
+
+                        <p className="minimal-footer">
+                            {t('auth.login.noAccount')}{' '}
+                            <Link to="/register">{t('auth.login.register')}</Link>
+                        </p>
+                    </motion.div>
                 </div>
             </div>
         </div>

@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { AuthContext } from '../../context/AuthContext';
@@ -18,34 +19,40 @@ import {
 
 const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
   const { user, logout } = useContext(AuthContext);
+  const { t } = useTranslation();
   const location = useLocation();
   const role = user?.role || 'tourist';
 
   // Navigation items based on role
   const navItems = {
     tourist: [
-      { path: '/dashboard/favorites', label: 'My Favorites', icon: <FaHeart /> },
-      { path: '/dashboard/my-bookings', label: 'My Bookings', icon: <FaCalendarAlt /> },
+      { path: '/dashboard', label: t('dashboard.sidebar.home'), icon: <FaHome /> },
+      { path: '/dashboard/favorites', label: t('dashboard.sidebar.myFavorites'), icon: <FaHeart /> },
+      { path: '/dashboard/my-bookings', label: t('dashboard.sidebar.myBookings'), icon: <FaCalendarAlt /> },
     ],
     hotel: [
-      { path: '/dashboard/profile', label: 'My Profile', icon: <FaUser /> },
-      { path: '/dashboard/services', label: 'My Services', icon: <FaBriefcase /> },
-      { path: '/dashboard/bookings', label: 'My Demandes', icon: <FaClipboardList /> },
+      { path: '/dashboard', label: t('dashboard.sidebar.home'), icon: <FaHome /> },
+      { path: '/dashboard/profile', label: t('dashboard.sidebar.myProfile'), icon: <FaUser /> },
+      { path: '/dashboard/services', label: t('dashboard.sidebar.myServices'), icon: <FaBriefcase /> },
+      { path: '/dashboard/bookings', label: t('dashboard.sidebar.myDemandes'), icon: <FaClipboardList /> },
     ],
     guide: [
-      { path: '/dashboard/profile', label: 'My Profile', icon: <FaUser /> },
-      { path: '/dashboard/services', label: 'Expeditions', icon: <FaBriefcase /> },
-      { path: '/dashboard/bookings', label: 'Incoming Requests', icon: <FaClipboardList /> },
+      { path: '/dashboard', label: t('dashboard.sidebar.home'), icon: <FaHome /> },
+      { path: '/dashboard/profile', label: t('dashboard.sidebar.myProfile'), icon: <FaUser /> },
+      { path: '/dashboard/services', label: t('dashboard.sidebar.expeditions'), icon: <FaBriefcase /> },
+      { path: '/dashboard/bookings', label: t('dashboard.sidebar.incomingRequests'), icon: <FaClipboardList /> },
     ],
     transport: [
-      { path: '/dashboard/profile', label: 'My Profile', icon: <FaUser /> },
-      { path: '/dashboard/services', label: 'Vehicles', icon: <FaBriefcase /> },
-      { path: '/dashboard/bookings', label: 'Ride Requests', icon: <FaClipboardList /> },
+      { path: '/dashboard', label: t('dashboard.sidebar.home'), icon: <FaHome /> },
+      { path: '/dashboard/profile', label: t('dashboard.sidebar.myProfile'), icon: <FaUser /> },
+      { path: '/dashboard/services', label: t('dashboard.sidebar.vehicles'), icon: <FaBriefcase /> },
+      { path: '/dashboard/bookings', label: t('dashboard.sidebar.rideRequests'), icon: <FaClipboardList /> },
     ],
     coop: [
-      { path: '/dashboard/profile', label: 'My Profile', icon: <FaUser /> },
-      { path: '/dashboard/services', label: 'Products', icon: <FaBriefcase /> },
-      { path: '/dashboard/bookings', label: 'Visit Requests', icon: <FaClipboardList /> },
+      { path: '/dashboard', label: t('dashboard.sidebar.home'), icon: <FaHome /> },
+      { path: '/dashboard/profile', label: t('dashboard.sidebar.myProfile'), icon: <FaUser /> },
+      { path: '/dashboard/services', label: t('dashboard.sidebar.products'), icon: <FaBriefcase /> },
+      { path: '/dashboard/bookings', label: t('dashboard.sidebar.visitRequests'), icon: <FaClipboardList /> },
     ]
   };
 
@@ -56,7 +63,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
       <button 
         className="sidebar-toggle-btn desktop-only" 
         onClick={() => setIsCollapsed(!isCollapsed)}
-        title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+        title={isCollapsed ? t('dashboard.sidebar.expand') : t('dashboard.sidebar.collapse')}
       >
         {isCollapsed ? <FaChevronRight /> : <FaChevronLeft />}
       </button>
@@ -86,7 +93,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
         {role === 'tourist' && (
           <Link to="/dashboard/settings" className={`nav-item ${location.pathname === '/dashboard/settings' ? 'active' : ''}`}>
             <span className="nav-icon"><FaCog /></span>
-            {!isCollapsed && <span className="nav-label">Settings</span>}
+            {!isCollapsed && <span className="nav-label">{t('dashboard.sidebar.settings')}</span>}
           </Link>
         )}
         <button 
@@ -95,7 +102,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
           style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left', cursor: 'pointer' }}
         >
           <span className="nav-icon"><FaSignOutAlt /></span>
-          {!isCollapsed && <span className="nav-label">Log Out</span>}
+          {!isCollapsed && <span className="nav-label">{t('dashboard.sidebar.logout')}</span>}
         </button>
       </div>
     </div>

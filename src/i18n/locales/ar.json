@@ -30,8 +30,25 @@
       "heritage": "تراث ثقافي"
     },
     "testimonials": {
-      "eyebrow": "قصص الضيوف",
-      "title": "أصداء الفناء"
+      "eyebrow": "أصوات المجتمع",
+      "title": "تعليقات",
+      "roles": {
+        "tourist": "سائح",
+        "hotel": "صاحب فندق",
+        "transport": "مزود نقل"
+      },
+      "touristName": "سارة ج.",
+      "hotelName": "عمر الإدريسي",
+      "transportName": "كريم بنزاني",
+      "touristComment": "كانت رحلتي إلى مراكش لا تُنسى. ساعدني VibKech في العثور على أفضل الرياضات والجواهر الخفية في المدينة القديمة!",
+      "hotelComment": "بصفتي صاحب رياض، كان VibKech منصة رائعة للتواصل مع المسافرين الذين يقدرون الضيافة المغربية الأصيلة.",
+      "transportComment": "فعال وموثوق. لقد شهدت زيادة كبيرة في الحجوزات لخدمات النقل الخاصة بي من خلال هذه المنصة."
+    },
+    "luxury": {
+      "eyebrow": "حياة استثنائية",
+      "title": "إقامات فاخرة ورياضات",
+      "checkDetails": "عرض التفاصيل ←",
+      "loading": "اكتشاف إقامات استثنائية..."
     }
   },
   "planning": {
@@ -83,14 +100,23 @@
     },
     "budget": {
       "total": "التقدير الإجمالي",
-      "places": "الأماكن",
-      "nights": "الليالي",
+      "places": "أماكن",
+      "nights": "ليالي",
       "next": "التالي"
+    },
+    "labels": {
+      "details": "تفاصيل",
+      "riad": "رياض",
+      "hotel": "فندق",
+      "chauffeur": "سائق",
+      "transfer": "توصيل",
+      "medina": "المدينة"
     }
   },
   "explore": {
     "title": "استكشف مراكش",
-    "search": "ابحث عن وجهات...",
+    "subtitle": "من القصور الإمبراطورية إلى الحدائق السرية، اكتشف كل ركن في المدينة الحمراء.",
+    "search": "ابحث عن مكان... (مثل: ماجوريل، المدينة)",
     "grid": "شبكة",
     "map": "خريطة",
     "seeMore": "عرض المزيد",
@@ -103,28 +129,143 @@
       "nature": "الطبيعة",
       "adventure": "المغامرة"
     },
-    "noResults": "لم يتم العثور على وجهات."
+    "noResults": "لم يتم العثور على نتائج."
   },
 
   "auth": {
+    "back": "عودة",
     "login": {
       "title": "مرحباً بعودتك",
+      "subtitle": "مرحباً بك مجدداً في المدينة الحمراء",
+      "description": "سجل الدخول لمواصلة رحلتك في مراكش — اكتشف الرياضات الخفية والأسواق النابضة بالتاريخ والتجارب الخالدة.",
+      "stats": {
+        "monuments": "معلم تاريخي",
+        "tourists": "سائح / سنوياً",
+        "heritage": "تراث عالمي"
+      },
+      "secureLogin": "تسجيل دخول آمن",
+      "eyebrow": "VibKech — أدخل بيانات اعتمادك للوصول إلى حسابك.",
       "email": "البريد الإلكتروني",
       "password": "كلمة المرور",
+      "rememberMe": "تذكرني",
+      "forgotPassword": "هل نسيت كلمة المرور؟",
       "submit": "تسجيل الدخول",
       "noAccount": "ليس لديك حساب؟",
       "register": "إنشاء حساب"
     },
     "register": {
       "title": "إنشاء حساب",
+      "subtitle": "انضم إلى التجربة",
       "name": "الاسم الكامل",
       "email": "البريد الإلكتروني",
       "password": "كلمة المرور",
       "confirm": "تأكيد كلمة المرور",
       "submit": "إنشاء حساب",
-      "haveAccount": "لديك حساب بالفعل؟",
+      "haveAccount": "هل لديك حساب بالفعل؟",
       "login": "تسجيل الدخول"
     }
+  },
+  "landing": {
+    "eyebrow": "عش تجربة مراكش",
+    "welcome": "مرحباً بكم",
+    "title1": "دليل",
+    "title2": "مراكش",
+    "title3": "الشامل",
+    "description": "اكتشف سحر المدينة الحمراء — من المدن العتيقة والقصور الملكية إلى الأسواق النابضة والرياضات الهادئة.",
+    "cta": "ابدأ رحلتك",
+    "scroll": "مرر للأسفل للاستكشاف",
+    "skip": "تخطي المقدمة"
+  },
+  "places": {
+    "back": "استكشف مراكش",
+    "details": "التفاصيل",
+    "book": "حجز",
+    "noServices": "لا توجد خدمات متاحة في هذا المكان",
+    "discoverServices": "اكتشف خدماتنا",
+    "location": "الموقع",
+    "showMap": "عرض على الخريطة",
+    "hideMap": "إخفاء الخريطة",
+    "notFound": "المكان غير موجود.",
+    "backHome": "العودة للرئيسية",
+    "yourRating": "تقييمك",
+    "tabs": {
+      "accommodation": "الإقامة",
+      "activities": "الأنشطة",
+      "transport": "النقل"
+    },
+    "filters": {
+      "all": "الكل",
+      "hotels": "فنادق",
+      "riads": "رياضات"
+    }
+  },
+  "activity": {
+    "notFound": "النشاط غير موجود",
+    "back": "عودة",
+    "about": "حول هذا النشاط",
+    "gallery": "معرض الصور",
+    "photo": "صورة"
+  },
+  "provider": {
+    "hero": {
+      "changeCover": "تغيير صورة الغلاف",
+      "reviews": "تقييمات"
+    },
+    "gallery": {
+      "title": "معرض الصور",
+      "manage": "إدارة الصور",
+      "add": "إضافة صورة"
+    },
+    "about": "حول التجربة",
+    "amenities": {
+      "title": "المرافق والميزات",
+      "add": "إضافة ميزة",
+      "remove": "حذف"
+    },
+    "services": {
+      "accommodation": "الغرف والأجنحة (الإقامة)",
+      "transport": "أسطولنا ومساراتنا",
+      "coop": "منتجات حرفية",
+      "addItem": "إضافة عنصر",
+      "editImage": "تعديل الصورة",
+      "remove": "حذف"
+    },
+    "booking": {
+      "startsFrom": "يبدأ من",
+      "reserve": "احجز الآن",
+      "contact": "اتصل بالمتجر",
+      "widgetPreview": "معاينة الأداة",
+      "contactInfo": "معلومات الاتصال"
+    },
+    "profileNotFound": "الملف الشخصي غير موجود",
+    "profileNotFoundDesc": "تعذر تحميل الملف الشخصي للمزود المطلوب."
+  },
+  "comments": {
+    "title": "التعليقات",
+    "generalDiscussion": "مناقشة عامة",
+    "generalDiscussionDesc": "شارك انطباعاتك عن AL-RIAD ومراكش بشكل عام.",
+    "shareYourOpinion": "شارك برأيك",
+    "placeholder": "اكتب تعليقاً...",
+    "loginToComment": "سجل الدخول لترك تعليق",
+    "mustBeLoggedIn": "يجب أن تكون {{link}} للتعليق.",
+    "loggedInLink": "مسجلاً للدخول",
+    "conversations": "المحادثات",
+    "noComments": "لا توجد تعليقات حتى الآن. كن أول من يشارك برأيه!"
+  },
+  "selection": {
+    "title": "اختياراتي",
+    "subtitle": "هنا تجد جميع اختياراتك لإقامتك القادمة في مراكش.",
+    "empty": "قائمة اختياراتك فارغة",
+    "emptyDesc": "استكشف الأماكن والخدمات للبدء في التخطيط لرحلتك.",
+    "exploreBtn": "استكشف مراكش",
+    "startsFrom": "يبدأ من",
+    "priceOnRequest": "السعر عند الطلب",
+    "summaryTitle": "ملخص الرحلة",
+    "selectedItems": "العناصر المختارة",
+    "pointsOfInterest": "نقاط الاهتمام",
+    "reservedServices": "الخدمات المحجوزة",
+    "confirmBtn": "تأكيد اختياراتي",
+    "autoSave": "يتم حفظ اختياراتك تلقائياً."
   },
   "common": {
     "loading": "جارٍ التحميل...",
@@ -173,6 +314,85 @@
       "title": "اختبر مراكش بلا حدود",
       "subtitle": "رحلتك إلى قلب المدينة الحمراء تبدأ من هنا.",
       "btn": "استكشف الآن"
+    }
+  },
+  "dashboard": {
+    "sidebar": {
+      "myFavorites": "مفضلاتي",
+      "myBookings": "حجوزاتي",
+      "myProfile": "ملفي الشخصي",
+      "myServices": "خدماتي",
+      "myDemandes": "طلباتي",
+      "expeditions": "الرحلات",
+      "incomingRequests": "الطلبات الواردة",
+      "vehicles": "المركبات",
+      "rideRequests": "طلبات التوصيل",
+      "products": "المنتجات",
+      "visitRequests": "طلبات الزيارة",
+      "settings": "الإعدادات",
+      "logout": "تسجيل الخروج",
+      "expand": "توسيع الشريط الجانبي",
+      "collapse": "طوي الشريط الجانبي"
+    },
+    "topbar": {
+      "search": "بحث في لوحة التحكم...",
+      "notifications": "التنبيهات",
+      "profile": "الملف الشخصي"
+    },
+    "home": {
+      "welcomeBack": "مرحباً بعودتك، {{name}}!",
+      "welcome": "مرحباً، {{name}}!",
+      "touristSubtitle": "إليك ما يحدث في مغامراتك بمراكش اليوم.",
+      "proSubtitle": "نظرة عامة على أداء عملك في مراكش.",
+      "stats": {
+        "myFavorites": "مفضلاتي",
+        "bookedTrips": "الرحلات المحجوزة",
+        "pendingRequests": "الطلبات المعلقة",
+        "yourRating": "تقييمك",
+        "totalServices": "إجمالي الخدمات",
+        "totalRequests": "إجمالي الطلبات",
+        "activeClients": "العملاء النشطون",
+        "rating": "التقييم"
+      },
+      "recentRecommendations": "التوصيات الأخيرة",
+      "upcomingBookings": "الحجوزات القادمة",
+      "noUpcoming": "لا توجد حجوزات قادمة اليوم.",
+      "browsePlaces": "تصفح الأماكن",
+      "pendingRequestsTitle": "الطلبات المعلقة",
+      "recentReviews": "المراجعات الأخيرة",
+      "view": "عرض",
+      "accept": "قبول",
+      "reject": "رفض"
+    },
+    "favorites": {
+      "title": "مفضلاتي",
+      "subtitle": "الأماكن والخدمات التي قمت بحفظها لرحلتك إلى مراكش.",
+      "empty": "لم تقم بحفظ أي مفضلات بعد.",
+      "emptyDesc": "استكشف مراكش لتجد الجواهر الخفية!",
+      "removeError": "خطأ في إزالة المفضلة"
+    },
+    "bookings": {
+      "title": "حجوزاتي",
+      "subtitle": "تابع رحلاتك المؤكدة وطلبات الخدمات المعلقة.",
+      "empty": "لم يتم العثور على حجوزات بعد.",
+      "emptyDesc": "ابدأ رحلتك باختيار خدمة في مراكش!",
+      "cancel": "إلغاء الحجز",
+      "details": "التفاصيل",
+      "retry": "إعادة المحاولة",
+      "providedBy": "مقدم من {{name}}",
+      "status": {
+        "completed": "مكتمل",
+        "confirmed": "مؤكد",
+        "pending": "معلق"
+      }
+    },
+    "requests": {
+      "title": "طلبات الحجز",
+      "subtitle": "إدارة طلبات الخدمات الواردة من السياح.",
+      "pendingTitle": "الطلبات المعلقة",
+      "noPending": "لا توجد طلبات معلقة.",
+      "historyTitle": "السجل والمعالجة",
+      "updateError": "خطأ في تحديث حالة الحجز"
     }
   }
 }

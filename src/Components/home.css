@@ -4,18 +4,20 @@
 }
 
 .destinations-section, .testimonials-section {
+  position: relative;
   background-image: 
-    linear-gradient(rgba(248, 247, 244, 0.45), rgba(248, 247, 244, 0.45)),
+    linear-gradient(rgba(248, 247, 244, 0.6), rgba(248, 247, 244, 0.6)),
     url('/background/zlige.png');
   background-attachment: fixed;
-  background-size: 600px;
+  background-size: 500px;
   background-repeat: repeat;
+  transition: background-image 0.4s ease;
 }
 
 body.dark-mode .destinations-section, 
 body.dark-mode .testimonials-section {
   background-image: 
-    linear-gradient(rgba(26, 26, 26, 0.65), rgba(26, 26, 26, 0.65)),
+    linear-gradient(rgba(18, 18, 18, 0.85), rgba(18, 18, 18, 0.85)),
     url('/background/zlige.png');
 }
 

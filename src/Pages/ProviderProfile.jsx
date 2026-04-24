@@ -9,7 +9,7 @@ import Layout from '../Components/Layout';
 import './ProviderProfile.css';
 import api from '../api/axios';
 import { AuthContext } from '../context/AuthContext';
-
+import { useTranslation } from 'react-i18next';
 import getImageUrl from '../utils/imageUrl';
 
 const mockProviderData = {
@@ -154,6 +154,7 @@ const EditableField = ({ isEditMode, value, onSave, multiline, type = "text", te
   );
 };
 const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
+  const { t } = useTranslation();
   const { type, id } = useParams();
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
@@ -481,10 +482,10 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
     const errorContent = (
       <div style={{ height: isDashboard ? '50vh' : '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '1rem' }}>
         <FaTimes size={48} style={{ color: '#ef4444' }} />
-        <h2 style={{ fontFamily: 'var(--font-serif)' }}>Profile Not Found</h2>
-        <p style={{ color: 'var(--lux-text-muted)' }}>The requested provider profile could not be loaded.</p>
+        <h2 style={{ fontFamily: 'var(--font-serif)' }}>{t('provider.profileNotFound')}</h2>
+        <p style={{ color: 'var(--lux-text-muted)' }}>{t('provider.profileNotFoundDesc')}</p>
         <button onClick={() => navigate('/home')} style={{ padding: '0.8rem 1.5rem', background: 'var(--lux-accent)', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}>
-           Back to Home
+           {t('places.backHome')}
         </button>
       </div>
     );
@@ -510,7 +511,7 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
               onClick={() => fileInputRef.current?.click()}
               style={{ position: 'absolute', top: '20px', right: '20px', background: '#fff', color: '#333', border: 'none', padding: '0.8rem 1.2rem', borderRadius: '12px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', zIndex: 10, boxShadow: '0 4px 10px rgba(0,0,0,0.3)' }}
             >
-               <FaCamera /> Change Cover Photo
+               <FaCamera /> {t('provider.hero.changeCover')}
             </button>
           </>
         )}
@@ -525,7 +526,7 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
               <EditableField isEditMode={isEditMode} value={data.name} onSave={(val) => handleUpdate('name', val)} textComponent="span" />
             </h1>
             <div className="hero-meta" style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
-              <span><FaStar style={{ color: 'var(--lux-accent)' }}/> {data.rating} ({data.reviewsCount} reviews)</span>
+              <span><FaStar style={{ color: 'var(--lux-accent)' }}/> {data.rating} ({data.reviewsCount} {t('provider.hero.reviews')})</span>
               <span style={{ display: 'flex', alignItems: 'center' }}>
                 <FaMapMarkerAlt style={{ marginRight: '0.5rem' }} /> 
                 <EditableField isEditMode={isEditMode} value={data.location} onSave={(val) => handleUpdate('location', val)} textComponent="span" />
@@ -557,10 +558,10 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
               initial="hidden"
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                <h2 className="section-title" style={{ marginBottom: 0 }}>Gallery</h2>
+                <h2 className="section-title" style={{ marginBottom: 0 }}>{t('provider.gallery.title')}</h2>
                 {isEditMode && (
                    <button onClick={() => navigate('/dashboard/images')} style={{ background: 'var(--lux-accent)', color: '#fff', border: 'none', padding: '0.6rem 1.2rem', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <FaCamera /> Manage Photos
+                      <FaCamera /> {t('provider.gallery.manage')}
                    </button>
                 )}
               </div>
@@ -583,7 +584,7 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
                       onMouseLeave={e => { e.currentTarget.style.borderColor = '#d4c5a9'; e.currentTarget.style.color = '#b8a98a'; }}
                     >
                       <FaCamera size={36} />
-                      <span style={{ fontSize: '0.9rem', fontWeight: '600' }}>Add Photo</span>
+                      <span style={{ fontSize: '0.9rem', fontWeight: '600' }}>{t('provider.gallery.add')}</span>
                     </div>
                   ) : null}
                 </div>
@@ -644,7 +645,7 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
             whileInView="visible"
             initial="hidden"
           >
-            <h2 className="section-title">About the Experience</h2>
+            <h2 className="section-title">{t('provider.about')}</h2>
             <div style={{ background: 'rgba(255,255,255,0.4)', padding: '2rem', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.6)' }}>
                <EditableField 
                  isEditMode={isEditMode} 
@@ -667,8 +668,8 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
             initial="hidden"
           >
             <h2 className="section-title" style={{ display: 'flex', justifyContent: 'space-between' }}>
-              Amenities & Features
-              {isEditMode && <button onClick={handleAddFeature} style={{ fontSize: '0.9rem', color: 'var(--lux-accent)', background: 'none', border: 'none', cursor: 'pointer' }}>+ Add Feature</button>}
+              {t('provider.amenities.title')}
+              {isEditMode && <button onClick={handleAddFeature} style={{ fontSize: '0.9rem', color: 'var(--lux-accent)', background: 'none', border: 'none', cursor: 'pointer' }}>+ {t('provider.amenities.add')}</button>}
             </h2>
             <div className="features-grid">
               {(data.features || []).map((feat, i) => (
@@ -682,7 +683,7 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
                   <span className="feature-icon">{feat.icon || <FaCheck />}</span>
                   <span>{feat.label}</span>
                   {isEditMode && (
-                    <button onClick={() => handleDeleteFeature(i)} style={{ position: 'absolute', right: '10px', background: 'none', border: 'none', color: 'red', cursor: 'pointer', opacity: 0.7 }}><FaTimes /></button>
+                    <button onClick={() => handleDeleteFeature(i)} style={{ position: 'absolute', right: '10px', background: 'none', border: 'none', color: 'red', cursor: 'pointer', opacity: 0.7 }}><FaTimes /> {t('provider.amenities.remove')}</button>
                   )}
                 </motion.div>
               ))}
@@ -699,8 +700,8 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
             initial="hidden"
           >
             <h2 className="section-title" style={{ display: 'flex', justifyContent: 'space-between' }}>
-              {providerType === 'hotel' ? 'Chambres & Suites (Hébergement)' : providerType === 'transport' ? 'Our Fleet & Routes' : 'Artisan Products'}
-              {isEditMode && <button onClick={() => setShowAddModal(true)} style={{ fontSize: '0.9rem', color: 'var(--lux-accent)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: '600' }}>+ Add Item</button>}
+              {providerType === 'hotel' ? t('provider.services.accommodation') : providerType === 'transport' ? t('provider.services.transport') : t('provider.services.coop')}
+              {isEditMode && <button onClick={() => setShowAddModal(true)} style={{ fontSize: '0.9rem', color: 'var(--lux-accent)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: '600' }}>+ {t('provider.services.addItem')}</button>}
             </h2>
             <div className="dynamic-lists">
               {data.services.map(svc => (
@@ -718,13 +719,13 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
                   </div>
                   {isEditMode && (
                      <>
-                     <label style={{ position: 'absolute', top: '10px', left: '10px', background: '#fff', padding: '0.5rem', borderRadius: '8px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.8rem' }}>
-                        <FaCamera /> Edit Image
+                      <label style={{ position: 'absolute', top: '10px', left: '10px', background: '#fff', padding: '0.5rem', borderRadius: '8px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.8rem' }}>
+                        <FaCamera /> {t('provider.services.editImage')}
                         <input type="file" style={{ display: 'none' }} accept="image/*" onChange={(e) => handleServiceImageUpload(e, svc.id)} />
-                     </label>
-                     <button onClick={() => handleDeleteService(svc.id)} style={{ position: 'absolute', top: '10px', right: '10px', background: 'rgba(255,255,255,0.9)', color: 'red', border: 'none', padding: '0.5rem', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.8rem' }}>
-                       <FaTimes /> Remove
-                     </button>
+                      </label>
+                      <button onClick={() => handleDeleteService(svc.id)} style={{ position: 'absolute', top: '10px', right: '10px', background: 'rgba(255,255,255,0.9)', color: 'red', border: 'none', padding: '0.5rem', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.8rem' }}>
+                        <FaTimes /> {t('provider.services.remove')}
+                      </button>
                      </>
                   )}
                   <div className="dynamic-info">
@@ -760,9 +761,9 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
           <div className="booking-card">
             <h3 className="booking-price" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <EditableField isEditMode={isEditMode} value={data.priceStarts} onSave={(val) => handleUpdate('priceStarts', val)} type="number" />
-              <span style={{ marginLeft: '0.5rem' }}>MAD</span>
+              <span style={{ marginLeft: '0.5rem' }}>{t('common.mad')}</span>
             </h3>
-            <span className="booking-subtext">Starts from</span>
+            <span className="booking-subtext">{t('provider.booking.startsFrom')}</span>
             
             <form className="booking-form">
               {type === 'hotel' || type === 'transport' ? (
@@ -771,19 +772,19 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
                     <input type="date" className="lux-input" disabled={isEditMode} />
                     {type === 'hotel' && <input type="number" min="1" placeholder="Guests" className="lux-input" style={{ width: '80px' }} disabled={isEditMode} />}
                   </div>
-                  <button className="lux-button" onClick={(e) => e.preventDefault()} disabled={isEditMode}>Reserve Now</button>
+                  <button className="lux-button" onClick={(e) => e.preventDefault()} disabled={isEditMode}>{t('provider.booking.reserve')}</button>
                 </>
               ) : (
                 <>
-                  <button className="lux-button" onClick={(e) => e.preventDefault()} disabled={isEditMode}>Contact Store</button>
+                  <button className="lux-button" onClick={(e) => e.preventDefault()} disabled={isEditMode}>{t('provider.booking.contact')}</button>
                 </>
               )}
-              {isEditMode && <p style={{ color: 'var(--lux-accent)', textAlign: 'center', marginTop: '1rem', fontWeight: 'bold' }}>Widget Preview</p>}
+              {isEditMode && <p style={{ color: 'var(--lux-accent)', textAlign: 'center', marginTop: '1rem', fontWeight: 'bold' }}>{t('provider.booking.widgetPreview')}</p>}
             </form>
           </div>
 
           <div className="contact-box">
-            <h3 style={{ margin: '0 0 1.5rem 0', fontFamily: 'var(--font-serif)' }}>Contact Info</h3>
+            <h3 style={{ margin: '0 0 1.5rem 0', fontFamily: 'var(--font-serif)' }}>{t('provider.booking.contactInfo')}</h3>
             <div className="contact-item" style={{ display: 'flex', alignItems: 'center' }}>
               <FaPhoneAlt style={{ flexShrink: 0 }} /> 
               <EditableField isEditMode={isEditMode} value={data.contact.phone} onSave={(val) => handleUpdateContact('phone', val)} />

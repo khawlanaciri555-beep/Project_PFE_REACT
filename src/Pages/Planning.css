@@ -39,22 +39,24 @@ body.dark-mode .planning-page.premium-theme {
   bottom: 2rem;
   left: 50%;
   transform: translateX(-50%);
-  width: 90%;
-  max-width: 900px;
-  background: rgba(26, 24, 23, 0.95);
-  backdrop-filter: blur(20px);
-  padding: 1.5rem 2.5rem;
-  border-radius: 24px;
+  width: auto;
+  min-width: 600px;
+  max-width: 90%;
+  background: rgba(26, 24, 23, 0.98);
+  backdrop-filter: blur(25px);
+  padding: 1rem 2rem;
+  border-radius: 20px;
   z-index: 1000;
   color: #fff;
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .budget-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 3rem;
 }
 
 .budget-info span {
@@ -93,14 +95,16 @@ body.dark-mode .planning-page.premium-theme {
   background: var(--premium-terracotta);
   color: #fff;
   border: none;
-  padding: 1rem 2.5rem;
-  border-radius: 14px;
+  padding: 0.8rem 2rem;
+  border-radius: 12px;
   font-weight: 700;
+  font-size: 0.9rem;
   display: flex;
   align-items: center;
   gap: 0.8rem;
   cursor: pointer;
-  transition: 0.3s;
+  transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
 .budget-next-btn:hover {
@@ -726,7 +730,16 @@ body.dark-mode .planning-page.premium-theme {
   .stepper { width: 100%; transition: 0.3s; }
   .step-label { display: none; }
   .planning-card { padding: 2rem; }
-  .floating-budget-bar { padding: 1rem 1.5rem; }
+  .floating-budget-bar { 
+    padding: 1rem 1.2rem; 
+    min-width: unset;
+    width: 95%;
+    bottom: 1rem;
+  }
+  .budget-content { gap: 1rem; }
+  .budget-stats { gap: 1rem; }
+  .budget-info h3 { font-size: 1.4rem; }
+  .budget-next-btn { padding: 0.7rem 1.2rem; font-size: 0.8rem; }
 }
 
 /* Loader & Error States */

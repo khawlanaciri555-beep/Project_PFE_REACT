@@ -254,7 +254,7 @@ const Planning = () => {
                               <div className="selection-indicator">
                                 {formData.selectedPlaces.some(p => p.id === place.id) ? <FaCheckCircle /> : <div className="plus-icon">+</div>}
                               </div>
-                              <div className="place-badge">{place.category || 'Medina'}</div>
+                              <div className="place-badge">{place.category || t('planning.labels.medina')}</div>
                             </div>
                             <div className="place-card-body-premium">
                               <h3>{place.name || place.title}</h3>
@@ -383,7 +383,7 @@ const Planning = () => {
                                       gallery: service.gallery || [service.image]
                                     })}
                                   >
-                                    Détails
+                                    {t('planning.labels.details')}
                                   </button>
                                 )}
                                 <button 
@@ -440,7 +440,7 @@ const Planning = () => {
                             >
                               <div className="h-img-wrap">
                                  <img src={hotel.image || '/logo picter/placeholder.jpg'} alt={hotel.name} />
-                                 <div className="h-badge-premium">{hotel.type === 'riad' ? 'Riad' : 'Hôtel'}</div>
+                                 <div className="h-badge-premium">{hotel.type === 'riad' ? t('planning.labels.riad') : t('planning.labels.hotel')}</div>
                               </div>
                               <div className="hotel-info-premium">
                                 <h5>{hotel.name}</h5>
@@ -477,7 +477,7 @@ const Planning = () => {
                           ))}
                         </div>
                         
-                        {(formData.selectedTransport?.type === 'Chauffeur' || formData.selectedTransport?.type === 'Transfert') && (
+                        {(formData.selectedTransport?.type === 'Chauffeur' || formData.selectedTransport?.type === 'Transfert' || formData.selectedTransport?.type === 'Transfer') && (
                           <motion.div variants={itemVariants} className="route-premium-inputs">
                             <input 
                               placeholder={t('planning.step3.pickupLocation')}

@@ -3,12 +3,14 @@ import DashboardLayout from '../../Components/Dashboard/DashboardLayout';
 import api from '../../api/axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaCalendarAlt, FaHistory, FaCheckCircle, FaHourglassHalf, FaRegCreditCard } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 
 const StatusBadge = ({ status }) => {
+  const { t } = useTranslation();
   const styles = {
-    completed: { bg: 'rgba(16, 185, 129, 0.1)', color: '#10b981', label: 'Completed' },
-    confirmed: { bg: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6', label: 'Confirmed' },
-    pending: { bg: 'rgba(245, 158, 11, 0.1)', color: '#f59e0b', label: 'Pending' }
+    completed: { bg: 'rgba(16, 185, 129, 0.1)', color: '#10b981', label: t('dashboard.bookings.status.completed') },
+    confirmed: { bg: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6', label: t('dashboard.bookings.status.confirmed') },
+    pending: { bg: 'rgba(245, 158, 11, 0.1)', color: '#f59e0b', label: t('dashboard.bookings.status.pending') }
   };
   const config = styles[status] || styles.pending;
   
@@ -28,6 +30,7 @@ const StatusBadge = ({ status }) => {
 };
 
 const MyBookings = () => {
+  const { t } = useTranslation();
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -53,8 +56,8 @@ const MyBookings = () => {
   return (
     <DashboardLayout>
       <div className="dashboard-title-section">
-        <motion.h1 initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>My Bookings</motion.h1>
-        <p style={{ color: 'var(--dash-text-muted)' }}>Follow your confirmed trips and pending service requests.</p>
+        <motion.h1 initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>{t('dashboard.bookings.title')}</motion.h1>
+        <p style={{ color: 'var(--dash-text-muted)' }}>{t('dashboard.bookings.subtitle')}</p>
       </div>
 
       {loading ? (
@@ -64,7 +67,7 @@ const MyBookings = () => {
       ) : error ? (
         <div style={{ textAlign: 'center', padding: '5rem', color: '#ef4444' }}>
            <p>{error}</p>
-           <button onClick={fetchBookings} style={{ background: 'var(--dash-accent)', color: '#fff', border: 'none', padding: '0.6rem 1.2rem', borderRadius: '10px', cursor: 'pointer', marginTop: '1rem' }}>Retry</button>
+           <button onClick={fetchBookings} style={{ background: 'var(--dash-accent)', color: '#fff', border: 'none', padding: '0.6rem 1.2rem', borderRadius: '10px', cursor: 'pointer', marginTop: '1rem' }}>{t('dashboard.bookings.retry')}</button>
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -95,7 +98,7 @@ const MyBookings = () => {
                   </div>
                   <div>
                     <h3 style={{ margin: 0, fontSize: '1.1rem' }}>{booking.service?.title || 'Service Title'}</h3>
-                    <p style={{ margin: '0.25rem 0', fontSize: '0.85rem', color: 'var(--dash-text-muted)' }}>Provided by {booking.provider?.name || 'Local Host'}</p>
+                    <p style={{ margin: '0.25rem 0', fontSize: '0.85rem', color: 'var(--dash-text-muted)' }}>{t('dashboard.bookings.providedBy', { name: booking.provider?.name || 'Local Host' })}</p>
                     <div style={{ display: 'flex', gap: '1.5rem', marginTop: '0.5rem', fontSize: '0.8rem' }}>
                         <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><FaHistory /> {booking.date}</span>
                         <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><FaRegCreditCard /> {booking.service?.price || '0 MAD'}</span>
@@ -105,7 +108,7 @@ const MyBookings = () => {
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
                   <StatusBadge status={booking.status} />
-                  <button style={{ background: 'none', border: '1px solid var(--glass-border)', color: 'var(--dash-text)', padding: '0.6rem 1.2rem', borderRadius: '10px', fontSize: '0.85rem', cursor: 'pointer', fontWeight: '600' }}>Details</button>
+                  <button style={{ background: 'none', border: '1px solid var(--glass-border)', color: 'var(--dash-text)', padding: '0.6rem 1.2rem', borderRadius: '10px', fontSize: '0.85rem', cursor: 'pointer', fontWeight: '600' }}>{t('dashboard.bookings.details')}</button>
                 </div>
               </motion.div>
             ))}
@@ -114,8 +117,8 @@ const MyBookings = () => {
           {bookings.length === 0 && (
             <div style={{ textAlign: 'center', padding: '5rem 0', opacity: 0.5 }}>
               <FaHourglassHalf style={{ fontSize: '3rem', marginBottom: '1rem' }} />
-              <h3>No bookings found yet.</h3>
-              <p>Start your journey by choosing a service in Marrakech!</p>
+              <h3>{t('dashboard.bookings.empty')}</h3>
+              <p>{t('dashboard.bookings.emptyDesc')}</p>
             </div>
           )}
         </div>

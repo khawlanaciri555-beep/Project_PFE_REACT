@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import Layout from '../Components/Layout';
 import { CartContext } from '../context/CartContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -10,14 +11,15 @@ import './MySelection.css';
 const MySelection = () => {
     const { cart, removeFromCart } = useContext(CartContext);
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     return (
         <Layout>
             <div className="selection-page">
                 <div className="selection-header">
                     <div className="max-container">
-                        <h1>Ma Sélection</h1>
-                        <p>Retrouvez ici tous vos choix pour votre prochain séjour à Marrakech.</p>
+                        <h1>{t('selection.title')}</h1>
+                        <p>{t('selection.subtitle')}</p>
                     </div>
                 </div>
 
@@ -32,10 +34,10 @@ const MySelection = () => {
                                         className="empty-state"
                                     >
                                         <div className="empty-icon">🎒</div>
-                                        <h2>Votre sélection est vide</h2>
-                                        <p>Explorez les lieux et les services pour commencer à planifier votre voyage.</p>
+                                        <h2>{t('selection.empty')}</h2>
+                                        <p>{t('selection.emptyDesc')}</p>
                                         <button onClick={() => navigate('/explore')} className="btn-primary">
-                                            Explorer Marrakech
+                                            {t('selection.exploreBtn')}
                                         </button>
                                     </motion.div>
                                 ) : (
@@ -61,9 +63,9 @@ const MySelection = () => {
                                                 <div className="card-footer">
                                                     <div className="card-price">
                                                         {item.price > 0 ? (
-                                                            <><span>À partir de</span> {item.price} MAD</>
+                                                            <><span>{t('selection.startsFrom')}</span> {item.price} MAD</>
                                                         ) : (
-                                                            'Prix sur demande'
+                                                            t('selection.priceOnRequest')
                                                         )}
                                                     </div>
                                                     <div className="card-actions">
@@ -81,26 +83,26 @@ const MySelection = () => {
 
                         <div className="selection-summary">
                             <div className="summary-card">
-                                <h3>Résumé du Voyage</h3>
+                                <h3>{t('selection.summaryTitle')}</h3>
                                 <div className="summary-item">
-                                    <span>Éléments sélectionnés</span>
+                                    <span>{t('selection.selectedItems')}</span>
                                     <span>{cart.length}</span>
                                 </div>
                                 <div className="summary-divider" />
                                 <div className="summary-total">
-                                    <span>Points d'intérêt</span>
+                                    <span>{t('selection.pointsOfInterest')}</span>
                                     <span>{cart.filter(i => i.type === 'place').length}</span>
                                 </div>
                                 <div className="summary-total">
-                                    <span>Services réservés</span>
+                                    <span>{t('selection.reservedServices')}</span>
                                     <span>{cart.filter(i => i.type !== 'place').length}</span>
                                 </div>
                                 
                                 <button className="btn-book-all" disabled={cart.length === 0}>
-                                    Confirmer ma Sélection
+                                    {t('selection.confirmBtn')}
                                 </button>
                                 <p className="summary-note">
-                                    <FaClock /> Votre sélection est sauvegardée automatiquement.
+                                    <FaClock /> {t('selection.autoSave')}
                                 </p>
                             </div>
                         </div>
