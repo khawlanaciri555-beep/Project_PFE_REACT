@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { Link } from 'react-router-dom';
+import getImageUrl from '../../utils/imageUrl';
 
 // Fix for default Leaflet icon issue in React
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
@@ -26,7 +27,39 @@ const terracottaIcon = new L.DivIcon({
   popupAnchor: [0, -24],
 });
 
-const ServiceMap = ({ items }) => {
+const MapBounds = ({ items }) => {
+  const map = useMap();
+  React.useEffect(() => {
+    if (items && items.length > 0) {
+      const bounds = [];
+      items.forEach(item => {
+        let lat = null, lng = null;
+        if (item.coordinates && typeof item.coordinates === 'string') {
+          const parts = item.coordinates.split(',');
+          if (parts.length === 2) {
+             const pLat = parseFloat(parts[0].trim());
+             const pLng = parseFloat(parts[1].trim());
+             if (!isNaN(pLat) && !isNaN(pLng)) { lat = pLat; lng = pLng; }
+          }
+        } else if (item.lat && item.lng) {
+             const pLat = parseFloat(item.lat);
+             const pLng = parseFloat(item.lng);
+             if (!isNaN(pLat) && !isNaN(pLng)) { lat = pLat; lng = pLng; }
+        }
+        if (lat !== null && lng !== null) {
+          bounds.push([lat, lng]);
+        }
+      });
+      if (bounds.length > 0) {
+        // give it a slight delay so map is fully rendered
+        setTimeout(() => map.fitBounds(bounds, { padding: [50, 50] }), 100);
+      }
+    }
+  }, [items, map]);
+  return null;
+};
+
+const ServiceMap = ({ items = [] }) => {
   const defaultCenter = [31.6295, -7.9811]; // Medina, Marrakech
 
   return (
@@ -42,35 +75,59 @@ const ServiceMap = ({ items }) => {
           url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
           className="premium-tiles"
         />
+        <MapBounds items={items} />
         
-        {items.map((item) => (
-          <Marker 
-            key={item.id} 
-            position={[item.lat || 31.63, item.lng || -7.98]} 
-            icon={terracottaIcon}
-          >
-            <Popup className="signature-popup">
-              <div className="premium-popup-content">
-                <div className="popup-img-wrap">
-                  <img 
-                    src={item.image || '/logo picter/placeholder.jpg'} 
-                    alt={item.title} 
-                  />
-                  <div className="popup-badge">Premium</div>
+        {(items || []).map((item) => {
+          let lat = 31.63;
+          let lng = -7.98;
+          if (item.coordinates && typeof item.coordinates === 'string') {
+            const parts = item.coordinates.split(',');
+            if (parts.length === 2) {
+              const pLat = parseFloat(parts[0].trim());
+              const pLng = parseFloat(parts[1].trim());
+              if (!isNaN(pLat) && !isNaN(pLng)) {
+                lat = pLat;
+                lng = pLng;
+              }
+            }
+          } else if (item.lat && item.lng) {
+            const pLat = parseFloat(item.lat);
+            const pLng = parseFloat(item.lng);
+            if (!isNaN(pLat) && !isNaN(pLng)) {
+                lat = pLat;
+                lng = pLng;
+            }
+          }
+          
+          return (
+            <Marker 
+              key={item.id || Math.random()} 
+              position={[lat, lng]} 
+              icon={terracottaIcon}
+            >
+              <Popup className="signature-popup">
+                <div className="premium-popup-content">
+                  <div className="popup-img-wrap">
+                    <img 
+                      src={item.image ? getImageUrl(item.image) : '/logo picter/placeholder.jpg'} 
+                      alt={item.title} 
+                    />
+                    <div className="popup-badge">Premium</div>
+                  </div>
+                  <div className="popup-info">
+                     <h4>{item.title}</h4>
+                     <div className="popup-meta">
+                        <span className="p-price">{item.price && item.price !== 'Gratuit' ? item.price : 'Gratuit'}</span>
+                        <Link to={`/place/${item.id}`} className="p-link">
+                          Détails &rarr;
+                        </Link>
+                     </div>
+                  </div>
                 </div>
-                <div className="popup-info">
-                   <h4>{item.title}</h4>
-                   <div className="popup-meta">
-                      <span className="p-price">{item.price} MAD</span>
-                      <Link to={`/place/${item.id}`} className="p-link">
-                        Détails &rarr;
-                      </Link>
-                   </div>
-                </div>
-              </div>
-            </Popup>
-          </Marker>
-        ))}
+              </Popup>
+            </Marker>
+          );
+        })}
       </MapContainer>
       
       {/* Decorative Gradient Overlay */}

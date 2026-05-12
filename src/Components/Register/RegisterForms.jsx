@@ -5,6 +5,14 @@ import { FaUser, FaEnvelope, FaLock, FaPhone, FaMapMarkerAlt, FaBriefcase, FaBui
 export const TouristForm = ({ data, onChange }) => (
   <>
     <FloatingInput
+      icon={FaUser}
+      label="Full Name"
+      name="name"
+      value={data.name}
+      onChange={onChange}
+      required
+    />
+    <FloatingInput
       icon={FaEnvelope}
       label="Email Address"
       type="email"
@@ -22,14 +30,35 @@ export const TouristForm = ({ data, onChange }) => (
       onChange={onChange}
       required
     />
+    <FloatingInput
+      icon={FaLock}
+      label="Confirm Password"
+      type="password"
+      name="password_confirmation"
+      value={data.password_confirmation}
+      onChange={onChange}
+      required
+    />
   </>
 );
 
-export const HotelForm = ({ data, onChange, onFileChange }) => (
+export const HotelForm = ({ data, onChange, onFileChange, places }) => (
   <>
+    <CustomSelect
+      icon={FaBuilding}
+      label="Type d'hébergement"
+      name="accommodationType"
+      value={data.accommodationType || 'hotel'}
+      onChange={onChange}
+      options={[
+        { value: 'hotel', label: 'Hôtel' },
+        { value: 'riad', label: 'Riad' }
+      ]}
+      required
+    />
     <FloatingInput
       icon={FaBuilding}
-      label="Hotel Name"
+      label="Nom de l'hébergement"
       name="hotelName"
       value={data.hotelName}
       onChange={onChange}
@@ -54,6 +83,15 @@ export const HotelForm = ({ data, onChange, onFileChange }) => (
       required
     />
     <FloatingInput
+      icon={FaLock}
+      label="Confirm Password"
+      type="password"
+      name="password_confirmation"
+      value={data.password_confirmation}
+      onChange={onChange}
+      required
+    />
+    <FloatingInput
       icon={FaPhone}
       label="Phone Number"
       type="tel"
@@ -72,24 +110,11 @@ export const HotelForm = ({ data, onChange, onFileChange }) => (
     />
     <CustomSelect
       icon={FaMapMarkerAlt}
-      label="Region"
-      name="region"
-      value={data.region}
+      label="Place"
+      name="place_id"
+      value={data.place_id}
       onChange={onChange}
-      options={[
-        { value: 'marrakech-safi', label: 'Marrakech-Safi' },
-        { value: 'tanger-tetouan-alhoceima', label: 'Tanger-Tetouan-Al Hoceima' },
-        { value: 'oriental', label: 'L\'Oriental' },
-        { value: 'fes-meknes', label: 'Fès-Meknès' },
-        { value: 'rabat-sale-kenitra', label: 'Rabat-Salé-Kénitra' },
-        { value: 'beni-mellal-khenifra', label: 'Béni Mellal-Khénifra' },
-        { value: 'casablanca-settat', label: 'Casablanca-Settat' },
-        { value: 'draa-tafilalet', label: 'Drâa-Tafilalet' },
-        { value: 'souss-massa', label: 'Souss-Massa' },
-        { value: 'guelmim-oued-noun', label: 'Guelmim-Oued Noun' },
-        { value: 'laayoune-sakia-elhamra', label: 'Laâyoune-Sakia El Hamra' },
-        { value: 'dakhla-oued-eddahab', label: 'Dakhla-Oued Ed-Dahab' }
-      ]}
+      options={places}
       required
     />
     <FileUpload
@@ -108,7 +133,7 @@ export const HotelForm = ({ data, onChange, onFileChange }) => (
   </>
 );
 
-export const TransporteurForm = ({ data, onChange, onFileChange }) => (
+export const TransporteurForm = ({ data, onChange, onFileChange, places }) => (
   <>
     <FloatingInput
       icon={FaUser}
@@ -137,6 +162,15 @@ export const TransporteurForm = ({ data, onChange, onFileChange }) => (
       required
     />
     <FloatingInput
+      icon={FaLock}
+      label="Confirm Password"
+      type="password"
+      name="password_confirmation"
+      value={data.password_confirmation}
+      onChange={onChange}
+      required
+    />
+    <FloatingInput
       icon={FaPhone}
       label="Phone Number"
       type="tel"
@@ -159,6 +193,15 @@ export const TransporteurForm = ({ data, onChange, onFileChange }) => (
       ]}
       required
     />
+    <CustomSelect
+      icon={FaMapMarkerAlt}
+      label="Place"
+      name="place_id"
+      value={data.place_id}
+      onChange={onChange}
+      options={places}
+      required
+    />
     <FloatingInput
       icon={FaFileAlt}
       label="License Number"
@@ -174,7 +217,7 @@ export const TransporteurForm = ({ data, onChange, onFileChange }) => (
   </>
 );
 
-export const CooperativeForm = ({ data, onChange, onFileChange }) => (
+export const CooperativeForm = ({ data, onChange, onFileChange, places }) => (
   <>
     <FloatingInput
       icon={FaBuilding}
@@ -203,12 +246,30 @@ export const CooperativeForm = ({ data, onChange, onFileChange }) => (
       required
     />
     <FloatingInput
+      icon={FaLock}
+      label="Confirm Password"
+      type="password"
+      name="password_confirmation"
+      value={data.password_confirmation}
+      onChange={onChange}
+      required
+    />
+    <FloatingInput
       icon={FaPhone}
       label="Phone Number"
       type="tel"
       name="phone"
       value={data.phone}
       onChange={onChange}
+      required
+    />
+    <CustomSelect
+      icon={FaMapMarkerAlt}
+      label="Place"
+      name="place_id"
+      value={data.place_id}
+      onChange={onChange}
+      options={places}
       required
     />
     <FloatingInput

@@ -1,0 +1,480 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "explore": "Explorer",
+    "planning": "Planification",
+    "about": "À propos",
+    "login": "Connexion",
+    "register": "S'inscrire",
+    "logout": "Déconnexion",
+    "dashboard": "Mon Tableau de Bord",
+    "hello": "Bonjour"
+  },
+  "home": {
+    "hero": {
+      "title": "Découvrez Marrakech",
+      "subtitle": "Un Voyage à Travers le Temps et les Couleurs",
+      "description": "Entrez au cœur de la Ville Rouge, où d'anciens palais murmurent des récits de dynasties et des souks vibrants offrent un festin des sens."
+    },
+    "destinations": {
+      "eyebrow": "DESTINATIONS POPULAIRES",
+      "title": "Explorer Marrakech",
+      "seeMore": "Explorer tout Marrakech",
+      "loading": "Chargement des destinations...",
+      "viewDetail": "Voir détail →"
+    },
+    "stats": {
+      "founded": "FONDÉE",
+      "monuments": "MONUMENTS",
+      "tourists": "TOURISTES PAR AN",
+      "heritage": "PATRIMOINE CULTUREL"
+    },
+      "testimonials": {
+      "eyebrow": "VOIX DE LA COMMUNAUTÉ",
+      "title": "Commentaires",
+      "description": "Découvrez les expériences partagées par les voyageurs sur nos transports, coopératives et sites emblématiques.",
+      "loading": "Chargement des expériences...",
+      "verified": "Touriste Vérifié",
+      "roles": {
+        "tourist": "Touriste",
+        "hotel": "Propriétaire d'Hôtel",
+        "transport": "Prestataire de Transport"
+      },
+      "touristName": "Sarah J.",
+      "hotelName": "Omar El Idrissi",
+      "transportName": "Karim Benzani",
+      "touristComment": "Mon voyage à Marrakech a été inoubliable. VibKech m'a aidé à trouver les meilleurs Riads et les joyaux cachés de la Médina !",
+      "hotelComment": "En tant que propriétaire de Riad, VibKech a été une plateforme incroyable pour entrer en contact avec des voyageurs qui apprécient l'hospitalité marocaine authentique.",
+      "transportComment": "Efficace et fiable. J'ai constaté une augmentation significative des réservations pour mes services de transport privé via cette plateforme.",
+      "transport": "Transport",
+      "coop": "Coop",
+      "place": "Lieu"
+    },
+    "luxury": {
+      "eyebrow": "SÉJOURS D'EXCEPTION",
+      "title": "Hôtels de Luxe & Riads",
+      "checkDetails": "Voir Détails →",
+      "loading": "Découverte de séjours exceptionnels..."
+    }
+  },
+  "planning": {
+    "eyebrow": "CONCIERGERIE VibKech",
+    "title": "Créez votre évasion de luxe",
+    "steps": {
+      "destinations": "Destinations",
+      "experiences": "Expériences",
+      "accommodation": "Hébergement",
+      "signature": "Signature"
+    },
+    "step1": {
+      "title": "Où et quand commence l'aventure ?",
+      "arrival": "Arrivée",
+      "departure": "Départ",
+      "nights": "nuits",
+      "dreamDestinations": "Destinations de Rêve",
+      "continue": "Continuer"
+    },
+    "step2": {
+      "title": "Expériences sur mesure",
+      "budget": "Votre budget par activité",
+      "all": "Tout",
+      "selected": "Sélectionné",
+      "book": "Réserver",
+      "next": "Suivant"
+    },
+    "step3": {
+      "title": "Hébergement & Logistique",
+      "luxuryRetreats": "Hébergements (Hôtels & Riads)",
+      "elegantMobility": "Mobilité Élégante",
+      "pickupLocation": "Lieu de ramassage",
+      "finalDestination": "Destination finale",
+      "previous": "Précédent",
+      "signature": "Signature"
+    },
+    "step4": {
+      "title": "Votre Itinéraire Signature",
+      "timeline": "Chronologie",
+      "destinations": "Destinations",
+      "experiences": "Expériences Choisies",
+      "accommodation": "Hébergement Prestige",
+      "noHotel": "Veuillez sélectionner un hébergement",
+      "totalInvestment": "INVESTISSEMENT TOTAL",
+      "adjust": "Ajuster",
+      "confirm": "Confirmer mon Évasion",
+      "confirmSuccess": "Félicitations ! Votre voyage de luxe est planifié.",
+      "confirmError": "Erreur lors de la confirmation."
+    },
+    "budget": {
+      "total": "ESTIMATION TOTALE",
+      "places": "Lieux",
+      "nights": "Nuits",
+      "next": "Suivant"
+    },
+    "labels": {
+      "details": "Détails",
+      "riad": "Riad",
+      "hotel": "Hôtel",
+      "chauffeur": "Chauffeur",
+      "transfer": "Transfert",
+      "medina": "Médina"
+    }
+  },
+  "explore": {
+    "title": "Explorer Marrakech",
+    "subtitle": "Des palais impériaux aux jardins secrets, découvrez chaque recoin de la ville ocre.",
+    "search": "Rechercher un lieu... (ex. Majorelle, Médina)",
+    "grid": "Grille",
+    "map": "Carte",
+    "seeMore": "Voir plus",
+    "defaultDescription": "Une expérience inoubliable au cœur de Marrakech.",
+    "filters": {
+      "all": "Tout",
+      "monuments": "Monuments",
+      "gardens": "Jardins",
+      "museums": "Musées",
+      "nature": "Nature",
+      "adventure": "Aventure"
+    },
+    "noResults": "Aucun résultat trouvé."
+  },
+  "auth": {
+    "back": "Retour",
+    "login": {
+      "title": "Bon retour",
+      "subtitle": "Bienvenue de nouveau dans la Ville Rouge",
+      "description": "Connectez-vous pour continuer votre voyage à Marrakech — découvrez des riads cachés, des souks vibrants et des expériences intemporelles.",
+      "stats": {
+        "monuments": "Monuments",
+        "tourists": "Touristes / An",
+        "heritage": "Patrimoine"
+      },
+      "secureLogin": "CONNEXION SÉCURISÉE",
+      "eyebrow": "VibKech — Entrez vos identifiants pour accéder à votre compte.",
+      "email": "Adresse e-mail",
+      "password": "Mot de passe",
+      "rememberMe": "Se souvenir de moi",
+      "forgotPassword": "Mot de passe oublié ?",
+      "submit": "Se connecter",
+      "noAccount": "Vous n'avez pas de compte ?",
+      "register": "S'inscrire"
+    },
+    "register": {
+      "title": "Créer un compte",
+      "subtitle": "Rejoignez l'expérience",
+      "name": "Nom complet",
+      "email": "Adresse e-mail",
+      "password": "Mot de passe",
+      "confirm": "Confirmer le mot de passe",
+      "submit": "Créer un compte",
+      "haveAccount": "Déjà un compte ?",
+      "login": "Se connecter"
+    }
+  },
+  "planning": {
+    "steps": {
+      "destinations": "Destinations",
+      "experiences": "Expériences",
+      "accommodation": "Hébergement",
+      "signature": "Signature"
+    },
+    "budget": {
+      "total": "Estimation Totale",
+      "places": "Lieux",
+      "nights": "Nuits",
+      "next": "Suivant"
+    },
+    "eyebrow": "Planifiez votre voyage de rêve",
+    "title": "Concepteur de Voyage Intelligent",
+    "step1": {
+      "title": "Où et Quand ?",
+      "arrival": "Date d'arrivée",
+      "departure": "Date de départ",
+      "nights": "nuits",
+      "dreamDestinations": "Vos destinations de rêve à Marrakech",
+      "continue": "Continuer vers les expériences"
+    },
+    "step2": {
+      "title": "Expériences Inoubliables",
+      "all": "Tous",
+      "budget": "Budget Expériences (par personne)",
+      "book": "Réserver",
+      "selected": "Sélectionné"
+    },
+    "step3": {
+      "title": "Séjour & Transport",
+      "luxuryRetreats": "Retraites de Luxe",
+      "elegantMobility": "Mobilité Élégante",
+      "pickupLocation": "Lieu de prise en charge",
+      "finalDestination": "Destination finale",
+      "previous": "Précédent",
+      "signature": "Signature Itinéraire"
+    },
+    "step4": {
+      "title": "Votre Touche Finale",
+      "itinerarySummary": "Résumé de votre itinéraire à Marrakech",
+      "confirm": "Confirmer & Réserver",
+      "timeline": "Chronologie",
+      "destinations": "Destinations",
+      "experiences": "Expériences",
+      "accommodation": "Hébergement",
+      "noHotel": "Aucun hôtel sélectionné",
+      "totalInvestment": "Investissement Total",
+      "adjust": "Ajuster le plan",
+      "confirmSuccess": "Votre itinéraire et vos réservations ont été enregistrés avec succès !",
+      "confirmError": "Erreur lors de l'enregistrement de l'itinéraire. Veuillez réessayer."
+    },
+    "labels": {
+      "medina": "Médina",
+      "riad": "Riad",
+      "hotel": "Hôtel",
+      "details": "Détails"
+    }
+  },
+  "landing": {
+    "eyebrow": "DÉCOUVREZ MARRAKECH",
+    "welcome": "Bienvenue",
+    "title1": "Le",
+    "title2": "Guide de",
+    "title3": "Marrakech",
+    "description": "Découvrez la magie de la Ville Rouge — des anciennes Médinas et palais royaux aux souks vibrants et riads sereins.",
+    "cta": "Commencez Votre Voyage",
+    "scroll": "Faites défiler pour explorer",
+    "skip": "Passer l'intro"
+  },
+  "places": {
+    "back": "Explorer Marrakech",
+    "details": "Détails",
+    "book": "Réserver",
+    "noServices": "Aucun service disponible dans cette place",
+    "discoverServices": "Découvrez nos services",
+    "location": "Localisation",
+    "showMap": "Voir sur la carte",
+    "hideMap": "Masquer la carte",
+    "notFound": "Lieu non trouvé.",
+    "backHome": "Retour à l'accueil",
+    "yourRating": "Votre note",
+    "tabs": {
+      "accommodation": "Hébergement",
+      "activities": "Activités",
+      "transport": "Transport"
+    },
+    "filters": {
+      "all": "Tous",
+      "hotels": "Hôtels",
+      "riads": "Riads"
+    }
+  },
+  "activity": {
+    "notFound": "Activité non trouvée",
+    "back": "Retour",
+    "about": "À propos de cette activité",
+    "gallery": "Galerie d'images",
+    "photo": "Photo"
+  },
+  "provider": {
+    "hero": {
+      "changeCover": "Changer la photo de couverture",
+      "reviews": "avis"
+    },
+    "gallery": {
+      "title": "Galerie",
+      "manage": "Gérer les photos",
+      "add": "Ajouter une photo"
+    },
+    "about": "À propos de l'expérience",
+    "amenities": {
+      "title": "Équipements & Caractéristiques",
+      "add": "Ajouter un équipement",
+      "remove": "Supprimer"
+    },
+    "services": {
+      "accommodation": "Chambres & Suites (Hébergement)",
+      "transport": "Notre Flotte & Itinéraires",
+      "coop": "Produits Artisanaux",
+      "addItem": "Ajouter un article",
+      "editImage": "Modifier l'image",
+      "remove": "Supprimer"
+    },
+    "booking": {
+      "startsFrom": "À partir de",
+      "reserve": "Réserver maintenant",
+      "contact": "Contacter le magasin",
+      "widgetPreview": "Aperçu du widget",
+      "contactInfo": "Infos de contact"
+    },
+    "profileNotFound": "Profil non trouvé",
+    "profileNotFoundDesc": "Le profil du prestataire demandé n'a pas pu être chargé."
+  },
+  "comments": {
+    "title": "Commentaires",
+    "generalDiscussion": "Discussion Générale",
+    "generalDiscussionDesc": "Partagez vos impressions sur AL-RIAD et Marrakech en général.",
+    "shareYourOpinion": "Partagez votre avis",
+    "placeholder": "Écrivez un commentaire...",
+    "loginToComment": "Connectez-vous pour laisser un commentaire",
+    "mustBeLoggedIn": "Vous devez être {{link}} pour commenter.",
+    "loggedInLink": "connecté",
+    "conversations": "Conversations",
+    "noComments": "Aucun commentaire pour le moment. Soyez le premier à partager votre avis !"
+  },
+  "selection": {
+    "title": "Ma Sélection",
+    "subtitle": "Retrouvez ici tous vos choix pour votre prochain séjour à Marrakech.",
+    "empty": "Votre sélection est vide",
+    "emptyDesc": "Explorez les lieux et les services pour commencer à planifier votre voyage.",
+    "exploreBtn": "Explorer Marrakech",
+    "startsFrom": "À partir de",
+    "priceOnRequest": "Prix sur demande",
+    "summaryTitle": "Résumé du Voyage",
+    "selectedItems": "Éléments sélectionnés",
+    "pointsOfInterest": "Points d'intérêt",
+    "reservedServices": "Services réservés",
+    "confirmBtn": "Confirmer ma Sélection",
+    "autoSave": "Votre sélection est sauvegardée automatiquement."
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur s'est produite",
+    "back": "Retour",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "confirm": "Confirmer",
+    "perNight": "MAD/nuit",
+    "mad": "MAD"
+  },
+  "about": {
+    "hero": {
+      "title": "Découvrez Marrakech avec VibKech",
+      "subtitle": "Un Voyage à Travers le Temps et les Couleurs"
+    },
+    "story": {
+      "title": "Une Passion pour la Découverte Authentique",
+      "p1": "Né d'un amour profond pour la Ville Ocre, VibKech a été créé pour combler le fossé entre un voyageur et les secrets cachés de Marrakech. Nous pensons que la véritable découverte se produit lorsque l'on s'éloigne de la foule pour entrer au cœur d'une culture.",
+      "p2": "Notre plateforme centralise tout ce dont vous avez besoin : monuments légendaires, Riads de luxe chargés de siècles d'histoire, et aventures authentiques dans les joyaux cachés de la Médina."
+    },
+    "values": {
+      "title": "Pourquoi Choisir VibKech ?",
+      "v1": { "title": "Expériences Sélectionnées", "desc": "Nous ne nous contentons pas de lister des lieux ; nous sélectionnons des expériences qui résonnent avec le véritable esprit du Maroc." },
+      "v2": { "title": "Qualité Premium", "desc": "Des riads de luxe aux visites exclusives, nous veillons à ce que chaque détail réponde au plus haut standard d'excellence." },
+      "v3": { "title": "Communauté Locale", "desc": "Nous travaillons directement avec des guides et des artisans locaux pour soutenir l'économie et garantir l'authenticité." }
+    },
+    "timeline": {
+      "title": "Marrakech à travers les âges",
+      "subtitle": "Chroniques de la Ville Rouge",
+      "step1": { "date": "1070 AD", "title": "La Fondation", "desc": "Marrakech a été fondée par Youssef Ibn Tachfine, chef de la dynastie Almoravide. Il a choisi cet emplacement stratégique comme porte d'entrée du Sahara et carrefour commercial entre l'Afrique et l'Europe.", "details": ["Murs rouges (La Ville Rouge)", "Premières mosquées fondées", "Système d'irrigation Khattarat"] },
+      "step2": { "date": "11-12ème Siècle", "title": "L'Ère Almoravide", "desc": "Marrakech est devenue une capitale puissante et un centre commercial mondial pour l'or, le sel et les épices, mêlant les cultures d'Afrique et d'Andalousie.", "details": ["Centre de pouvoir politique", "Essor du commerce transsaharien", "Brillance architecturale"] },
+      "step3": { "date": "12-13ème Siècle", "title": "L'Ère Almohade", "desc": "Des progrès significatifs ont été réalisés. Construction de la Mosquée Koutoubia, expansion de la ville et développement de l'architecture.", "details": ["Mosquée Koutoubia construite", "Murs de la ville agrandis", "Jardins et monuments"] },
+      "step4": { "date": "13-15ème Siècle", "title": "Les Mérinides", "desc": "La capitale a été transférée à Fès et l'importance politique a diminué, mais la ville est restée un centre commercial et économique vital.", "details": ["L'activité économique continue", "Identité architecturale préservée", "Hub Nord-Sud"] },
+      "step5": { "date": "16ème Siècle", "title": "Les Saadiens", "desc": "Marrakech a refleuri. Construction des Tombeaux Saadiens, développement des palais et commerce prospère avec l'Afrique.", "details": ["Tombeaux Saadiens construits", "Palais El Badi", "Richesse et Pouvoir"] },
+      "step6": { "date": "17ème Siècle à Aujourd'hui", "title": "Les Alaouites", "desc": "La stabilité s'est poursuivie. Marrakech est devenue une ville historique mondiale et un centre touristique de classe mondiale.", "details": ["Centre de tourisme mondial", "Restauration des monuments", "Jardins de l'Agdal et de la Menara"] },
+      "step7": { "date": "Aujourd'hui", "title": "Marrakech Contemporaine", "desc": "Marrakech aujourd'hui est un mélange unique d'histoire, de culture et de tourisme moderne.", "details": ["Place Jemaa el-Fna", "Jardin Majorelle", "Souks vibrants"] }
+    },
+    "mission": {
+      "title": "Notre Vision pour Marrakech",
+      "desc": "Mener la renaissance numérique de l'hospitalité de Marrakech, en en faisant la destination la plus technologiquement avancée et la plus traditionnellement préservée au monde. Nous unissons l'expertise locale aux standards mondiaux pour un voyage inoubliable."
+    },
+    "cta": {
+      "title": "Découvrez Marrakech au-delà des limites",
+      "subtitle": "Votre voyage au cœur de la Ville Ocre commence ici.",
+      "btn": "Explorer Maintenant"
+    }
+  },
+  "dashboard": {
+    "sidebar": {
+      "myFavorites": "Mes Favoris",
+      "myBookings": "Mes Réservations",
+      "myProfile": "Mon Profil",
+      "myServices": "Mes Services",
+      "myDemandes": "Mes Demandes",
+      "expeditions": "Expéditions",
+      "incomingRequests": "Demandes Entrantes",
+      "vehicles": "Véhicules",
+      "rideRequests": "Demandes de Course",
+      "products": "Produits",
+      "visitRequests": "Demandes de Visite",
+      "settings": "Paramètres",
+      "logout": "Déconnexion",
+      "expand": "Agrandir la barre latérale",
+      "collapse": "Réduire la barre latérale"
+    },
+    "topbar": {
+      "search": "Rechercher dans le tableau de bord...",
+      "notifications": "Notifications",
+      "profile": "Profil"
+    },
+    "home": {
+      "welcomeBack": "Bon retour, {{name}} !",
+      "welcome": "Bienvenue, {{name}} !",
+      "touristSubtitle": "Voici ce qui se passe pour vos aventures à Marrakech aujourd'hui.",
+      "proSubtitle": "Aperçu de la performance de votre entreprise à Marrakech.",
+      "stats": {
+        "myFavorites": "Mes Favoris",
+        "bookedTrips": "Voyages Réservés",
+        "pendingRequests": "Demandes en Attente",
+        "yourRating": "Votre Note",
+        "totalServices": "Total Services",
+        "totalRequests": "Total Demandes",
+        "activeClients": "Clients Actifs",
+        "rating": "Note"
+      },
+      "recentRecommendations": "Recommandations Récentes",
+      "upcomingBookings": "Réservations à Venir",
+      "noUpcoming": "Pas de réservations prévues pour aujourd'hui.",
+      "browsePlaces": "Parcourir les Lieux",
+      "pendingRequestsTitle": "Demandes en Attente",
+      "recentReviews": "Avis Récents",
+      "view": "Voir",
+      "accept": "Accepter",
+      "reject": "Refuser"
+    },
+    "favorites": {
+      "title": "Mes Favoris",
+      "subtitle": "Lieux et services que vous avez sauvegardés pour votre voyage à Marrakech.",
+      "empty": "Vous n'avez pas encore de favoris.",
+      "emptyDesc": "Explorez Marrakech pour trouver des perles cachées !",
+      "removeError": "Erreur lors de la suppression du favori"
+    },
+    "bookings": {
+      "title": "Mes Réservations",
+      "subtitle": "Suivez vos voyages confirmés et vos demandes de services en attente.",
+      "empty": "Aucune réservation trouvée pour le moment.",
+      "emptyDesc": "Commencez votre voyage en choisissant un service à Marrakech !",
+      "cancel": "Annuler la Réservation",
+      "details": "Détails",
+      "retry": "Réessayer",
+      "providedBy": "Fourni par {{name}}",
+      "status": {
+        "completed": "Terminé",
+        "confirmed": "Confirmé",
+        "pending": "En attente"
+      },
+      "tabs": {
+        "bookings": "Réservations",
+        "plannings": "Mes Programmes"
+      },
+      "planning": {
+        "tripTitle": "Voyage à Marrakech",
+        "stops": "Arrêts"
+      },
+      "noPlannings": "Aucun programme enregistré trouvé.",
+      "detailsTitle": "Détails de la Réservation",
+      "statusLabel": "Statut",
+      "start_date": "Date de début",
+      "end_date": "Date de fin",
+      "cancel": "Annuler la Réservation",
+      "confirmCancel": "Êtes-vous sûr de vouloir annuler cette réservation ?",
+      "cancelSuccess": "Réservation annulée avec succès.",
+      "cancelError": "Erreur lors de l'annulation de la réservation."
+    },
+    "requests": {
+      "title": "Demandes de Réservation",
+      "subtitle": "Gérez les demandes de services entrantes des touristes.",
+      "pendingTitle": "Demandes en Attente",
+      "noPending": "Aucune demande en attente.",
+      "historyTitle": "Historique & Traitées",
+      "updateError": "Erreur lors de la mise à jour du statut de la réservation"
+    }
+  }
+}

@@ -1,0 +1,512 @@
+{
+  "nav": {
+    "home": "Home",
+    "explore": "Explore",
+    "planning": "Planning",
+    "about": "About",
+    "login": "Login",
+    "register": "Sign Up",
+    "logout": "Logout",
+    "dashboard": "My Dashboard",
+    "hello": "Hello"
+  },
+  "home": {
+    "hero": {
+      "title": "Discover Marrakech",
+      "subtitle": "A Journey Through Time and Color",
+      "description": "Step into the heart of the Red City, where ancient palaces whisper tales of dynasties and vibrant souks offer a sensory feast unlike anywhere on earth."
+    },
+    "destinations": {
+      "eyebrow": "POPULAR DESTINATIONS",
+      "title": "Explore Marrakech",
+      "seeMore": "Explore all of Marrakech",
+      "loading": "Loading destinations...",
+      "viewDetail": "View details →"
+    },
+    "stats": {
+      "founded": "FOUNDED",
+      "monuments": "MONUMENTS",
+      "tourists": "TOURISTS YEARLY",
+      "heritage": "CULTURAL HERITAGE"
+    },
+      "testimonials": {
+      "eyebrow": "COMMUNITY VOICES",
+      "title": "Comments",
+      "description": "Discover the experiences shared by travelers about our transport, cooperatives, and iconic landmarks.",
+      "loading": "Loading tourist experiences...",
+      "verified": "Verified Tourist",
+      "roles": {
+        "tourist": "Tourist",
+        "hotel": "Hotel Owner",
+        "transport": "Transport Provider"
+      },
+      "touristName": "Sarah J.",
+      "hotelName": "Omar El Idrissi",
+      "transportName": "Karim Benzani",
+      "touristComment": "My trip to Marrakech was unforgettable. VibKech helped me find the best Riads and hidden gems in the Medina!",
+      "hotelComment": "As a Riad owner, VibKech has been an amazing platform to connect with travelers who appreciate authentic Moroccan hospitality.",
+      "transportComment": "Efficient and reliable. I've seen a significant increase in bookings for my private transport services through this platform.",
+      "transport": "Transport",
+      "coop": "Coop",
+      "place": "Place"
+    },
+    "luxury": {
+      "eyebrow": "EXCEPTIONAL LIVING",
+      "title": "Luxury Stays & Riads",
+      "checkDetails": "Check Details →",
+      "loading": "Discovering exceptional stays..."
+    }
+  },
+  "planning": {
+    "eyebrow": "CONCIERGERIE VibKech",
+    "title": "Create your luxury escape",
+    "steps": {
+      "destinations": "Destinations",
+      "experiences": "Experiences",
+      "accommodation": "Accommodation",
+      "signature": "Signature"
+    },
+    "step1": {
+      "title": "Where and when does the adventure begin?",
+      "arrival": "Arrival",
+      "departure": "Departure",
+      "nights": "nights",
+      "dreamDestinations": "Dream Destinations",
+      "continue": "Continue"
+    },
+    "step2": {
+      "title": "Tailor-made Experiences",
+      "budget": "Your budget per activity",
+      "all": "All",
+      "selected": "Selected",
+      "book": "Book",
+      "next": "Next"
+    },
+    "step3": {
+      "title": "Accommodation & Logistics",
+      "luxuryRetreats": "Accommodations (Hotels & Riads)",
+      "elegantMobility": "Elegant Mobility",
+      "pickupLocation": "Pickup location",
+      "finalDestination": "Final destination",
+      "previous": "Previous",
+      "signature": "Signature"
+    },
+    "step4": {
+      "title": "Your Signature Itinerary",
+      "timeline": "Timeline",
+      "destinations": "Destinations",
+      "experiences": "Chosen Experiences",
+      "accommodation": "Prestige Accommodation",
+      "noHotel": "Please select an accommodation",
+      "totalInvestment": "TOTAL INVESTMENT",
+      "adjust": "Adjust",
+      "confirm": "Confirm my Escape",
+      "confirmSuccess": "Congratulations! Your luxury trip is planned.",
+      "confirmError": "Error during confirmation."
+    },
+    "budget": {
+      "total": "TOTAL ESTIMATE",
+      "places": "Places",
+      "nights": "Nights",
+      "next": "Next"
+    },
+    "labels": {
+      "details": "Details",
+      "riad": "Riad",
+      "hotel": "Hotel",
+      "chauffeur": "Chauffeur",
+      "transfer": "Transfer",
+      "medina": "Medina"
+    }
+  },
+  "explore": {
+    "title": "Explore Marrakech",
+    "subtitle": "From imperial palaces to secret gardens, discover every corner of the Ochre City.",
+    "searchPlaceholder": "Search a place... (e.g. Majorelle, Medina)",
+    "search": "Search destinations...",
+    "grid": "Grid",
+    "map": "Map",
+    "seeMore": "See more",
+    "defaultDescription": "An unforgettable experience at the heart of Marrakech.",
+    "filters": {
+      "all": "All",
+      "monuments": "Monuments",
+      "gardens": "Gardens",
+      "museums": "Museums",
+      "nature": "Nature",
+      "adventure": "Adventure"
+    },
+    "noResults": "No results found."
+  },
+  "place": {
+    "notFound": "Place not found.",
+    "backToHome": "Back to home",
+    "exploreMarrakech": "Explore Marrakech",
+    "yourRating": "Your rating",
+    "location": "Location",
+    "hideMap": "Hide map",
+    "showMap": "Show on map",
+    "discoverServices": "Discover our services",
+    "noServices": "No services available in this place",
+    "tabs": {
+      "accommodation": "Accommodation",
+      "activities": "Activities",
+      "restaurants": "Restaurants",
+      "transport": "Transport"
+    },
+    "filter": {
+      "all": "All",
+      "hotel": "Hotels",
+      "riad": "Riads"
+    }
+  },
+  "planning": {
+    "steps": {
+      "destinations": "Destinations",
+      "experiences": "Experiences",
+      "accommodation": "Stay & Transport",
+      "signature": "Signature"
+    },
+    "budget": {
+      "total": "Total Estimate",
+      "places": "Places",
+      "nights": "Nights",
+      "next": "Next"
+    },
+    "eyebrow": "Plan your dream trip",
+    "title": "Smart Trip Designer",
+    "step1": {
+      "title": "When and Where?",
+      "arrival": "Arrival Date",
+      "departure": "Departure Date",
+      "nights": "nights",
+      "dreamDestinations": "Your dream destinations in Marrakech",
+      "continue": "Continue to explore experiences"
+    },
+    "step2": {
+      "title": "Unforgettable Experiences",
+      "all": "All",
+      "budget": "Experiences Budget (per person)"
+    },
+    "step3": {
+      "title": "Stay & Transport",
+      "all": "All",
+      "hotels": "Hotels",
+      "riads": "Riads",
+      "transports": "Transports"
+    },
+    "step4": {
+      "title": "Your Final Touch",
+      "itinerarySummary": "Your Marrakech Itinerary Summary",
+      "confirm": "Confirm & Book Trip",
+      "timeline": "Timeline",
+      "destinations": "Destinations",
+      "experiences": "Experiences",
+      "accommodation": "Accommodation",
+      "noHotel": "No hotel selected",
+      "totalInvestment": "Total Investment",
+      "adjust": "Adjust Plan",
+      "confirmSuccess": "Your itinerary and bookings have been saved successfully!",
+      "confirmError": "Error saving itinerary. Please try again."
+    }
+  },
+  "auth": {
+    "back": "Back",
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Welcome back to the Red City",
+      "description": "Sign in to continue your Marrakech journey — discover hidden riads, vibrant souks, and timeless experiences.",
+      "stats": {
+        "monuments": "Monuments",
+        "tourists": "Tourists / Year",
+        "heritage": "Heritage"
+      },
+      "secureLogin": "SECURE LOGIN",
+      "eyebrow": "VibKech — Enter your credentials to access your account.",
+      "email": "Email address",
+      "password": "Password",
+      "rememberMe": "Remember Me",
+      "forgotPassword": "Forgot password?",
+      "submit": "Sign in",
+      "noAccount": "Don't have an account?",
+      "register": "Sign up"
+    },
+    "register": {
+      "title": "Create an account",
+      "subtitle": "Join the Marrakech Experience",
+      "name": "Full name",
+      "email": "Email address",
+      "password": "Password",
+      "confirm": "Confirm password",
+      "submit": "Create account",
+      "haveAccount": "Already have an account?",
+      "login": "Sign in"
+    }
+  },
+  "landing": {
+    "eyebrow": "EXPERIENCE MARRAKECH",
+    "welcome": "Welcome",
+    "title1": "The",
+    "title2": "Marrakech",
+    "title3": "Guide",
+    "description": "Uncover the magic of the Red City — from ancient Medinas and royal palaces to vibrant souks and serene riads.",
+    "cta": "Begin Your Journey",
+    "scroll": "Scroll to explore",
+    "skip": "Skip intro"
+  },
+  "places": {
+    "back": "Explore Marrakech",
+    "details": "Details",
+    "book": "Book",
+    "noServices": "No services available in this place",
+    "discoverServices": "Discover our services",
+    "location": "Location",
+    "showMap": "Show on map",
+    "hideMap": "Hide map",
+    "notFound": "Place not found.",
+    "backHome": "Back to home",
+    "yourRating": "Your rating",
+    "tabs": {
+      "accommodation": "Accommodation",
+      "activities": "Activities",
+      "transport": "Transport"
+    },
+    "filters": {
+      "all": "All",
+      "hotels": "Hotels",
+      "riads": "Riads"
+    }
+  },
+  "activity": {
+    "notFound": "Activity not found",
+    "back": "Back",
+    "about": "About this activity",
+    "gallery": "Image Gallery",
+    "photo": "Photo"
+  },
+  "provider": {
+    "hero": {
+      "changeCover": "Change Cover Photo",
+      "reviews": "reviews"
+    },
+    "gallery": {
+      "title": "Gallery",
+      "manage": "Manage Photos",
+      "add": "Add Photo"
+    },
+    "about": "About the Experience",
+    "amenities": {
+      "title": "Amenities & Features",
+      "add": "Add Feature",
+      "remove": "Remove"
+    },
+    "services": {
+      "accommodation": "Rooms & Suites (Accommodation)",
+      "transport": "Our Fleet & Routes",
+      "coop": "Artisan Products",
+      "addItem": "Add Item",
+      "editImage": "Edit Image",
+      "remove": "Remove"
+    },
+    "booking": {
+      "startsFrom": "Starts from",
+      "reserve": "Reserve Now",
+      "contact": "Contact Store",
+      "widgetPreview": "Widget Preview",
+      "contactInfo": "Contact Info"
+    },
+    "profileNotFound": "Profile Not Found",
+    "profileNotFoundDesc": "The requested provider profile could not be loaded."
+  },
+  "comments": {
+    "title": "Comments",
+    "generalDiscussion": "General Discussion",
+    "generalDiscussionDesc": "Share your impressions of AL-RIAD and Marrakech in general.",
+    "shareYourOpinion": "Share your opinion",
+    "placeholder": "Write a comment...",
+    "loginToComment": "Log in to leave a comment",
+    "mustBeLoggedIn": "You must be {{link}} to comment.",
+    "loggedInLink": "logged in",
+    "conversations": "Conversations",
+    "noComments": "No comments yet. Be the first to share your opinion!"
+  },
+  "selection": {
+    "title": "My Selection",
+    "subtitle": "Here you can find all your choices for your next stay in Marrakech.",
+    "empty": "Your selection is empty",
+    "emptyDesc": "Explore places and services to start planning your trip.",
+    "exploreBtn": "Explore Marrakech",
+    "startsFrom": "Starts from",
+    "priceOnRequest": "Price on request",
+    "summaryTitle": "Trip Summary",
+    "selectedItems": "Selected items",
+    "pointsOfInterest": "Points of interest",
+    "reservedServices": "Reserved services",
+    "confirmBtn": "Confirm My Selection",
+    "autoSave": "Your selection is automatically saved."
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "error_status": "Error: {{status}}",
+    "connection_error": "Connection refused. Please start your Laravel server.",
+    "retry": "Retry",
+    "back": "Back",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "confirm": "Confirm",
+    "details": "Details",
+    "service": "Service",
+    "host": "Local Host",
+    "perNight": "MAD/night",
+    "mad": "MAD"
+  },
+  "bookings": {
+    "subtitle": "Follow your confirmed trips and pending service requests.",
+    "providedBy": "Provided by",
+    "noResults": "No bookings found yet.",
+    "startJourney": "Start your journey by choosing a service in Marrakech!",
+    "status": {
+      "completed": "Completed",
+      "confirmed": "Confirmed",
+      "accepted": "Accepted",
+      "pending": "Pending",
+      "rejected": "Rejected"
+    }
+  },
+  "about": {
+    "hero": {
+      "title": "Discover Marrakech with VibKech",
+      "subtitle": "A Journey Through Time and Color"
+    },
+    "story": {
+      "title": "A Passion for Authentic Discovery",
+      "p1": "Born from a deep love for the Ochre City, VibKech was created to bridge the gap between a traveler and the hidden secrets of Marrakech. We believe that true discovery happens when you step away from the crowds and into the heart of a culture.",
+      "p2": "Our platform centralizes everything you need: legendary monuments, luxury Riads with centuries of history, and authentic adventures in the hidden gems of the Medina."
+    },
+    "values": {
+      "title": "Why Choose VibKech?",
+      "v1": { "title": "Curated Experiences", "desc": "We don't just list places; we select experiences that resonate with the true spirit of Morocco." },
+      "v2": { "title": "Premium Quality", "desc": "From luxury riads to exclusive tours, we ensure every detail meets the highest standard of excellence." },
+      "v3": { "title": "Local Community", "desc": "We work directly with local guides and artisans to support the economy and ensure authenticity." }
+    },
+    "timeline": {
+      "title": "Marrakech Through the Ages",
+      "subtitle": "Chronicles of the Red City",
+      "step1": { "date": "1070 AD", "title": "The Foundation", "desc": "Marrakech was founded by Youssef Ibn Tachfine, leader of the Almoravid dynasty. He chose this strategic location as a gateway to the Sahara and a trading hub between Africa and Europe.", "details": ["Red walls (The Red City)", "First mosques founded", "Khattarat irrigation system"] },
+      "step2": { "date": "11-12th Century", "title": "Almoravid Era", "desc": "Marrakech became a powerful capital and a global commercial center for gold, salt, and spices, blending cultures from Africa and Andalusia.", "details": ["Political power center", "Trans-Saharan trade boom", "Architectural brilliance"] },
+      "step3": { "date": "12-13th Century", "title": "Almohad Era", "desc": "Significant progress was made. Construction of the Koutoubia Mosque, expansion of the city, and development of architecture.", "details": ["Koutoubia Mosque built", "City walls expanded", "Gardens and monuments"] },
+      "step4": { "date": "13-15th Century", "title": "The Merinids", "desc": "The capital moved to Fez, and political importance decreased, but the city remained a vital commercial and economic center.", "details": ["Economic activity continued", "Architectural identity kept", "North-South hub"] },
+      "step5": { "date": "16th Century", "title": "The Saadians", "desc": "Marrakech flourished again. Construction of the Saadian Tombs, development of palaces, and prosperous trade with Africa.", "details": ["Saadian Tombs built", "El Badi Palace", "Wealth and Power"] },
+      "step6": { "date": "17th Century to Today", "title": "The Alaouites", "desc": "Stability continued. Marrakech evolved into a global historic city and a world-class tourism hub.", "details": ["Global tourism center", "Restoration of monuments", "Agdal and Menara gardens"] },
+      "step7": { "date": "Today", "title": "Contemporary Marrakech", "desc": "Marrakech today is a unique blend of history, culture, and modern tourism.", "details": ["Jemaa el-Fnaa Square", "Jardin Majorelle", "Vibrant Souks"] }
+    },
+    "mission": {
+      "title": "Our Vision for Marrakech",
+      "desc": "To lead the digital renaissance of Marrakech hospitality, making it the most technologically advanced and traditionally preserved destination in the world. We unify local expertise with global standards for an unforgettable journey."
+    },
+    "cta": {
+      "title": "Experience Marrakech Beyond Limits",
+      "subtitle": "Your journey into the heart of the Ochre City starts here.",
+      "btn": "Explore Now"
+    }
+  },
+  "dashboard": {
+    "sidebar": {
+      "myFavorites": "My Favorites",
+      "myBookings": "My Bookings",
+      "myProfile": "My Profile",
+      "myServices": "My Services",
+      "myDemandes": "My Demandes",
+      "expeditions": "Expeditions",
+      "incomingRequests": "Incoming Requests",
+      "vehicles": "Vehicles",
+      "rideRequests": "Ride Requests",
+      "products": "Products",
+      "visitRequests": "Visit Requests",
+      "settings": "Settings",
+      "logout": "Log Out",
+      "expand": "Expand Sidebar",
+      "collapse": "Collapse Sidebar"
+    },
+    "topbar": {
+      "search": "Search in dashboard...",
+      "notifications": "Notifications",
+      "profile": "Profile"
+    },
+    "home": {
+      "welcomeBack": "Welcome Back, {{name}}!",
+      "welcome": "Welcome, {{name}}!",
+      "touristSubtitle": "Here's what's happening with your Marrakech adventures today.",
+      "proSubtitle": "Overview of your business performance in Marrakech.",
+      "stats": {
+        "myFavorites": "My Favorites",
+        "bookedTrips": "Booked Trips",
+        "pendingRequests": "Pending Requests",
+        "yourRating": "Your Rating",
+        "totalServices": "Total Services",
+        "totalRequests": "Total Requests",
+        "activeClients": "Active Clients",
+        "rating": "Rating"
+      },
+      "recentRecommendations": "Recent Recommendations",
+      "upcomingBookings": "Upcoming Bookings",
+      "noUpcoming": "No upcoming bookings for today.",
+      "browsePlaces": "Browse Places",
+      "pendingRequestsTitle": "Pending Requests",
+      "recentReviews": "Recent Reviews",
+      "view": "View",
+      "accept": "Accept",
+      "reject": "Reject"
+    },
+    "favorites": {
+      "title": "My Favorites",
+      "subtitle": "Locations and services you've saved for your Marrakech trip.",
+      "empty": "You haven't saved any favorites yet.",
+      "emptyDesc": "Explore Marrakech to find hidden gems!",
+      "removeError": "Error removing favorite"
+    },
+    "bookings": {
+      "title": "My Bookings",
+      "subtitle": "Follow your confirmed trips and pending service requests.",
+      "empty": "No bookings found yet.",
+      "emptyDesc": "Start your journey by choosing a service in Marrakech!",
+      "cancel": "Cancel Booking",
+      "details": "Details",
+      "retry": "Retry",
+      "providedBy": "Provided by {{name}}",
+      "status": {
+        "completed": "Completed",
+        "confirmed": "Confirmed",
+        "pending": "Pending"
+      },
+      "tabs": {
+        "bookings": "Bookings",
+        "plannings": "My Plannings"
+      },
+      "planning": {
+        "tripTitle": "Trip to Marrakech",
+        "stops": "Stops"
+      },
+      "noPlannings": "No saved plannings found.",
+      "detailsTitle": "Booking Details",
+      "statusLabel": "Status",
+      "start_date": "Start Date",
+      "end_date": "End Date",
+      "cancel": "Cancel Booking",
+      "confirmCancel": "Are you sure you want to cancel this booking?",
+      "cancelSuccess": "Booking cancelled successfully.",
+      "cancelError": "Error cancelling booking."
+    },
+    "requests": {
+      "title": "Booking Requests",
+      "subtitle": "Manage incoming service requests from tourists.",
+      "pendingTitle": "Pending Requests",
+      "noPending": "No pending requests.",
+      "historyTitle": "History & Processed",
+      "updateError": "Error updating booking status"
+    }
+  }
+}

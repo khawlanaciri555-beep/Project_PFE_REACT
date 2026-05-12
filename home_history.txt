@@ -1,0 +1,86 @@
+﻿commit f774e48e864b3f9555f24520836f0c498d907471
+Author: koutar2006 <kawtarkawtar201912@gmail.com>
+Date:   Tue Apr 21 16:15:42 2026 +0100
+
+    modification de homme explor et lpanning
+
+diff --git a/src/Pages/Home.jsx b/src/Pages/Home.jsx
+index dbde44b..9c0db6b 100644
+--- a/src/Pages/Home.jsx
++++ b/src/Pages/Home.jsx
+@@ -206,75 +206,7 @@ const Home = () => {
+           <Counter value="UNESCO" label={t('home.stats.heritage')} index={3} />
+       </section>
+ 
+-      {/* Testimonials Section */}
+-      <section className="testimonials-section">
+-        <div className="section-header-center">
+-            <span className="section-eyebrow">{t('home.testimonials.eyebrow')}</span>
+-            <h2 className="section-title">{t('home.testimonials.title')}</h2>
+-        </div>
+-
+-        <div className="testimonials-masonry">
+-           <div className="test-card large user-elara">
+-               <div className="user-info">
+-                   <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User" className="avatar"/>
+-                   <div>
+-                       <h4>Elara Rossi</h4>
+-                       <div className="stars">ÔÿàÔÿàÔÿàÔÿàÔÿà</div>
+-                   </div>
+-               </div>
+-               <p className="quote">
+-                 "Staying in a traditional Riad was a dream. The service was impeccable, and waking up to the sound of birds in the orange trees was the highlight of my year."
+-               </p>
+-           </div>
+-
+-           <div className="test-card small right-col-1 user-mark">
+-              <div className="user-info">
+-                   <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" className="avatar"/>
+-                   <div>
+-                       <h4>Mark Jenkins</h4>
+-                       <div className="stars">ÔÿàÔÿàÔÿàÔÿàÔÿà</div>
+-                   </div>
+-               </div>
+-               <p className="quote">
+-                 "The photography tours were mind-blowing. Our guide knew every hidden alley in the Medina!"
+-               </p>
+-           </div>
+-
+-           <div className="test-card small block-bottom-left user-aisha">
+-              <div className="user-info">
+-                   <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="User" className="avatar"/>
+-                   <div>
+-                       <h4>Aisha Mansour</h4>
+-                       <div className="stars">ÔÿàÔÿàÔÿàÔÿàÔÿà</div>
+-                   </div>
+-               </div>
+-               <p className="quote">
+-                 "Authentic, luxurious, and soul-stirring. VibKech is the perfect gateway to Marrakech culture."
+-               </p>
+-           </div>
+-
+-           <div className="test-card medium block-bottom-right user-david">
+-              <div className="user-info">
+-                   <img src="https://randomuser.me/api/portraits/men/46.jpg" alt="User" className="avatar"/>
+-                   <div>
+-                       <h4>David Chen</h4>
+-                       <div className="stars">ÔÿàÔÿàÔÿàÔÿàÔÿà</div>
+-                   </div>
+-               </div>
+-               <div className="split-content">
+-                 <p className="quote">
+-                   "The hospitality here is not just a service, it's an art form. From the tea ceremonies to the rooftop dinners, everything was magical."
+-                 </p>
+-                 <img src="https://images.unsplash.com/photo-1574751336422-790159fd4fc9?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Mint Tea" className="tea-pic"/>
+-               </div>
+-           </div>
+-        </div>
+-      </section>
+-
+       </div>
+-      <Link to="/comments/general" className="floating-general-comment" title="Discussion G├®n├®rale">
+-        <FaCommentDots size={28} />
+-      </Link>
+     </Layout>
+   );
+ };

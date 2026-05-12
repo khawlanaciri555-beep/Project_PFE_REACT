@@ -1,9 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '../Components/LanguageSwitcher/LanguageSwitcher';
 import './LandingPage.css';
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [loaded, setLoaded] = useState(false);
   const [entered, setEntered] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -25,7 +28,8 @@ const LandingPage = () => {
 
   const handleEnter = () => {
     setEntered(true);
-    setTimeout(() => navigate('/home'), 900);
+    // Increased delay for the shutter animation to complete
+    setTimeout(() => navigate('/home'), 1100);
   };
 
   return (
@@ -34,6 +38,9 @@ const LandingPage = () => {
       className={`landing-root ${loaded ? 'loaded' : ''} ${entered ? 'exiting' : ''}`}
       onMouseMove={handleMouseMove}
     >
+      {/* Shutter reveal panels */}
+      <div className="shutter shutter-left" />
+      <div className="shutter shutter-right" />
       {/* Animated background blobs */}
       <div className="landing-bg">
         <div className="blob blob-1" style={{ transform: `translate(${mousePos.x * -18}px, ${mousePos.y * -12}px)` }} />
@@ -57,6 +64,9 @@ const LandingPage = () => {
           <span className="logo-text">Vib<span>-</span>Kech</span>
         </div>
         <div className="landing-tagline-top">Marrakech · Morocco</div>
+        <div style={{ position: 'absolute', top: '1.5rem', right: '2rem', zIndex: 100 }}>
+          <LanguageSwitcher />
+        </div>
       </div>
 
       {/* Main content */}
@@ -71,25 +81,24 @@ const LandingPage = () => {
 
         <div className="landing-eyebrow">
           <span className="eyebrow-line" />
-          <span>EXPERIENCE MARRAKECH</span>
+          <span>{t('landing.eyebrow')}</span>
           <span className="eyebrow-line" />
         </div>
 
         <h1 className="landing-title">
-          <span className="title-line-1">Welcome</span>
+          <span className="title-line-1">{t('landing.welcome')}</span>
           <span className="title-line-2">
-            <em>The</em> Marrakech <em>Guide</em>
+            <em>{t('landing.title1')}</em> {t('landing.title2')} <em>{t('landing.title3')}</em>
           </span>
         </h1>
 
         <p className="landing-desc">
-          Uncover the magic of the Red City — from ancient Medinas<br />
-          and royal palaces to vibrant souks and serene riads.
+          {t('landing.description')}
         </p>
 
         {/* CTA Button */}
         <button className="landing-cta" onClick={handleEnter} id="landing-enter-btn">
-          <span className="cta-text">Begin Your Journey</span>
+          <span className="cta-text">{t('landing.cta')}</span>
           <span className="cta-icon">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M5 12h14M13 6l6 6-6 6" />
@@ -99,7 +108,7 @@ const LandingPage = () => {
         </button>
 
         <div className="landing-scroll-hint">
-          <span>Scroll to explore</span>
+          <span>{t('landing.scroll')}</span>
           <span className="scroll-dots">
             <span /><span /><span />
           </span>
@@ -114,7 +123,7 @@ const LandingPage = () => {
           <span>All rights reserved</span>
         </div>
         <div className="bottom-right">
-          <a href="/home" className="skip-link" id="skip-to-home">Skip intro →</a>
+          <a href="/home" className="skip-link" id="skip-to-home">{t('landing.skip')} →</a>
         </div>
       </div>
 

@@ -1,26 +1,61 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import DashboardLayout from '../../Components/Dashboard/DashboardLayout';
 import { AuthContext } from '../../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaUser, FaLock, FaBell, FaCamera, FaSave, FaCheckCircle, FaTrash } from 'react-icons/fa';
+import ProviderProfile from '../ProviderProfile';
+import api from '../../api/axios';
 
 const Profile = () => {
   const { user } = useContext(AuthContext);
   const [activeTab, setActiveTab] = useState('account');
   const [isSaved, setIsSaved] = useState(false);
-
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
-    name: user?.name || 'Ahmed El Amrani',
-    email: user?.email || 'ahmed@example.com',
-    phone: '+212 6 00 00 00 00',
-    bio: 'Tour guide and Marrakech enthusiast.',
-    role: user?.role || 'tourist'
+    name: '',
+    email: '',
+    phone: '',
+    bio: '',
   });
 
-  const handleSave = (e) => {
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        setLoading(true);
+        const response = await api.get('/dashboard/profile');
+        const { user: userData } = response.data;
+        setFormData({
+          name: userData.name || '',
+          email: userData.email || '',
+          phone: userData.phone || '',
+          bio: userData.bio || '',
+        });
+      } catch (err) {
+        console.error('Failed to fetch profile', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProfile();
+  }, []);
+
+  const handleSave = async (e) => {
     e.preventDefault();
-    setIsSaved(true);
-    setTimeout(() => setIsSaved(false), 3000);
+    setLoading(true);
+    try {
+      await api.put('/dashboard/profile', {
+        name: formData.name,
+        phone: formData.phone,
+        address: '', // Address not fully used for tourists yet
+        description: formData.bio, // Using bio as description in DB update
+      });
+      setIsSaved(true);
+      setTimeout(() => setIsSaved(false), 3000);
+    } catch (err) {
+      alert('Failed to save profile changes.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const tabs = [
@@ -29,141 +64,137 @@ const Profile = () => {
     { id: 'notifications', label: 'Notifications', icon: <FaBell /> },
   ];
 
+  if (loading && !isSaved) {
+    return <DashboardLayout><div style={{ textAlign: 'center', padding: '5rem' }}>Loading Profile...</div></DashboardLayout>;
+  }
+
   return (
     <DashboardLayout>
       <div className="dashboard-title-section">
-        <motion.h1 initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>Settings & Profile</motion.h1>
-        <p style={{ color: 'var(--dash-text-muted)' }}>Manage your account settings and preferences.</p>
+        <motion.h1 initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
+           {user?.role !== 'tourist' ? 'My Public Profile' : 'Settings & Profile'}
+        </motion.h1>
+        <p style={{ color: 'var(--dash-text-muted)' }}>
+           {user?.role !== 'tourist' ? 'Manage how your business appears to tourists.' : 'Manage your account settings and preferences.'}
+        </p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(200px, 280px) 1fr', gap: '3rem', alignItems: 'start' }}>
-        
-        {/* Navigation Sidebar */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          {tabs.map((tab) => (
-            <button 
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '1rem', 
-                padding: '1.25rem', 
-                borderRadius: '16px',
-                border: 'none',
-                background: activeTab === tab.id ? 'var(--dash-gold-glow)' : 'transparent',
-                color: activeTab === tab.id ? 'var(--dash-accent)' : 'var(--dash-text-muted)',
-                cursor: 'pointer',
-                textAlign: 'left',
-                fontWeight: '600',
-                transition: 'all 0.3s ease'
-              }}
+      {/* Horizontal Navigation Tabs */}
+      <div className="horizontal-tabs">
+        {tabs.filter(t => !(t.hideForTourist && user?.role === 'tourist')).map((tab) => (
+          <button 
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`horizontal-tab-btn ${activeTab === tab.id ? 'active' : ''}`}
+          >
+            {tab.icon} {tab.label}
+          </button>
+        ))}
+      </div>
+
+      <div 
+        className="card-glass" 
+        style={{ 
+          background: activeTab === 'account' && user?.role !== 'tourist' ? 'transparent' : 'white', 
+          border: activeTab === 'account' && user?.role !== 'tourist' ? 'none' : '1px solid var(--glass-border)', 
+          padding: activeTab === 'account' && user?.role !== 'tourist' ? '0' : '3rem', 
+          borderRadius: '32px',
+          boxShadow: activeTab === 'account' && user?.role !== 'tourist' ? 'none' : 'var(--shadow-md)',
+          width: '100%'
+        }}
+      >
+        <AnimatePresence mode="wait">
+          {activeTab === 'account' && (
+            <motion.div 
+              key="account"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
             >
-              {tab.icon} {tab.label}
-            </button>
-          ))}
-          <div style={{ marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid var(--glass-border)' }}>
-             <button style={{ color: '#ef4444', background: 'none', border: 'none', display: 'flex', alignItems: 'center', gap: '0.8rem', cursor: 'pointer' }}>
-                <FaTrash /> Deactivate Account
-             </button>
-          </div>
-        </div>
+              {user?.role !== 'tourist' ? (
+                <ProviderProfile isDashboard={true} isEditMode={true} />
+              ) : (
+                  <>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', marginBottom: '3rem' }}>
+                       <div style={{ position: 'relative' }}>
+                          <div style={{ width: '100px', height: '100px', borderRadius: '50%', background: 'linear-gradient(135deg, var(--dash-accent), #855d28)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', fontWeight: '800', border: '4px solid var(--glass-border)' }}>
+                            {formData.name ? formData.name.charAt(0).toUpperCase() : 'U'}
+                          </div>
+                          <button style={{ position: 'absolute', bottom: '0', right: '0', background: 'var(--dash-accent)', color: '#fff', border: '2px solid #fff', padding: '0.6rem', borderRadius: '50%', cursor: 'pointer' }}>
+                             <FaCamera size={14} />
+                          </button>
+                       </div>
+                       <div>
+                          <h2 style={{ margin: 0 }}>{formData.name}</h2>
+                          <p style={{ margin: '0.25rem 0', color: 'var(--dash-text-muted)', textTransform: 'capitalize' }}>{formData.role} Account</p>
+                       </div>
+                    </div>
 
-        {/* Content Area */}
-        <div 
-          className="card-glass" 
-          style={{ 
-            background: 'white', 
-            border: '1px solid var(--glass-border)', 
-            padding: '3rem', 
-            borderRadius: '32px',
-            boxShadow: 'var(--shadow-md)'
-          }}
-        >
-          <AnimatePresence mode="wait">
-            {activeTab === 'account' && (
-              <motion.div 
-                key="account"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', marginBottom: '3rem' }}>
-                   <div style={{ position: 'relative' }}>
-                      <div style={{ width: '100px', height: '100px', borderRadius: '50%', background: 'linear-gradient(135deg, var(--dash-accent), #855d28)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', fontWeight: '800', border: '4px solid var(--glass-border)' }}>
-                        {formData.name[0].toUpperCase()}
-                      </div>
-                      <button style={{ position: 'absolute', bottom: '0', right: '0', background: 'var(--dash-accent)', color: '#fff', border: '2px solid #fff', padding: '0.6rem', borderRadius: '50%', cursor: 'pointer' }}>
-                         <FaCamera size={14} />
-                      </button>
-                   </div>
-                   <div>
-                      <h2 style={{ margin: 0 }}>{formData.name}</h2>
-                      <p style={{ margin: '0.25rem 0', color: 'var(--dash-text-muted)', textTransform: 'capitalize' }}>{formData.role} Account</p>
-                   </div>
-                </div>
+                    <form onSubmit={handleSave} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+                       <div className="form-group" style={{ gridColumn: 'span 1' }}>
+                          <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--dash-text-muted)', fontSize: '0.9rem' }}>Full Name</label>
+                          <input 
+                            type="text" 
+                            value={formData.name}
+                            onChange={(e) => setFormData({...formData, name: e.target.value})}
+                            style={{ width: '100%', background: '#F8F7F4', border: '1px solid var(--glass-border)', color: 'var(--dash-text)', padding: '1rem', borderRadius: '12px', outline: 'none' }}
+                          />
+                       </div>
+                       <div className="form-group">
+                          <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--dash-text-muted)', fontSize: '0.9rem' }}>Email Address</label>
+                          <input 
+                            type="email" 
+                            value={formData.email}
+                            style={{ width: '100%', background: '#F1F1F1', border: '1px solid var(--glass-border)', color: 'var(--dash-text-muted)', padding: '1rem', borderRadius: '12px', cursor: 'not-allowed' }}
+                            disabled
+                          />
+                       </div>
+                       <div className="form-group">
+                          <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--dash-text-muted)', fontSize: '0.9rem' }}>Phone Number</label>
+                          <input 
+                            type="tel" 
+                            value={formData.phone}
+                            onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                            style={{ width: '100%', background: '#F8F7F4', border: '1px solid var(--glass-border)', color: 'var(--dash-text)', padding: '1rem', borderRadius: '12px', outline: 'none' }}
+                          />
+                       </div>
+                        <div className="form-group" style={{ gridColumn: 'span 2' }}>
+                          <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--dash-text-muted)', fontSize: '0.9rem' }}>Bio</label>
+                          <textarea 
+                            rows="4"
+                            value={formData.bio}
+                            onChange={(e) => setFormData({...formData, bio: e.target.value})}
+                            style={{ width: '100%', background: '#F8F7F4', border: '1px solid var(--glass-border)', color: 'var(--dash-text)', padding: '1rem', borderRadius: '12px', outline: 'none', resize: 'none' }}
+                            placeholder="Tell us about yourself..."
+                          />
+                       </div>
 
-                <form onSubmit={handleSave} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
-                   <div className="form-group" style={{ gridColumn: 'span 1' }}>
-                      <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--dash-text-muted)', fontSize: '0.9rem' }}>Full Name</label>
-                      <input 
-                        type="text" 
-                        value={formData.name}
-                        onChange={(e) => setFormData({...formData, name: e.target.value})}
-                        style={{ width: '100%', background: '#F8F7F4', border: '1px solid var(--glass-border)', color: 'var(--dash-text)', padding: '1rem', borderRadius: '12px', outline: 'none' }}
-                      />
-                   </div>
-                   <div className="form-group">
-                      <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--dash-text-muted)', fontSize: '0.9rem' }}>Email Address</label>
-                      <input 
-                        type="email" 
-                        value={formData.email}
-                        style={{ width: '100%', background: '#F1F1F1', border: '1px solid var(--glass-border)', color: 'var(--dash-text-muted)', padding: '1rem', borderRadius: '12px', cursor: 'not-allowed' }}
-                        disabled
-                      />
-                   </div>
-                   <div className="form-group">
-                      <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--dash-text-muted)', fontSize: '0.9rem' }}>Phone Number</label>
-                      <input 
-                        type="tel" 
-                        value={formData.phone}
-                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                        style={{ width: '100%', background: '#F8F7F4', border: '1px solid var(--glass-border)', color: 'var(--dash-text)', padding: '1rem', borderRadius: '12px', outline: 'none' }}
-                      />
-                   </div>
-                   <div className="form-group" style={{ gridColumn: 'span 2' }}>
-                      <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--dash-text-muted)', fontSize: '0.9rem' }}>Bio</label>
-                      <textarea 
-                        rows="4"
-                        value={formData.bio}
-                        onChange={(e) => setFormData({...formData, bio: e.target.value})}
-                        style={{ width: '100%', background: '#F8F7F4', border: '1px solid var(--glass-border)', color: 'var(--dash-text)', padding: '1rem', borderRadius: '12px', outline: 'none', resize: 'none' }}
-                      />
-                   </div>
-
-                   <div style={{ gridColumn: 'span 2', marginTop: '1rem' }}>
-                      <button 
-                        type="submit"
-                        style={{ 
-                          background: 'var(--dash-accent)', 
-                          color: '#fff', 
-                          border: 'none', 
-                          padding: '1.25rem 3rem', 
-                          borderRadius: '16px', 
-                          fontWeight: '700', 
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.75rem',
-                          boxShadow: '0 8px 30px var(--dash-gold-glow)'
-                        }}
-                      >
-                         {isSaved ? <><FaCheckCircle /> Saved!</> : <><FaSave /> Save Profile</>}
-                      </button>
-                   </div>
-                </form>
+                       <div style={{ gridColumn: 'span 2', marginTop: '1rem' }}>
+                          <button 
+                            type="submit"
+                            style={{ 
+                              background: 'var(--dash-accent)', 
+                              color: '#fff', 
+                              border: 'none', 
+                              padding: '1.25rem 3rem', 
+                              borderRadius: '16px', 
+                              fontWeight: '700', 
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '0.75rem',
+                              boxShadow: '0 8px 30px var(--dash-gold-glow)'
+                            }}
+                          >
+                             {isSaved ? <><FaCheckCircle /> Saved!</> : <><FaSave /> Save Profile</>}
+                          </button>
+                       </div>
+                    </form>
+                  </>
+                )}
               </motion.div>
             )}
+
 
             {activeTab === 'security' && (
               <motion.div 
@@ -222,7 +253,7 @@ const Profile = () => {
             )}
           </AnimatePresence>
         </div>
-      </div>
+      
     </DashboardLayout>
   );
 };

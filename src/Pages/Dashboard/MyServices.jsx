@@ -4,14 +4,14 @@ import { mockUserServices } from '../../data/dashboardData';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaPlus, FaEllipsisV, FaChartLine, FaTrash, FaEdit } from 'react-icons/fa';
 
-import api from '../../api/axios';
+import getImageUrl from '../../utils/imageUrl';
 
 const MyServices = () => {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newService, setNewService] = useState({ title: '', price: '', type: '' });
+  const [newService, setNewService] = useState({ title: '', price: '', type: '', description: '', image: null });
 
   useEffect(() => {
     fetchServices();
@@ -21,7 +21,8 @@ const MyServices = () => {
     try {
       setLoading(true);
       const response = await api.get('/services');
-      setServices(response.data);
+      const dataArray = response.data.data !== undefined ? response.data.data : response.data;
+      setServices(Array.isArray(dataArray) ? dataArray : []);
       setError(null);
     } catch (err) {
       setError('Unable to load services. Make sure your Laravel server is running.');
@@ -34,13 +35,19 @@ const MyServices = () => {
   const handleAddService = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post('/services', {
-        ...newService,
-        status: 'active'
-      });
-      setServices([response.data, ...services]);
+      const data = new FormData();
+      data.append('title', newService.title);
+      data.append('price', newService.price);
+      data.append('type', newService.type);
+      data.append('description', newService.description);
+      if (newService.image) {
+        data.append('image', newService.image);
+      }
+      
+      const response = await api.post('/services', data);
+      await fetchServices(); // Refresh to get formatted data
       setIsModalOpen(false);
-      setNewService({ title: '', price: '', type: '' });
+      setNewService({ title: '', price: '', type: '', description: '', image: null });
     } catch (err) {
       alert('Error creating service: ' + (err.response?.data?.message || 'Server error'));
     }
@@ -103,15 +110,26 @@ const MyServices = () => {
                   boxShadow: 'var(--shadow-sm)'
                 }}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
-                  <span style={{ background: 'rgba(188, 73, 49, 0.05)', color: 'var(--dash-accent)', padding: '0.4rem 0.8rem', borderRadius: '8px', fontSize: '0.75rem', fontWeight: '700' }}>
-                    {service.type || 'Activity'}
-                  </span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem', alignItems: 'flex-start' }}>
+                  <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                    {service.image && (
+                      <img 
+                        src={getImageUrl(service.image)} 
+                        alt={service.title} 
+                        style={{ width: '60px', height: '60px', borderRadius: '12px', objectFit: 'cover' }} 
+                      />
+                    )}
+                    <div>
+                        <span style={{ background: 'rgba(188, 73, 49, 0.05)', color: 'var(--dash-accent)', padding: '0.4rem 0.8rem', borderRadius: '8px', fontSize: '0.75rem', fontWeight: '700' }}>
+                           {service.type || 'Activity'}
+                        </span>
+                        <h3 style={{ margin: '0.5rem 0 0 0', fontSize: '1.1rem' }}>{service.title}</h3>
+                    </div>
+                  </div>
                   <FaEllipsisV style={{ color: 'var(--dash-text-muted)', cursor: 'pointer' }} />
                 </div>
 
-                <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.25rem' }}>{service.title}</h3>
-                <p style={{ fontSize: '1.5rem', fontWeight: '700', color: 'var(--dash-accent)', margin: '0.5rem 0' }}>{service.price}</p>
+                <p style={{ fontSize: '1.5rem', fontWeight: '700', color: 'var(--dash-accent)', margin: '0.5rem 0' }}>{service.price} MAD</p>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--glass-border)' }}>
                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem' }}>
@@ -151,12 +169,21 @@ const MyServices = () => {
                     onChange={(e) => setNewService({...newService, title: e.target.value})}
                   />
                 </div>
+                <div className="form-group">
+                  <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--dash-text-muted)' }}>Service Photo</label>
+                  <input 
+                    type="file" 
+                    accept="image/*"
+                    style={{ width: '100%', background: '#F8F7F4', border: '1px solid var(--glass-border)', padding: '0.8rem', borderRadius: '12px', color: 'var(--dash-text)', outline: 'none' }}
+                    onChange={(e) => setNewService({...newService, image: e.target.files[0]})}
+                  />
+                </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                     <div className="form-group">
-                        <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--dash-text-muted)' }}>Price</label>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--dash-text-muted)' }}>Price (MAD)</label>
                         <input 
-                            type="text" 
-                            placeholder="e.g. 500 MAD"
+                            type="number" 
+                            placeholder="e.g. 500"
                             required
                             style={{ width: '100%', background: '#F8F7F4', border: '1px solid var(--glass-border)', padding: '1rem', borderRadius: '12px', color: 'var(--dash-text)', outline: 'none' }}
                             value={newService.price}
@@ -166,16 +193,26 @@ const MyServices = () => {
                     <div className="form-group">
                         <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--dash-text-muted)' }}>Category</label>
                         <select 
+                            required
                             style={{ width: '100%', background: '#F8F7F4', border: '1px solid var(--glass-border)', padding: '1rem', borderRadius: '12px', color: 'var(--dash-text)', outline: 'none' }}
                             value={newService.type}
                             onChange={(e) => setNewService({...newService, type: e.target.value})}
                         >
                             <option value="">Select...</option>
+                            <option value="Activités">Activités</option>
                             <option value="Hébergement">Hébergement</option>
                             <option value="Transport">Transport</option>
-                            <option value="Activités">Activités</option>
                         </select>
                     </div>
+                </div>
+                <div className="form-group">
+                  <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--dash-text-muted)' }}>Description</label>
+                  <textarea 
+                    rows="3"
+                    style={{ width: '100%', background: '#F8F7F4', border: '1px solid var(--glass-border)', padding: '1rem', borderRadius: '12px', color: 'var(--dash-text)', outline: 'none', resize: 'none' }}
+                    value={newService.description}
+                    onChange={(e) => setNewService({...newService, description: e.target.value})}
+                  />
                 </div>
                 
                 <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>

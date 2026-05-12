@@ -7,6 +7,7 @@ import {
 } from 'react-icons/fa';
 import DashboardLayout from '../../Components/Dashboard/DashboardLayout';
 import api from '../../api/axios';
+import { useTranslation } from 'react-i18next';
 
 const StatCard = ({ icon, value, label, delay, loading }) => (
   <motion.div 
@@ -30,6 +31,7 @@ const StatCard = ({ icon, value, label, delay, loading }) => (
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
+  const { t } = useTranslation();
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const role = user?.role || 'tourist';
@@ -51,23 +53,38 @@ const Dashboard = () => {
     fetchStats();
   }, []);
 
+  const handleStatusUpdate = async (bookingId, status) => {
+    try {
+      await api.patch(`/bookings/${bookingId}/status`, { status });
+      // Remove from the pending list
+      setStats(prev => ({
+        ...prev,
+        pending: prev.pending - 1,
+        pending_requests: prev.pending_requests.filter(req => req.id !== bookingId)
+      }));
+    } catch (err) {
+      console.error('Failed to update booking status', err);
+      alert('Failed to update status');
+    }
+  };
+
   const renderTouristDashboard = () => (
     <>
       <div className="dashboard-title-section">
-        <h1>Welcome Back, {user?.name || 'Explorer'}!</h1>
-        <p style={{ color: 'var(--dash-text-muted)' }}>Here's what's happening with your Marrakech adventures today.</p>
+        <h1>{t('dashboard.home.welcomeBack', { name: user?.name || 'Explorer' })}</h1>
+        <p style={{ color: 'var(--dash-text-muted)' }}>{t('dashboard.home.touristSubtitle')}</p>
       </div>
 
       <div className="stats-grid">
-        <StatCard icon={<FaHeart />} value={stats?.favorites || 0} label="My Favorites" delay={0.1} loading={loading} />
-        <StatCard icon={<FaCalendarCheck />} value={stats?.bookings || 0} label="Booked Trips" delay={0.2} loading={loading} />
-        <StatCard icon={<FaClock />} value={stats?.pending || 0} label="Pending Requests" delay={0.3} loading={loading} />
-        <StatCard icon={<FaStar />} value={stats?.rating || 4.8} label="Your Rating" delay={0.4} loading={loading} />
+        <StatCard icon={<FaHeart />} value={stats?.favorites || 0} label={t('dashboard.home.stats.myFavorites')} delay={0.1} loading={loading} />
+        <StatCard icon={<FaCalendarCheck />} value={stats?.bookings || 0} label={t('dashboard.home.stats.bookedTrips')} delay={0.2} loading={loading} />
+        <StatCard icon={<FaClock />} value={stats?.pending || 0} label={t('dashboard.home.stats.pendingRequests')} delay={0.3} loading={loading} />
+        <StatCard icon={<FaStar />} value={stats?.rating || 4.8} label={t('dashboard.home.stats.yourRating')} delay={0.4} loading={loading} />
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '2rem' }}>
         <div className="card-glass" style={{ background: 'white', border: '1px solid var(--glass-border)', padding: '2rem', borderRadius: '24px', boxShadow: 'var(--shadow-sm)' }}>
-          <h3 style={{ marginBottom: '1.5rem', fontFamily: 'var(--font-serif)', color: 'var(--dash-accent)' }}>Recent Recommendations</h3>
+          <h3 style={{ marginBottom: '1.5rem', fontFamily: 'var(--font-serif)', color: 'var(--dash-accent)' }}>{t('dashboard.home.recentRecommendations')}</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
              {[1, 2, 3].map(i => (
                <div key={i} style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', padding: '1rem', borderBottom: '1px solid var(--glass-border)' }}>
@@ -76,17 +93,17 @@ const Dashboard = () => {
                    <h4 style={{ margin: 0 }}>Palais de la Bahia</h4>
                    <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--dash-text-muted)' }}>Recommended based on your visit to Koutoubia</p>
                  </div>
-                 <button style={{ marginLeft: 'auto', background: 'var(--dash-accent)', color: '#fff', border: 'none', padding: '0.5rem 1rem', borderRadius: '8px', cursor: 'pointer' }}>View</button>
+                 <button className="btn-modern-outline" style={{ marginLeft: 'auto', padding: '0.4rem 1rem' }}>{t('dashboard.home.view', 'View')}</button>
                </div>
              ))}
           </div>
         </div>
 
         <div className="card-glass" style={{ background: 'white', border: '1px solid var(--glass-border)', padding: '2rem', borderRadius: '24px', boxShadow: 'var(--shadow-sm)' }}>
-          <h3 style={{ marginBottom: '1.5rem', fontFamily: 'var(--font-serif)', color: 'var(--dash-accent)' }}>Upcoming Bookings</h3>
+          <h3 style={{ marginBottom: '1.5rem', fontFamily: 'var(--font-serif)', color: 'var(--dash-accent)' }}>{t('dashboard.home.upcomingBookings')}</h3>
           <div style={{ fontSize: '0.9rem', color: 'var(--dash-text-muted)' }}>
-            No upcoming bookings for today. <br/> <br/>
-            <button style={{ color: 'var(--dash-accent)', background: 'none', border: '1px solid var(--dash-accent)', padding: '0.5rem 1rem', borderRadius: '8px', cursor: 'pointer', fontWeight: '600' }}>Browse Places</button>
+            {t('dashboard.home.noUpcoming', 'No upcoming bookings for today.')} <br/> <br/>
+            <button className="btn-modern">{t('dashboard.home.browsePlaces', 'Browse Places')}</button>
           </div>
         </div>
       </div>
@@ -96,39 +113,41 @@ const Dashboard = () => {
   const renderProfessionalDashboard = () => (
     <>
       <div className="dashboard-title-section">
-        <h1>Welcome, {user?.name || 'Partner'}!</h1>
-        <p style={{ color: 'var(--dash-text-muted)' }}>Overview of your business performance in Marrakech.</p>
+        <h1>{t('dashboard.home.welcome', { name: user?.name || 'Partner' })}</h1>
+        <p style={{ color: 'var(--dash-text-muted)' }}>{t('dashboard.home.proSubtitle')}</p>
       </div>
 
       <div className="stats-grid">
-        <StatCard icon={<FaBriefcase />} value={stats?.services || 0} label="Total Services" delay={0.1} loading={loading} />
-        <StatCard icon={<FaListUl />} value={stats?.requests || 0} label="Total Requests" delay={0.2} loading={loading} />
-        <StatCard icon={<FaUserTie />} value={stats?.clients || 0} label="Active Clients" delay={0.3} loading={loading} />
-        <StatCard icon={<FaStar />} value={stats?.rating || 4.9} label="Rating" delay={0.4} loading={loading} />
+        <StatCard icon={<FaBriefcase />} value={stats?.services || 0} label={t('dashboard.home.stats.totalServices')} delay={0.1} loading={loading} />
+        <StatCard icon={<FaListUl />} value={stats?.requests || 0} label={t('dashboard.home.stats.totalRequests')} delay={0.2} loading={loading} />
+        <StatCard icon={<FaUserTie />} value={stats?.clients || 0} label={t('dashboard.home.stats.activeClients')} delay={0.3} loading={loading} />
+        <StatCard icon={<FaStar />} value={stats?.rating || 4.9} label={t('dashboard.home.stats.rating')} delay={0.4} loading={loading} />
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
         <div className="card-glass" style={{ background: 'white', border: '1px solid var(--glass-border)', padding: '2rem', borderRadius: '24px', boxShadow: 'var(--shadow-sm)' }}>
-          <h3 style={{ marginBottom: '1.5rem', fontFamily: 'var(--font-serif)', color: 'var(--dash-accent)' }}>Pending Requests</h3>
+          <h3 style={{ marginBottom: '1.5rem', fontFamily: 'var(--font-serif)', color: 'var(--dash-accent)' }}>{t('dashboard.home.pendingRequestsTitle')}</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-             {[1, 2].map(i => (
-               <div key={i} style={{ display: 'flex', gap: '1rem', alignItems: 'center', padding: '1rem', borderBottom: '1px solid var(--glass-border)' }}>
-                 <div className="user-avatar" style={{ width: '40px', height: '40px' }}>T</div>
+             {stats?.pending_requests && stats.pending_requests.length > 0 ? stats.pending_requests.map(req => (
+               <div key={req.id} style={{ display: 'flex', gap: '1rem', alignItems: 'center', padding: '1rem', borderBottom: '1px solid var(--glass-border)' }}>
+                 <div className="user-avatar" style={{ width: '40px', height: '40px' }}>{req.user?.name ? req.user.name[0].toUpperCase() : 'T'}</div>
                  <div>
-                   <h4 style={{ margin: 0 }}>Tourist {i}</h4>
-                   <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--dash-text-muted)' }}>Requested for Oct 12, 2024</p>
+                   <h4 style={{ margin: 0 }}>{req.user?.name || 'Tourist'}</h4>
+                   <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--dash-text-muted)' }}>Requested for {new Date(req.start_date).toLocaleDateString()}</p>
                  </div>
                  <div style={{ marginLeft: 'auto', display: 'flex', gap: '0.5rem' }}>
-                    <button style={{ background: '#10b981', border: 'none', color: '#fff', padding: '0.4rem 0.8rem', borderRadius: '6px', cursor: 'pointer' }}>Accept</button>
-                    <button style={{ background: '#ef4444', border: 'none', color: '#fff', padding: '0.4rem 0.8rem', borderRadius: '6px', cursor: 'pointer' }}>Reject</button>
+                 <button onClick={() => handleStatusUpdate(req.id, 'accepted')} className="btn-modern" style={{ background: '#10b981', boxShadow: '0 4px 12px rgba(16, 185, 129, 0.25)' }}>{t('dashboard.home.accept', 'Accept')}</button>
+                 <button onClick={() => handleStatusUpdate(req.id, 'rejected')} className="btn-modern-outline" style={{ color: '#ef4444', borderColor: '#ef4444' }}>{t('dashboard.home.reject', 'Reject')}</button>
                  </div>
                </div>
-             ))}
+             )) : (
+               <p style={{ color: 'var(--dash-text-muted)', fontStyle: 'italic' }}>No pending requests at the moment.</p>
+             )}
           </div>
         </div>
 
         <div className="card-glass" style={{ background: 'white', border: '1px solid var(--glass-border)', padding: '2rem', borderRadius: '24px', boxShadow: 'var(--shadow-sm)' }}>
-          <h3 style={{ marginBottom: '1.5rem', fontFamily: 'var(--font-serif)', color: 'var(--dash-accent)' }}>Recent Reviews</h3>
+          <h3 style={{ marginBottom: '1.5rem', fontFamily: 'var(--font-serif)', color: 'var(--dash-accent)' }}>{t('dashboard.home.recentReviews')}</h3>
           <p style={{ color: 'var(--dash-text-muted)', fontStyle: 'italic' }}>"Amazing service, very professional and friendly. Highly recommended!"</p>
           <span style={{ fontSize: '0.8rem', color: 'var(--dash-accent)', fontWeight: '600' }}>- Sarah Muller (Tourist)</span>
         </div>

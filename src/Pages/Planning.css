@@ -4,12 +4,18 @@
   --premium-terracotta: #BC4931;
   --premium-sand: #F8F7F4;
   --premium-dark: #1A1817;
-  --premium-glass: rgba(255, 255, 255, 0.7);
-  --premium-shadow: 0 20px 80px rgba(0, 0, 0, 0.08);
-  --premium-glow: 0 0 20px rgba(188, 73, 49, 0.2);
+  --premium-glass: rgba(255, 255, 255, 0.1);
+  --premium-shadow: 0 40px 100px rgba(0, 0, 0, 0.05);
+  --premium-glow: 0 0 20px rgba(188, 73, 49, 0.15);
 }
 
 .planning-page.premium-theme {
+  background-image: 
+    linear-gradient(rgba(248, 247, 244, 0.3), rgba(248, 247, 244, 0.3)),
+    url('/background/zlige.png');
+  background-attachment: fixed;
+  background-size: 600px;
+  background-repeat: repeat;
   background-color: var(--premium-sand);
   min-height: 100vh;
   padding: 8rem 5% 10rem;
@@ -21,28 +27,36 @@
   font-family: var(--font-serif);
 }
 
+body.dark-mode .planning-page.premium-theme {
+    background-image: 
+        linear-gradient(rgba(26, 26, 26, 0.75), rgba(26, 26, 26, 0.75)),
+        url('/background/zlige.png');
+}
+
 /* Floating Budget Bar */
 .floating-budget-bar {
   position: fixed;
   bottom: 2rem;
   left: 50%;
   transform: translateX(-50%);
-  width: 90%;
-  max-width: 900px;
-  background: rgba(26, 24, 23, 0.95);
-  backdrop-filter: blur(20px);
-  padding: 1.5rem 2.5rem;
-  border-radius: 24px;
+  width: auto;
+  min-width: 600px;
+  max-width: 90%;
+  background: rgba(26, 24, 23, 0.98);
+  backdrop-filter: blur(25px);
+  padding: 1rem 2rem;
+  border-radius: 20px;
   z-index: 1000;
   color: #fff;
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .budget-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 3rem;
 }
 
 .budget-info span {
@@ -81,14 +95,16 @@
   background: var(--premium-terracotta);
   color: #fff;
   border: none;
-  padding: 1rem 2.5rem;
-  border-radius: 14px;
+  padding: 0.8rem 2rem;
+  border-radius: 12px;
   font-weight: 700;
+  font-size: 0.9rem;
   display: flex;
   align-items: center;
   gap: 0.8rem;
   cursor: pointer;
-  transition: 0.3s;
+  transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
 .budget-next-btn:hover {
@@ -108,6 +124,49 @@
   max-width: 700px;
   margin: 0 auto;
   position: relative;
+}
+
+.stepper-inner-path {
+  position: absolute;
+  left: 21px;
+  right: 21px;
+  top: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.stepper-plane {
+  position: absolute;
+  top: 0;
+  width: 42px;
+  height: 42px;
+  background: transparent;
+  color: var(--premium-terracotta);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  pointer-events: none;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.pro-plane-icon {
+  filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
+  transform: rotate(10deg); /* Slight default pitch */
+}
+
+.plane-trail {
+  position: absolute;
+  right: 100%;
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(to left, var(--premium-terracotta), transparent);
+  border-radius: 100px;
+  transform-origin: right;
+  margin-right: -10px;
+  opacity: 0;
 }
 
 .step-item {
@@ -157,24 +216,17 @@
 }
 
 .step-progress {
-  flex: 1;
-  height: 2px;
-  background: #e7e5e4;
-  margin-top: 22px;
-  position: relative;
-}
-
-.step-progress.active {
-  background: var(--premium-terracotta);
+  display: none;
 }
 
 /* Cards & Grid Overhaul */
 .planning-card {
   background: var(--premium-glass);
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
   border-radius: 40px;
   padding: 4rem;
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: var(--premium-shadow);
 }
 
@@ -502,14 +554,25 @@
   border-color: var(--premium-terracotta);
 }
 
-.t-icon-premium {
-  width: 50px;
-  height: 50px;
-  background: var(--premium-sand);
+.t-img-wrap-premium {
+  width: 60px;
+  height: 60px;
   border-radius: 14px;
+  overflow: hidden;
+  background: var(--premium-sand);
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+}
+
+.t-img-wrap-premium img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.t-icon-fallback {
   font-size: 1.4rem;
   color: var(--premium-terracotta);
 }
@@ -678,7 +741,16 @@
   .stepper { width: 100%; transition: 0.3s; }
   .step-label { display: none; }
   .planning-card { padding: 2rem; }
-  .floating-budget-bar { padding: 1rem 1.5rem; }
+  .floating-budget-bar { 
+    padding: 1rem 1.2rem; 
+    min-width: unset;
+    width: 95%;
+    bottom: 1rem;
+  }
+  .budget-content { gap: 1rem; }
+  .budget-stats { gap: 1rem; }
+  .budget-info h3 { font-size: 1.4rem; }
+  .budget-next-btn { padding: 0.7rem 1.2rem; font-size: 0.8rem; }
 }
 
 /* Loader & Error States */
@@ -720,4 +792,198 @@
   font-style: italic;
   border: 2px dashed #e7e5e4;
   border-radius: 20px;
+}
+
+/* --- Description Bubble Styles --- */
+
+.description-wrapper-premium {
+  position: relative;
+}
+
+.card-footer-premium {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.8rem;
+}
+
+.description-btn-premium {
+  color: var(--premium-terracotta);
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.8;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.description-btn-premium:hover {
+  opacity: 1;
+  transform: scale(1.2) rotate(15deg);
+}
+
+.act-details-btn-premium {
+  flex: 1;
+  padding: 1rem;
+  border-radius: 16px;
+  border: 1px solid #e7e5e4;
+  background: #fff;
+  font-weight: 800;
+  cursor: pointer;
+  transition: 0.3s;
+  color: var(--premium-dark);
+}
+
+.act-details-btn-premium:hover {
+  border-color: var(--premium-terracotta);
+  color: var(--premium-terracotta);
+}
+
+.description-bubble-premium {
+  position: absolute;
+  bottom: 100%;
+  right: -10px;
+  width: 260px;
+  z-index: 100;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 15px 35px rgba(0,0,0,0.15));
+}
+
+.bubble-content {
+  background: var(--premium-sand);
+  background: rgba(248, 247, 244, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 1.5rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  position: relative;
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+.close-bubble-btn {
+  position: absolute;
+  top: 8px; right: 8px;
+  background: rgba(188, 73, 49, 0.1);
+  color: var(--premium-terracotta);
+  border: none;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.close-bubble-btn:hover { background: var(--premium-terracotta); color: #fff; }
+
+.bubble-content p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--premium-dark);
+  margin: 0;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+.bubble-arrow {
+  position: absolute;
+  bottom: -10px;
+  right: 20px;
+  width: 0; 
+  height: 0; 
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid var(--premium-sand);
+  opacity: 0.95;
+}
+
+@media (max-width: 640px) {
+  .description-bubble-premium {
+    width: 200px;
+    right: -20px;
+  }
+}
+
+/* --- RTL Support --- */
+.planning-page.rtl-mode {
+  direction: rtl;
+}
+
+.planning-page.rtl-mode .stepper-plane {
+  transform: translateX(50%);
+}
+
+.planning-page.rtl-mode .pro-plane-icon {
+  transform: rotate(-10deg) scaleX(-1);
+}
+
+.planning-page.rtl-mode .plane-trail {
+  right: auto;
+  left: 100%;
+  background: linear-gradient(to right, var(--premium-terracotta), transparent);
+  transform-origin: left;
+  margin-right: 0;
+  margin-left: -10px;
+}
+
+.planning-page.rtl-mode .input-group-premium label {
+  gap: 0.5rem;
+}
+
+.planning-page.rtl-mode .btn-premium-next svg {
+  transform: rotate(180deg);
+}
+
+.planning-page.rtl-mode .btn-premium-back svg {
+  transform: rotate(180deg);
+}
+
+.planning-page.rtl-mode .stat-item {
+  flex-direction: row;
+}
+
+.planning-page.rtl-mode .budget-next-btn svg {
+  transform: rotate(180deg);
+}
+
+.planning-page.rtl-mode .hotel-info-premium {
+  text-align: right;
+}
+
+.planning-page.rtl-mode .t-price-premium {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.planning-page.rtl-mode .sum-label-premium {
+  text-align: right;
+}
+
+.planning-page.rtl-mode .sum-act-item {
+  flex-direction: row;
+}
+
+.planning-page.rtl-mode .itinerary-total-premium {
+  text-align: right;
+}
+
+.planning-page.rtl-mode .close-gallery-btn {
+  right: auto;
+  left: 20px;
+}
+
+.planning-page.rtl-mode .act-tag {
+  left: auto;
+  right: 20px;
+}
+
+.planning-page.rtl-mode .selection-indicator {
+  right: auto;
+  left: 15px;
+}
+
+.planning-page.rtl-mode .place-badge {
+  left: auto;
+  right: 15px;
 }

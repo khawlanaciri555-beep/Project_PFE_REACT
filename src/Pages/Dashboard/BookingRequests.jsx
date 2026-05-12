@@ -3,8 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import DashboardLayout from '../../Components/Dashboard/DashboardLayout';
 import BookingCard from '../../Components/Dashboard/BookingCard';
 import api from '../../api/axios';
+import { useTranslation } from 'react-i18next';
 
 const BookingRequests = () => {
+  const { t } = useTranslation();
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -16,7 +18,8 @@ const BookingRequests = () => {
     try {
       setLoading(true);
       const response = await api.get('/bookings');
-      setRequests(response.data);
+      const dataArray = response.data.data !== undefined ? response.data.data : response.data;
+      setRequests(Array.isArray(dataArray) ? dataArray : []);
     } catch (err) {
       console.error('Error fetching requests', err);
     } finally {
@@ -31,7 +34,7 @@ const BookingRequests = () => {
         req.id === id ? { ...req, status: newStatus } : req
       ));
     } catch (err) {
-      alert('Error updating booking status');
+      alert(t('dashboard.requests.updateError'));
     }
   };
 
@@ -45,9 +48,9 @@ const BookingRequests = () => {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
         >
-          Booking Requests
+          {t('dashboard.requests.title')}
         </motion.h1>
-        <p style={{ color: 'var(--dash-text-muted)' }}>Manage incoming service requests from tourists.</p>
+        <p style={{ color: 'var(--dash-text-muted)' }}>{t('dashboard.requests.subtitle')}</p>
       </div>
 
       {loading ? (
@@ -58,7 +61,7 @@ const BookingRequests = () => {
         <>
           <div style={{ marginBottom: '3rem' }}>
             <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              Pending Requests <span style={{ background: 'var(--dash-accent)', color: '#fff', fontSize: '0.7rem', padding: '0.2rem 0.5rem', borderRadius: '50px' }}>{pending.length}</span>
+              {t('dashboard.requests.pendingTitle')} <span style={{ background: 'var(--dash-accent)', color: '#fff', fontSize: '0.7rem', padding: '0.2rem 0.5rem', borderRadius: '50px' }}>{pending.length}</span>
             </h3>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem' }}>
               <AnimatePresence>
@@ -66,12 +69,12 @@ const BookingRequests = () => {
                   <BookingCard key={req.id} request={req} onStatusChange={handleStatusChange} />
                 ))}
               </AnimatePresence>
-              {pending.length === 0 && <p style={{ color: 'var(--dash-text-muted)' }}>No pending requests.</p>}
+              {pending.length === 0 && <p style={{ color: 'var(--dash-text-muted)' }}>{t('dashboard.requests.noPending')}</p>}
             </div>
           </div>
 
           <div style={{ marginTop: '3rem' }}>
-            <h3 style={{ marginBottom: '1.5rem', color: 'var(--dash-text-muted)' }}>History & Processed</h3>
+            <h3 style={{ marginBottom: '1.5rem', color: 'var(--dash-text-muted)' }}>{t('dashboard.requests.historyTitle')}</h3>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem', opacity: 0.8 }}>
               {past.map(req => (
                 <BookingCard key={req.id} request={req} onStatusChange={handleStatusChange} />

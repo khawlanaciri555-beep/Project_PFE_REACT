@@ -2,7 +2,9 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AuthContext } from '../context/AuthContext';
-import { FaBars, FaTimes, FaUser, FaSignOutAlt } from 'react-icons/fa';
+import { FaBars, FaTimes, FaUser, FaSignOutAlt, FaMoon, FaSun } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from './LanguageSwitcher/LanguageSwitcher';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -11,7 +13,24 @@ const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
   const location = useLocation();
   const navigate = useNavigate();
-  const isHomePage = location.pathname === '/home';
+  const isHomePage = location.pathname === '/home' || location.pathname === '/';
+  const { t } = useTranslation();
+  
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    return localStorage.getItem('theme') === 'dark';
+  });
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.body.classList.add('dark-mode');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.body.classList.remove('dark-mode');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [isDarkMode]);
+
+  const toggleTheme = () => setIsDarkMode(!isDarkMode);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -43,24 +62,28 @@ const Navbar = () => {
       </div>
 
       <div className="nav-links desktop-only">
-        <Link to="/home" className={isHomePage ? 'active' : ''}>Home</Link>
-        <Link to="/explore" className={location.pathname === '/explore' ? 'active' : ''}>Explore</Link>
-        <Link to="/planning" className={location.pathname === '/planning' ? 'active' : ''}>Planning</Link>
-        <Link to="#">About</Link>
+        <Link to="/home" className={isHomePage ? 'active' : ''}>{t('nav.home')}</Link>
+        <Link to="/explore" className={location.pathname === '/explore' ? 'active' : ''}>{t('nav.explore')}</Link>
+        <Link to="/planning" className={location.pathname === '/planning' ? 'active' : ''}>{t('nav.planning')}</Link>
+        <Link to="/about" className={location.pathname === '/about' ? 'active' : ''}>{t('nav.about')}</Link>
       </div>
 
       <div className="nav-buttons desktop-only">
+        <button onClick={toggleTheme} className="theme-toggle-btn" style={{ background: 'transparent', border: 'none', color: isScrolled || !isHomePage ? 'var(--text-dark)' : '#fff', cursor: 'pointer', fontSize: '1.2rem', marginRight: '1rem', display: 'flex', alignItems: 'center' }}>
+          {isDarkMode ? <FaSun color="#F59E0B" /> : <FaMoon />}
+        </button>
+        <LanguageSwitcher />
         {user ? (
           <>
             <Link to="/dashboard" style={{ textDecoration: 'none' }}>
-              <span className="user-name">Hello, {user.name}</span>
+              <span className="user-name">{t('nav.hello')}, {user.name}</span>
             </Link>
-            <button onClick={handleLogout} className="btn-logout">Logout</button>
+            <button onClick={handleLogout} className="btn-logout">{t('nav.logout')}</button>
           </>
         ) : (
           <>
-            <Link to="/login" className="btn-login">Login</Link>
-            <Link to="/register" className="btn-register">S'inscrire</Link>
+            <Link to="/login" className="btn-login">{t('nav.login')}</Link>
+            <Link to="/register" className="btn-register">{t('nav.register')}</Link>
           </>
         )}
       </div>
@@ -86,20 +109,26 @@ const Navbar = () => {
             </div>
 
             <div className="drawer-links">
-              <Link to="/home" onClick={toggleMobileMenu}>Home</Link>
-              <Link to="/explore" onClick={toggleMobileMenu}>Explore Marrakech</Link>
-              <Link to="/planning" onClick={toggleMobileMenu}>Trip Planner</Link>
-              <Link to="#" onClick={toggleMobileMenu}>About Us</Link>
+              <Link to="/home" onClick={toggleMobileMenu}>{t('nav.home')}</Link>
+              <Link to="/explore" onClick={toggleMobileMenu}>{t('nav.explore')}</Link>
+              <Link to="/planning" onClick={toggleMobileMenu}>{t('nav.planning')}</Link>
+              <Link to="/about" onClick={toggleMobileMenu}>{t('nav.about')}</Link>
+              <button 
+                onClick={toggleTheme} 
+                style={{ background: 'transparent', border: 'none', color: 'var(--text-dark)', cursor: 'pointer', fontSize: '1.2rem', margin: '1rem 0', display: 'flex', alignItems: 'center', gap: '10px' }}
+              >
+                {isDarkMode ? <><FaSun color="#F59E0B" /> {t('nav.light_mode') || 'Light Mode'}</> : <><FaMoon /> {t('nav.dark_mode') || 'Dark Mode'}</>}
+              </button>
               <hr style={{ border: 'none', borderTop: '1px solid rgba(188, 73, 49, 0.1)', margin: '1rem 0' }} />
               {user ? (
                 <>
-                  <Link to="/dashboard" onClick={toggleMobileMenu}><FaUser /> Mon Dashboard</Link>
-                  <button onClick={() => { handleLogout(); toggleMobileMenu(); }} className="btn-logout-mobile"><FaSignOutAlt /> Logout</button>
+                  <Link to="/dashboard" onClick={toggleMobileMenu}><FaUser /> {t('nav.dashboard')}</Link>
+                  <button onClick={() => { handleLogout(); toggleMobileMenu(); }} className="btn-logout-mobile"><FaSignOutAlt /> {t('nav.logout')}</button>
                 </>
               ) : (
                 <div className="drawer-auth">
-                  <Link to="/login" className="btn-login-mobile" onClick={toggleMobileMenu}>Se connecter</Link>
-                  <Link to="/register" className="btn-register-mobile" onClick={toggleMobileMenu}>Créer un compte</Link>
+                  <Link to="/login" className="btn-login-mobile" onClick={toggleMobileMenu}>{t('nav.login')}</Link>
+                  <Link to="/register" className="btn-register-mobile" onClick={toggleMobileMenu}>{t('nav.register')}</Link>
                 </div>
               )}
             </div>

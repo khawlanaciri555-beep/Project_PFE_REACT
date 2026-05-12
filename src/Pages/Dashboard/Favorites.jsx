@@ -3,8 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import DashboardLayout from '../../Components/Dashboard/DashboardLayout';
 import FavoriteCard from '../../Components/Dashboard/FavoriteCard';
 import api from '../../api/axios';
+import { useTranslation } from 'react-i18next';
 
 const Favorites = () => {
+  const { t } = useTranslation();
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -16,7 +18,8 @@ const Favorites = () => {
     try {
       setLoading(true);
       const response = await api.get('/favorites');
-      setFavorites(response.data);
+      const dataArray = response.data.data !== undefined ? response.data.data : response.data;
+      setFavorites(Array.isArray(dataArray) ? dataArray : []);
     } catch (err) {
       console.error('Error fetching favorites', err);
     } finally {
@@ -29,7 +32,7 @@ const Favorites = () => {
       await api.delete(`/favorites/${id}`);
       setFavorites(favorites.filter(item => item.id !== id));
     } catch (err) {
-      alert('Error removing favorite');
+      alert(t('dashboard.favorites.removeError'));
     }
   };
 
@@ -40,9 +43,9 @@ const Favorites = () => {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
         >
-          My Favorites
+          {t('dashboard.favorites.title')}
         </motion.h1>
-        <p style={{ color: 'var(--dash-text-muted)' }}>Locations and services you've saved for your Marrakech trip.</p>
+        <p style={{ color: 'var(--dash-text-muted)' }}>{t('dashboard.favorites.subtitle')}</p>
       </div>
 
       {loading ? (
@@ -66,8 +69,8 @@ const Favorites = () => {
                  animate={{ opacity: 1 }}
                  style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '5rem 0' }}
               >
-                <h3 style={{ color: 'var(--dash-text-muted)' }}>You haven't saved any favorites yet.</h3>
-                <p>Explore Marrakech to find hidden gems!</p>
+                <h3 style={{ color: 'var(--dash-text-muted)' }}>{t('dashboard.favorites.empty')}</h3>
+                <p>{t('dashboard.favorites.emptyDesc')}</p>
               </motion.div>
             )}
           </AnimatePresence>
