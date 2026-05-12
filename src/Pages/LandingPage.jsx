@@ -28,7 +28,8 @@ const LandingPage = () => {
 
   const handleEnter = () => {
     setEntered(true);
-    setTimeout(() => navigate('/home'), 900);
+    // Increased delay for the shutter animation to complete
+    setTimeout(() => navigate('/home'), 1100);
   };
 
   return (
@@ -37,6 +38,9 @@ const LandingPage = () => {
       className={`landing-root ${loaded ? 'loaded' : ''} ${entered ? 'exiting' : ''}`}
       onMouseMove={handleMouseMove}
     >
+      {/* Shutter reveal panels */}
+      <div className="shutter shutter-left" />
+      <div className="shutter shutter-right" />
       {/* Animated background blobs */}
       <div className="landing-bg">
         <div className="blob blob-1" style={{ transform: `translate(${mousePos.x * -18}px, ${mousePos.y * -12}px)` }} />

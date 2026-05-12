@@ -53,6 +53,21 @@ const Dashboard = () => {
     fetchStats();
   }, []);
 
+  const handleStatusUpdate = async (bookingId, status) => {
+    try {
+      await api.patch(`/bookings/${bookingId}/status`, { status });
+      // Remove from the pending list
+      setStats(prev => ({
+        ...prev,
+        pending: prev.pending - 1,
+        pending_requests: prev.pending_requests.filter(req => req.id !== bookingId)
+      }));
+    } catch (err) {
+      console.error('Failed to update booking status', err);
+      alert('Failed to update status');
+    }
+  };
+
   const renderTouristDashboard = () => (
     <>
       <div className="dashboard-title-section">
@@ -78,7 +93,7 @@ const Dashboard = () => {
                    <h4 style={{ margin: 0 }}>Palais de la Bahia</h4>
                    <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--dash-text-muted)' }}>Recommended based on your visit to Koutoubia</p>
                  </div>
-                 <button style={{ marginLeft: 'auto', background: 'var(--dash-accent)', color: '#fff', border: 'none', padding: '0.5rem 1rem', borderRadius: '8px', cursor: 'pointer' }}>{t('dashboard.home.view')}</button>
+                 <button className="btn-modern-outline" style={{ marginLeft: 'auto', padding: '0.4rem 1rem' }}>{t('dashboard.home.view', 'View')}</button>
                </div>
              ))}
           </div>
@@ -87,8 +102,8 @@ const Dashboard = () => {
         <div className="card-glass" style={{ background: 'white', border: '1px solid var(--glass-border)', padding: '2rem', borderRadius: '24px', boxShadow: 'var(--shadow-sm)' }}>
           <h3 style={{ marginBottom: '1.5rem', fontFamily: 'var(--font-serif)', color: 'var(--dash-accent)' }}>{t('dashboard.home.upcomingBookings')}</h3>
           <div style={{ fontSize: '0.9rem', color: 'var(--dash-text-muted)' }}>
-            {t('dashboard.home.noUpcoming')} <br/> <br/>
-            <button style={{ color: 'var(--dash-accent)', background: 'none', border: '1px solid var(--dash-accent)', padding: '0.5rem 1rem', borderRadius: '8px', cursor: 'pointer', fontWeight: '600' }}>{t('dashboard.home.browsePlaces')}</button>
+            {t('dashboard.home.noUpcoming', 'No upcoming bookings for today.')} <br/> <br/>
+            <button className="btn-modern">{t('dashboard.home.browsePlaces', 'Browse Places')}</button>
           </div>
         </div>
       </div>
@@ -113,19 +128,21 @@ const Dashboard = () => {
         <div className="card-glass" style={{ background: 'white', border: '1px solid var(--glass-border)', padding: '2rem', borderRadius: '24px', boxShadow: 'var(--shadow-sm)' }}>
           <h3 style={{ marginBottom: '1.5rem', fontFamily: 'var(--font-serif)', color: 'var(--dash-accent)' }}>{t('dashboard.home.pendingRequestsTitle')}</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-             {[1, 2].map(i => (
-               <div key={i} style={{ display: 'flex', gap: '1rem', alignItems: 'center', padding: '1rem', borderBottom: '1px solid var(--glass-border)' }}>
-                 <div className="user-avatar" style={{ width: '40px', height: '40px' }}>T</div>
+             {stats?.pending_requests && stats.pending_requests.length > 0 ? stats.pending_requests.map(req => (
+               <div key={req.id} style={{ display: 'flex', gap: '1rem', alignItems: 'center', padding: '1rem', borderBottom: '1px solid var(--glass-border)' }}>
+                 <div className="user-avatar" style={{ width: '40px', height: '40px' }}>{req.user?.name ? req.user.name[0].toUpperCase() : 'T'}</div>
                  <div>
-                   <h4 style={{ margin: 0 }}>Tourist {i}</h4>
-                   <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--dash-text-muted)' }}>Requested for Oct 12, 2024</p>
+                   <h4 style={{ margin: 0 }}>{req.user?.name || 'Tourist'}</h4>
+                   <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--dash-text-muted)' }}>Requested for {new Date(req.start_date).toLocaleDateString()}</p>
                  </div>
                  <div style={{ marginLeft: 'auto', display: 'flex', gap: '0.5rem' }}>
-                    <button style={{ background: '#10b981', border: 'none', color: '#fff', padding: '0.4rem 0.8rem', borderRadius: '6px', cursor: 'pointer' }}>{t('dashboard.home.accept')}</button>
-                    <button style={{ background: '#ef4444', border: 'none', color: '#fff', padding: '0.4rem 0.8rem', borderRadius: '6px', cursor: 'pointer' }}>{t('dashboard.home.reject')}</button>
+                 <button onClick={() => handleStatusUpdate(req.id, 'accepted')} className="btn-modern" style={{ background: '#10b981', boxShadow: '0 4px 12px rgba(16, 185, 129, 0.25)' }}>{t('dashboard.home.accept', 'Accept')}</button>
+                 <button onClick={() => handleStatusUpdate(req.id, 'rejected')} className="btn-modern-outline" style={{ color: '#ef4444', borderColor: '#ef4444' }}>{t('dashboard.home.reject', 'Reject')}</button>
                  </div>
                </div>
-             ))}
+             )) : (
+               <p style={{ color: 'var(--dash-text-muted)', fontStyle: 'italic' }}>No pending requests at the moment.</p>
+             )}
           </div>
         </div>
 

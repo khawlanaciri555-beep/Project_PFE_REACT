@@ -1,9 +1,11 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { AuthContext } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
-import { FaArrowLeft, FaSun, FaMoon } from 'react-icons/fa';
+import { FaArrowLeft, FaSun, FaMoon, FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
 import LanguageSwitcher from '../Components/LanguageSwitcher/LanguageSwitcher';
+
 import './Auth.css';
 
 const Login = () => {

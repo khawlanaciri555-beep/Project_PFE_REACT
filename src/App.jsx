@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import LandingPage from './Pages/LandingPage';
 import Home from './Pages/Home';
 import Login from './Pages/Login';
 import Register from './Pages/Register';
@@ -28,8 +27,8 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          {/* Landing Page – shown first when opening the app */}
-          <Route path="/" element={<LandingPage />} />
+          {/* Root route now goes directly to Home with the shutter reveal */}
+          <Route path="/" element={<Home />} />
 
           {/* Main app routes */}
           <Route path="/home" element={<Home />} />

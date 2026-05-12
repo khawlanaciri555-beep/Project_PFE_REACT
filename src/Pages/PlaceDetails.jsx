@@ -29,60 +29,66 @@ const Icons = {
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <rect x="1" y="3" width="22" height="13" rx="2"/><path d="M7 21h0"/><path d="M17 21h0"/><path d="M5 21a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2"/><path d="M2 10h20"/>
     </svg>
+  ),
+  Restaurants: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+    </svg>
   )
 };
 
 const ServiceCard = ({ id, title, hotel_type, type, description, price, rating, image, gallery, index, onBook, onViewGallery, provider_id, provider_type, is_provider_only }) => {
   const { t } = useTranslation();
   return (
-  <motion.div 
-    initial={{ opacity: 0, y: 30 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5, delay: index * 0.1 }}
-    whileHover={{ y: -5 }}
-    className="service-card-modern"
-  >
-    <div className="card-top">
-      <img src={getImageUrl(image) || '/logo picter/placeholder.jpg'} alt={title} className="card-img" />
-      <div className="card-type-tag">{hotel_type || type}</div>
-    </div>
-    
-    <div className="card-details">
-      <div style={{ marginBottom: '0.4rem' }}>
-        <RatingStars rating={rating} size={14} showCount={false} />
+    <motion.div 
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      whileHover={{ y: -5 }}
+      className="service-card-modern"
+    >
+      <div className="card-top">
+        <img src={getImageUrl(image) || '/logo picter/placeholder.jpg'} alt={title} className="card-img" />
+        <div className="card-type-tag">{hotel_type || type}</div>
       </div>
       
-      {price > 0 && <div className="card-price-tag">{price} MAD</div>}
-      
-      <h3 className="card-name-bold">{title}</h3>
-      
-      <p className="card-desc-small">{description?.substring(0, 120)}...</p>
-      
-      <div className="card-bottom-actions">
-        {(gallery && gallery.length > 1) || (['Activity', 'Experience', 'Workshop', 'Tour'].includes(type) && image) ? (
-          <Link 
-            to={`/activity/${id}`}
-            className="details-link-arrow"
-            style={{ textDecoration: 'none', color: 'var(--primary)', fontWeight: '600' }}
-          >
-            {t('places.details')} &rarr;
-          </Link>
-        ) : (
-          <Link to={provider_id && provider_type ? `/provider/${provider_type}/${provider_id}` : `#`} className="details-link-arrow">
-            {t('places.details')} &rarr;
-          </Link>
-        )}
-        {!is_provider_only && (
-          <button 
-            className="book-btn-direct"
-            onClick={() => onBook({ id, title, price, type })}
-          >
-            {t('places.book')}
-          </button>
-        )}
+      <div className="card-details">
+        <div style={{ marginBottom: '0.4rem' }}>
+          <RatingStars rating={rating} size={14} showCount={false} />
+        </div>
+        
+        {price > 0 && <div className="card-price-tag">{price} MAD</div>}
+        
+        <h3 className="card-name-bold">{title}</h3>
+        
+        <p className="card-desc-small">{description?.substring(0, 120)}...</p>
+        
+        <div className="card-bottom-actions">
+          {(gallery && gallery.length > 1) || (['Activity', 'Experience', 'Workshop', 'Tour'].includes(type) && image) ? (
+            <Link 
+              to={`/activity/${id}`}
+              className="details-link-arrow"
+              style={{ textDecoration: 'none', color: 'var(--primary)', fontWeight: '600' }}
+            >
+              {t('places.details')} &rarr;
+            </Link>
+          ) : (
+            <Link to={provider_id && provider_type ? `/provider/${provider_type}/${provider_id}` : `#`} className="details-link-arrow">
+              {t('places.details')} &rarr;
+            </Link>
+          )}
+          {!is_provider_only && (
+            <button 
+              className="book-btn-direct"
+              onClick={() => onBook({ id, title, price, type, is_provider_only, provider_type, provider_id })}
+            >
+              {t('places.book')}
+            </button>
+          )}
+        </div>
       </div>
-    </div>
-  </motion.div>
+    </motion.div>
   );
 };
 
@@ -98,9 +104,6 @@ const TabButton = ({ label, active, onClick, IconComponent }) => (
       <IconComponent />
     </span>
     {label}
-    <span style={{ marginLeft: '0.3rem', fontSize: '0.7rem', opacity: 0.7 }}>
-      {active ? '▴' : '▾'}
-    </span>
     {active && (
       <motion.div
         layoutId="active-pill"
@@ -115,15 +118,15 @@ const PlaceDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
   
   const [place, setPlace] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('hotels');
   const [isServicesOpen, setIsServicesOpen] = useState(false);
-  const [hotelTypeFilter, setHotelTypeFilter] = useState('Tous'); // 'Tous', 'Hôtel', 'Riad'
+  const [hotelTypeFilter, setHotelTypeFilter] = useState('Tous');
   const [selectedService, setSelectedService] = useState(null);
-  const [selectedGalleryService, setSelectedGalleryService] = useState(null);
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const [isMapVisible, setIsMapVisible] = useState(false);
 
@@ -158,7 +161,6 @@ const PlaceDetails = () => {
     }
     try {
       await api.post('/ratings', { place_id: id, rating: value });
-      // Refresh place data to show new average
       const response = await api.get(`/places/${id}`);
       setPlace(response.data.data ? response.data.data : response.data);
     } catch (err) {
@@ -176,7 +178,8 @@ const PlaceDetails = () => {
 
   const handleConfirmBooking = async (formData) => {
     await api.post('/bookings', {
-      service_id: selectedService.id,
+      service_id: formData.service_id || selectedService.id,
+      user_id: user.id,
       ...formData
     });
   };
@@ -205,17 +208,16 @@ const PlaceDetails = () => {
   const tabs = [
     { id: 'hotels', label: t('places.tabs.accommodation'), icon: Icons.Hotels },
     { id: 'activites', label: t('places.tabs.activities'), icon: Icons.Activites },
+    { id: 'restaurants', label: t('places.tabs.restaurants'), icon: Icons.Restaurants },
     { id: 'transport', label: t('places.tabs.transport'), icon: Icons.Transport }
   ];
 
   let currentServices = place.services?.[activeTab] || [];
   
-  // Apply sub-filter for hotels (Case-insensitive)
   if (activeTab === 'hotels' && hotelTypeFilter !== 'Tous') {
     const filterLower = hotelTypeFilter.toLowerCase();
     currentServices = currentServices.filter(s => {
         const typeLower = (s.hotel_type || s.type || '').toLowerCase();
-        // Match 'Hôtel' with 'hotel' if needed, or exact match
         if (filterLower === 'hôtel') return typeLower === 'hotel';
         return typeLower === filterLower;
     });
@@ -225,19 +227,20 @@ const PlaceDetails = () => {
 
   return (
     <Layout>
-      <div className="place-details-page">
+      <div className={`place-details-page ${isRTL ? 'rtl-mode' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
         <div className="bg-pattern" />
         
         <div className="max-container">
-          <header className="details-header">
+          <header className="details-header" style={{ justifyContent: isRTL ? 'flex-end' : 'flex-start' }}>
             <motion.button 
-              initial={{ opacity: 0, x: -20 }}
+              initial={{ opacity: 0, x: isRTL ? 20 : -20 }}
               animate={{ opacity: 1, x: 0 }}
               whileHover={{ scale: 1.05 }}
               onClick={() => navigate('/')}
               className="back-btn-minimal"
+              style={{ flexDirection: isRTL ? 'row-reverse' : 'row' }}
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ transform: isRTL ? 'rotate(180deg)' : 'none' }}>
                 <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
               </svg>
               <span>{t('places.back')}</span>
@@ -245,16 +248,11 @@ const PlaceDetails = () => {
           </header>
 
           <main className="main-content-wrapper">
-             {/* Dynamic Layout: Split when Map is open */}
              <motion.div 
                layout
-               className={`details-split-container ${isMapVisible ? 'map-open' : ''}`}
+               className={`details-split-container ${isMapVisible ? 'map-open' : ''} ${isRTL ? 'rtl-split' : ''}`}
              >
-                {/* 1. Hero / Info Box (Slider Inside) */}
-                <motion.div 
-                  layout
-                  className="place-hero-legacy"
-                >
+                <motion.div layout className="place-hero-legacy">
                   <div className="hero-slider-wrap">
                     <AnimatePresence mode="wait">
                       <motion.img 
@@ -270,7 +268,6 @@ const PlaceDetails = () => {
                     </AnimatePresence>
                     <div className="slider-overlay-gradient"></div>
                     
-                    {/* Dots indicator */}
                     <div className="slider-dots">
                       {galleryImages.map((_, idx) => (
                         <div 
@@ -282,21 +279,21 @@ const PlaceDetails = () => {
                     </div>
                   </div>
                   
-                  <div className="hero-info-legacy" style={{ position: 'relative' }}>
+                  <div className="hero-info-legacy" style={{ position: 'relative', textAlign: isRTL ? 'right' : 'left' }}>
                       <FavoriteButton 
                         placeId={place.id} 
                         initialIsFavorited={place.is_favorited} 
                         initialFavoriteId={place.favorite_id}
-                        style={{ top: '20px', right: '20px' }} 
+                        style={{ top: '20px', [isRTL ? 'left' : 'right']: '20px' }} 
                       />
                       
-                      <Link to={`/place/${place.id}/comments`} className="comment-btn-bounce" style={{ bottom: '20px', right: '20px', top: 'auto' }}>
+                      <Link to={`/place/${place.id}/comments`} className="comment-btn-bounce" style={{ bottom: '20px', [isRTL ? 'left' : 'right']: '20px', top: 'auto' }}>
                         <FaCommentDots />
                       </Link>
 
                       <span className="info-tag">{place.category}</span>
                     <h1 className="info-title">{place.title}</h1>
-                    <div style={{ marginBottom: '1.5rem' }}>
+                    <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: isRTL ? 'flex-end' : 'flex-start', alignItems: 'center', gap: '1rem' }}>
                       <RatingStars 
                          rating={place.rating_avg} 
                          totalRatings={place.total_ratings} 
@@ -315,8 +312,9 @@ const PlaceDetails = () => {
                     <motion.div 
                       onClick={() => setIsMapVisible(!isMapVisible)}
                       className={`place-coordinates-box ${isMapVisible ? 'active' : ''}`}
-                      whileHover={{ scale: 1.02, x: 5 }}
+                      whileHover={{ scale: 1.02, x: isRTL ? -5 : 5 }}
                       whileTap={{ scale: 0.98 }}
+                      style={{ flexDirection: isRTL ? 'row-reverse' : 'row' }}
                     >
                       <div className="box-icon">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -331,21 +329,20 @@ const PlaceDetails = () => {
                   </div>
                 </motion.div>
 
-                {/* 2. Side Map (Appears when mapVisible is true) */}
                 <AnimatePresence>
                   {isMapVisible && (
                     <motion.div 
                       key="side-map"
-                      initial={{ opacity: 0, x: 50, scale: 0.95 }}
+                      initial={{ opacity: 0, x: isRTL ? -50 : 50, scale: 0.95 }}
                       animate={{ opacity: 1, x: 0, scale: 1 }}
-                      exit={{ opacity: 0, x: 50, scale: 0.95 }}
+                      exit={{ opacity: 0, x: isRTL ? -50 : 50, scale: 0.95 }}
                       transition={{ type: "spring", stiffness: 200, damping: 25 }}
                       className="side-map-container"
                     >
                       <div className="map-frame-wrapper">
                         <iframe 
                           title="Marrakech Map"
-                          src={`https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d13587.21!2d${place.coordinates.split(',')[1]}!3d${place.coordinates.split(',')[0]}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sfr!2sma!4v1712067751965!5m2!1sfr!2sma`}
+                          src={`https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d13587.21!2d${place.coordinates?.split(',')[1]}!3d${place.coordinates?.split(',')[0]}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sfr!2sma!4v1712067751965!5m2!1sfr!2sma`}
                           width="100%" 
                           height="100%" 
                           style={{ border: 0 }} 
@@ -358,7 +355,6 @@ const PlaceDetails = () => {
                 </AnimatePresence>
              </motion.div>
 
-            {/* Services Section */}
             <div className="services-section">
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
@@ -370,11 +366,11 @@ const PlaceDetails = () => {
                 <div className="section-line" />
               </motion.div>
               
-              <div className="tabs-filter">
+              <div className="tabs-filter" style={{ flexDirection: isRTL ? 'row-reverse' : 'row' }}>
                 {tabs.map(tab => (
-                  <div key={tab.id} className="tab-wrapper" style={{ position: 'relative' }}>
+                  <div key={tab.id} className="tab-wrapper">
                     <TabButton 
-                        label={tab.id === 'hotels' && hotelTypeFilter !== 'Tous' ? `${hotelTypeFilter}s` : tab.label}
+                        label={tab.label}
                         IconComponent={tab.icon}
                         active={activeTab === tab.id && isServicesOpen}
                         onClick={() => {
@@ -386,24 +382,30 @@ const PlaceDetails = () => {
                             }
                         }}
                     />
-                    {tab.id === 'hotels' && (
-                        <select 
-                            value={hotelTypeFilter}
-                            onChange={(e) => {
-                                setHotelTypeFilter(e.target.value);
-                                setActiveTab('hotels');
-                                setIsServicesOpen(true);
-                            }}
-                            className="invisible-tab-select"
-                        >
-                            <option value="Tous">{t('places.filters.all')}</option>
-                            <option value="Hôtel">{t('places.filters.hotels')}</option>
-                            <option value="Riad">{t('places.filters.riads')}</option>
-                        </select>
-                    )}
                   </div>
                 ))}
               </div>
+
+              <AnimatePresence>
+                {isServicesOpen && activeTab === 'hotels' && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: -10, height: 0 }} 
+                    animate={{ opacity: 1, y: 0, height: 'auto' }} 
+                    exit={{ opacity: 0, height: 0 }} 
+                    style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginBottom: '1rem', overflow: 'hidden' }}
+                  >
+                    {['Tous', 'Hôtel', 'Riad'].map(type => (
+                      <button 
+                        key={type}
+                        onClick={() => setHotelTypeFilter(type)}
+                        style={{ padding: '0.4rem 1.2rem', borderRadius: '20px', border: '1px solid #e1dfdb', background: hotelTypeFilter === type ? '#1a1817' : '#fff', color: hotelTypeFilter === type ? '#fff' : '#524e4a', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.9rem', transition: '0.3s' }}
+                      >
+                        {type === 'Tous' ? t('places.filters.all') : t(`places.filters.${type === 'Hôtel' ? 'hotels' : 'riads'}`)}
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
               <AnimatePresence>
                 {isServicesOpen && (
@@ -421,6 +423,7 @@ const PlaceDetails = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
+                        style={{ direction: isRTL ? 'rtl' : 'ltr' }}
                       >
                         {currentServices.length > 0 ? (
                           currentServices.map((service, index) => (
@@ -428,7 +431,6 @@ const PlaceDetails = () => {
                               key={`${activeTab}-${service.id}-${index}`}
                               index={index}
                               onBook={handleBookClick}
-                              onViewGallery={setSelectedGalleryService}
                               {...service}
                             />
                           ))
@@ -455,12 +457,9 @@ const PlaceDetails = () => {
             onConfirm={handleConfirmBooking}
           />
         )}
-
-
       </div>
     </Layout>
   );
 };
-
 
 export default PlaceDetails;

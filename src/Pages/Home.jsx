@@ -8,6 +8,7 @@ import FavoriteButton from '../Components/FavoriteButton';
 import RatingStars from '../Components/RatingStars';
 import { FaCommentDots, FaQuoteLeft, FaUserCircle } from 'react-icons/fa';
 import '../Components/home.css';
+import '../Components/Layout.css';
 import getImageUrl from '../utils/imageUrl';
 
 const TestimonialCard = ({ role, name, content, iconColor }) => {
@@ -118,8 +119,24 @@ const Home = () => {
   const [places, setPlaces] = useState([]);
   const [hotels, setHotels] = useState([]);
   const [generalComments, setGeneralComments] = useState([]);
+  const [testimonials, setTestimonials] = useState([]);
   const { scrollY } = useScroll();
   const { t } = useTranslation();
+  const [opening, setOpening] = useState(false);
+  const [showShutter, setShowShutter] = useState(false);
+
+  useEffect(() => {
+    // Fast & Door-like reveal
+    setShowShutter(true);
+    setOpening(true);
+    
+    const timer = setTimeout(() => {
+      setOpening(false);
+      setTimeout(() => setShowShutter(false), 800);
+    }, 400); // Very short delay
+    
+    return () => clearTimeout(timer);
+  }, []);
   
   // Parallax / Smooth scroll effect for hero
   const heroOpacity = useTransform(scrollY, [0, 400], [1, 0]);
@@ -132,20 +149,25 @@ const Home = () => {
       try {
         const response = await api.get('/places');
         const result = response.data;
-        setPlaces(result.data || []);
+        const allPlaces = result.data || [];
+        // Filter out accommodation and transport from global view as requested
+        const filtered = allPlaces.filter(p => {
+          const cat = (p.category || '').toLowerCase();
+          return !cat.includes('hotel') && !cat.includes('riad') && !cat.includes('transport') && !cat.includes('hébergement');
+        });
+        setPlaces(filtered);
       } catch (err) {
         console.error("failed to load places", err);
       }
     };
 
-    const fetchHotels = async () => {
+    const fetchTestimonials = async () => {
       try {
-        const response = await api.get('/hotels');
+        const response = await api.get('/testimonials');
         const result = response.data;
-        // Just take the first 4 for the home page showcase
-        setHotels((result.data || []).slice(0, 4));
+        setTestimonials(result.data || []);
       } catch (err) {
-        console.error("failed to load hotels", err);
+        console.error("failed to load testimonials", err);
       }
     };
 
@@ -160,7 +182,7 @@ const Home = () => {
     };
 
     fetchPlaces();
-    fetchHotels();
+    fetchTestimonials();
     fetchGeneralComments();
 
     const interval = setInterval(() => {
@@ -179,12 +201,29 @@ const Home = () => {
 
   return (
     <Layout>
+      {showShutter && (
+        <div className={`shutter-reveal ${!opening ? 'is-open' : 'is-closed'}`}>
+          <div className="shutter shutter-left">
+            <div className="shutter-logo left">VIB<span>-</span>KECH</div>
+          </div>
+          <div className="shutter shutter-right">
+            <div className="shutter-logo right">VIB<span>-</span>KECH</div>
+          </div>
+        </div>
+      )}
       <div className="home-container">
 
       {/* Hero Section */}
       <section className="hero-section">
         <motion.div style={{ scale: videoScale }} className="hero-video-container">
-          <video autoPlay loop muted playsInline className="hero-video">
+          <video 
+            className="hero-video" 
+            autoPlay 
+            loop 
+            muted 
+            playsInline
+            poster="/background/marrakech_auth_bg.png"
+          >
             <source src="/background/backHome.mp4" type="video/mp4" />
           </video>
           <div className="hero-video-overlay"></div>
@@ -277,51 +316,59 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Testimonials Section (Community Voices) */}
-      <section className="testimonials-section" style={{ padding: '8rem 8%' }}>
-        <div className="section-header-center" style={{ marginBottom: '5rem', textAlign: 'center' }}>
-            <motion.span 
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              className="section-eyebrow" 
-              style={{ color: 'var(--primary)', letterSpacing: '4px', fontWeight: '800' }}
-            >
-              {t('home.testimonials.eyebrow')}
-            </motion.span>
-            <motion.h2 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="section-title" 
-              style={{ fontSize: '3rem', marginTop: '1rem', color: '#1A1817' }}
-            >
-              {t('home.testimonials.title')}
-            </motion.h2>
+      {/* Testimonials Section */}
+      <section className="testimonials-section" style={{ padding: '6rem 8%', background: 'var(--bg-color)' }}>
+        <div className="section-header-center" style={{ marginBottom: '4rem', textAlign: 'center' }}>
+            <span className="section-eyebrow" style={{ color: 'var(--primary)', letterSpacing: '3px', fontWeight: 'bold' }}>{t('home.testimonials.eyebrow')}</span>
+            <h2 className="section-title" style={{ fontSize: '2.5rem', marginTop: '1rem' }}>{t('home.testimonials.title')}</h2>
+            <p style={{ color: '#666', marginTop: '1rem', maxWidth: '600px', margin: '1rem auto' }}>{t('home.testimonials.description')}</p>
         </div>
         
-        <div className="testimonials-grid" style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
-          gap: '2.5rem' 
-        }}>
-           {generalComments.length > 0 ? (
-             generalComments.map(comment => (
-               <TestimonialCard 
-                  key={comment.id}
-                  role={comment.user?.role || t('home.testimonials.roles.tourist')} 
-                  name={comment.user?.name || 'Anonymous'} 
-                  content={comment.content}
-                  iconColor={
-                    comment.user?.role === 'hotel' ? "rgba(16, 185, 129, 0.1)" :
-                    comment.user?.role === 'transport' ? "rgba(245, 158, 11, 0.1)" :
-                    "rgba(59, 130, 246, 0.1)"
-                  }
-               />
+        <div className="testimonials-grid">
+           {testimonials.length > 0 ? (
+             testimonials.map(test => (
+               <motion.div 
+                 key={test.id} 
+                 className="testimonial-card-premium"
+                 initial={{ opacity: 0, y: 20 }}
+                 whileInView={{ opacity: 1, y: 0 }}
+                 viewport={{ once: true }}
+               >
+                 <div className="testimonial-quote-mark">
+                    "
+                 </div>
+                 <div className="testimonial-user">
+                    <img 
+                      src={`https://ui-avatars.com/api/?name=${test.user?.name}&background=random`} 
+                      alt={test.user?.name} 
+                      className="testimonial-avatar"
+                    />
+                    <div>
+                       <h4 className="testimonial-name">{test.user?.name}</h4>
+                       <span className="testimonial-meta">
+                          {test.transport ? `${t('home.testimonials.transport')}: ${test.transport.type}` : 
+                           test.cooperative ? `${t('home.testimonials.coop')}: ${test.cooperative.name}` : 
+                           test.place ? `${t('home.testimonials.place')}: ${test.place.title}` : t('home.testimonials.verified')}
+                       </span>
+                    </div>
+                 </div>
+                 <p className="testimonial-content">
+                   "{test.content}"
+                 </p>
+                 <div className="testimonial-footer">
+                    <div className="testimonial-stars">
+                       {[...Array(5)].map((_, i) => (
+                         <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="#C58A3A">
+                           <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                         </svg>
+                       ))}
+                    </div>
+                    <span className="testimonial-date">{new Date(test.created_at).toLocaleDateString()}</span>
+                 </div>
+               </motion.div>
              ))
            ) : (
-             <div style={{ textAlign: 'center', gridColumn: '1 / -1', padding: '3rem', color: '#888', fontStyle: 'italic' }}>
-               {t('comments.noComments')}
-             </div>
+             <div style={{ textAlign: 'center', gridColumn: '1 / -1', padding: '3rem', color: '#999' }}>{t('home.testimonials.loading')}</div>
            )}
         </div>
       </section>

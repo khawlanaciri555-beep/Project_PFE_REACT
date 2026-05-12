@@ -389,68 +389,110 @@ body.dark-mode .testimonials-section {
 }
 
 
-/* =========================================
-   Testimonials Section
-   ========================================= */
-.testimonials-section {
-  padding: 6rem 5%;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-.section-header-center {
-  text-align: center;
-  margin-bottom: 4rem;
-}
-
-.testimonials-masonry {
+.testimonials-grid {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  grid-auto-rows: minmax(100px, auto);
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 2rem;
 }
 
-.test-card {
-  background: rgba(255, 255, 255, 0.4); /* Transparent glass effect */
-  backdrop-filter: blur(5px);
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: none; /* Removed borders/shadows */
-  border: none;
+.testimonial-card-premium {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 24px;
+  padding: 2.5rem;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+  position: relative;
+  border: 1px solid rgba(255,255,255,0.8);
+  backdrop-filter: blur(10px);
+  transition: all 0.4s ease;
 }
 
-.user-info {
+body.dark-mode .testimonial-card-premium {
+  background: rgba(40, 40, 40, 0.8);
+  border-color: rgba(255,255,255,0.1);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+}
+
+.testimonial-card-premium:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 45px rgba(0,0,0,0.08);
+}
+
+.testimonial-quote-mark {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  color: rgba(197, 138, 58, 0.1);
+  font-size: 5rem;
+  line-height: 1;
+  z-index: 0;
+  pointer-events: none;
+  font-family: var(--font-serif);
+}
+
+.testimonial-user {
   display: flex;
   align-items: center;
   gap: 1rem;
   margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 1;
 }
 
-.avatar {
-  width: 50px; /* reduced from 50px */
-  height: 50px;
+.testimonial-avatar {
+  width: 55px;
+  height: 55px;
   border-radius: 50%;
-  object-fit: cover;
+  border: 2px solid white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-.user-info h4 {
-  margin: 0 0 0.2rem 0;
-  font-size: 1rem;
+.testimonial-name {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
   color: var(--text-dark);
 }
 
-.stars {
+.testimonial-meta {
+  font-size: 0.75rem;
   color: var(--primary);
-  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.quote {
-  font-family: var(--font-serif);
-  font-size: 0.95rem; /* reduced from 1.15rem */
-  line-height: 1.6;
+.testimonial-content {
   color: var(--text-light);
+  font-size: 0.95rem;
+  line-height: 1.7;
   font-style: italic;
+  position: relative;
+  z-index: 1;
+  min-height: 80px;
   margin: 0;
+}
+
+.testimonial-footer {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid rgba(0,0,0,0.05);
+  padding-top: 1.5rem;
+}
+
+body.dark-mode .testimonial-footer {
+  border-top-color: rgba(255,255,255,0.05);
+}
+
+.testimonial-stars {
+  display: flex;
+  gap: 2px;
+}
+
+.testimonial-date {
+  font-size: 0.7rem;
+  color: #999;
 }
 
 /* Masonry positioning */

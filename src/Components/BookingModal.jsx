@@ -1,15 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaCalendarAlt, FaUsers, FaPen, FaTimes, FaCheckCircle } from 'react-icons/fa';
+import { FaCalendarAlt, FaUsers, FaPen, FaTimes, FaCheckCircle, FaBed } from 'react-icons/fa';
+import api from '../api/axios';
 
 const BookingModal = ({ isOpen, onClose, service, onConfirm }) => {
   const [formData, setFormData] = useState({
-    date: '',
+    start_date: '',
+    end_date: '',
     guests: 1,
-    notes: ''
+    notes: '',
+    service_id: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [providerServices, setProviderServices] = useState([]);
+
+  useEffect(() => {
+    if (isOpen && service?.is_provider_only) {
+      // Fetch provider data to get its services
+      const type = service.provider_type === 'coop' ? 'cooperatives' : (service.provider_type + 's');
+      api.get(`/${type}/${service.provider_id}`).then(res => {
+        setProviderServices(res.data.data?.services || res.data?.services || []);
+      }).catch(err => console.error(err));
+    }
+  }, [isOpen, service]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,7 +36,8 @@ const BookingModal = ({ isOpen, onClose, service, onConfirm }) => {
         onClose();
       }, 3000);
     } catch (err) {
-      alert('Error sending booking request. Please try again.');
+      const errorMsg = err.response?.data?.message || 'Error sending booking request. Please try again.';
+      alert(errorMsg);
     } finally {
       setIsSubmitting(false);
     }
@@ -53,25 +68,61 @@ const BookingModal = ({ isOpen, onClose, service, onConfirm }) => {
                 <button onClick={onClose} style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', background: 'rgba(255,255,255,0.2)', border: 'none', color: '#fff', width: '32px', height: '32px', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <FaTimes />
                 </button>
-                <span style={{ fontSize: '0.8rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '2px', opacity: 0.8, display: 'block', marginBottom: '0.5rem' }}>Réservation de Service</span>
+                <span style={{ fontSize: '0.8rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '2px', opacity: 0.8, display: 'block', marginBottom: '0.5rem' }}>Réservation</span>
                 <h2 style={{ margin: 0, fontFamily: 'var(--font-serif)', fontSize: '1.75rem' }}>{service.title}</h2>
-                <div style={{ marginTop: '1rem', fontStyle: 'italic', opacity: 0.9 }}>{service.price} / expérience</div>
+                {!service.is_provider_only && <div style={{ marginTop: '1rem', fontStyle: 'italic', opacity: 0.9 }}>{service.price} / expérience</div>}
               </div>
 
               <form onSubmit={handleSubmit} style={{ padding: '2.5rem' }}>
                 <div style={{ display: 'grid', gap: '1.5rem' }}>
-                  <div className="form-group">
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.6rem', fontWeight: '700', color: '#1A1817' }}>
-                      <FaCalendarAlt style={{ color: 'var(--primary)' }} /> Date de visite
-                    </label>
-                    <input 
-                      type="date" 
-                      required 
-                      className="premium-input"
-                      style={{ width: '100%', padding: '1rem', borderRadius: '12px', border: '1.5px solid rgba(0,0,0,0.1)', background: '#fff', fontSize: '1rem', outline: 'none' }}
-                      value={formData.date}
-                      onChange={(e) => setFormData({...formData, date: e.target.value})}
-                    />
+                  
+                  {service.is_provider_only && (
+                    <div className="form-group">
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.6rem', fontWeight: '700', color: '#1A1817' }}>
+                        <FaBed style={{ color: 'var(--primary)' }} /> Choisissez un service
+                      </label>
+                      <select 
+                        required 
+                        className="premium-input"
+                        style={{ width: '100%', padding: '1rem', borderRadius: '12px', border: '1.5px solid rgba(0,0,0,0.1)', background: '#fff', fontSize: '1rem', outline: 'none' }}
+                        value={formData.service_id}
+                        onChange={(e) => setFormData({...formData, service_id: e.target.value})}
+                      >
+                        <option value="">Sélectionnez un service...</option>
+                        {providerServices.map(s => (
+                          <option key={s.id} value={s.id}>{s.title} - {s.price} MAD</option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+
+                  <div className="form-group" style={{ display: 'flex', gap: '1rem' }}>
+                    <div style={{ flex: 1 }}>
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.6rem', fontWeight: '700', color: '#1A1817' }}>
+                        <FaCalendarAlt style={{ color: 'var(--primary)' }} /> Date de début
+                      </label>
+                      <input 
+                        type="date" 
+                        required 
+                        className="premium-input"
+                        style={{ width: '100%', padding: '1rem', borderRadius: '12px', border: '1.5px solid rgba(0,0,0,0.1)', background: '#fff', fontSize: '1rem', outline: 'none' }}
+                        value={formData.start_date}
+                        onChange={(e) => setFormData({...formData, start_date: e.target.value})}
+                      />
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.6rem', fontWeight: '700', color: '#1A1817' }}>
+                        <FaCalendarAlt style={{ color: 'var(--primary)' }} /> Date de fin
+                      </label>
+                      <input 
+                        type="date" 
+                        required 
+                        className="premium-input"
+                        style={{ width: '100%', padding: '1rem', borderRadius: '12px', border: '1.5px solid rgba(0,0,0,0.1)', background: '#fff', fontSize: '1rem', outline: 'none' }}
+                        value={formData.end_date}
+                        onChange={(e) => setFormData({...formData, end_date: e.target.value})}
+                      />
+                    </div>
                   </div>
 
                   <div className="form-group">

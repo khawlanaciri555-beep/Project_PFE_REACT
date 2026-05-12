@@ -29,9 +29,12 @@
       "tourists": "TOURISTES PAR AN",
       "heritage": "PATRIMOINE CULTUREL"
     },
-    "testimonials": {
+      "testimonials": {
       "eyebrow": "VOIX DE LA COMMUNAUTÉ",
       "title": "Commentaires",
+      "description": "Découvrez les expériences partagées par les voyageurs sur nos transports, coopératives et sites emblématiques.",
+      "loading": "Chargement des expériences...",
+      "verified": "Touriste Vérifié",
       "roles": {
         "tourist": "Touriste",
         "hotel": "Propriétaire d'Hôtel",
@@ -42,7 +45,10 @@
       "transportName": "Karim Benzani",
       "touristComment": "Mon voyage à Marrakech a été inoubliable. VibKech m'a aidé à trouver les meilleurs Riads et les joyaux cachés de la Médina !",
       "hotelComment": "En tant que propriétaire de Riad, VibKech a été une plateforme incroyable pour entrer en contact avec des voyageurs qui apprécient l'hospitalité marocaine authentique.",
-      "transportComment": "Efficace et fiable. J'ai constaté une augmentation significative des réservations pour mes services de transport privé via cette plateforme."
+      "transportComment": "Efficace et fiable. J'ai constaté une augmentation significative des réservations pour mes services de transport privé via cette plateforme.",
+      "transport": "Transport",
+      "coop": "Coop",
+      "place": "Lieu"
     },
     "luxury": {
       "eyebrow": "SÉJOURS D'EXCEPTION",

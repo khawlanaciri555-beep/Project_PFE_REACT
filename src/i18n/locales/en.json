@@ -29,9 +29,12 @@
       "tourists": "TOURISTS YEARLY",
       "heritage": "CULTURAL HERITAGE"
     },
-    "testimonials": {
+      "testimonials": {
       "eyebrow": "COMMUNITY VOICES",
       "title": "Comments",
+      "description": "Discover the experiences shared by travelers about our transport, cooperatives, and iconic landmarks.",
+      "loading": "Loading tourist experiences...",
+      "verified": "Verified Tourist",
       "roles": {
         "tourist": "Tourist",
         "hotel": "Hotel Owner",
@@ -42,7 +45,10 @@
       "transportName": "Karim Benzani",
       "touristComment": "My trip to Marrakech was unforgettable. VibKech helped me find the best Riads and hidden gems in the Medina!",
       "hotelComment": "As a Riad owner, VibKech has been an amazing platform to connect with travelers who appreciate authentic Moroccan hospitality.",
-      "transportComment": "Efficient and reliable. I've seen a significant increase in bookings for my private transport services through this platform."
+      "transportComment": "Efficient and reliable. I've seen a significant increase in bookings for my private transport services through this platform.",
+      "transport": "Transport",
+      "coop": "Coop",
+      "place": "Place"
     },
     "luxury": {
       "eyebrow": "EXCEPTIONAL LIVING",
@@ -115,8 +121,9 @@
   },
   "explore": {
     "title": "Explore Marrakech",
-    "subtitle": "From imperial palaces to secret gardens, discover every corner of the ocher city.",
-    "search": "Search a place... (e.g. Majorelle, Medina)",
+    "subtitle": "From imperial palaces to secret gardens, discover every corner of the Ochre City.",
+    "searchPlaceholder": "Search a place... (e.g. Majorelle, Medina)",
+    "search": "Search destinations...",
     "grid": "Grid",
     "map": "Map",
     "seeMore": "See more",
@@ -131,11 +138,76 @@
     },
     "noResults": "No results found."
   },
+  "place": {
+    "notFound": "Place not found.",
+    "backToHome": "Back to home",
+    "exploreMarrakech": "Explore Marrakech",
+    "yourRating": "Your rating",
+    "location": "Location",
+    "hideMap": "Hide map",
+    "showMap": "Show on map",
+    "discoverServices": "Discover our services",
+    "noServices": "No services available in this place",
+    "tabs": {
+      "accommodation": "Accommodation",
+      "activities": "Activities",
+      "restaurants": "Restaurants",
+      "transport": "Transport"
+    },
+    "filter": {
+      "all": "All",
+      "hotel": "Hotels",
+      "riad": "Riads"
+    }
+  },
+  "planning": {
+    "steps": {
+      "destinations": "Destinations",
+      "experiences": "Experiences",
+      "accommodation": "Stay & Transport",
+      "signature": "Signature"
+    },
+    "budget": {
+      "total": "Total Estimate",
+      "places": "Places",
+      "nights": "Nights",
+      "next": "Next"
+    },
+    "eyebrow": "Plan your dream trip",
+    "title": "Smart Trip Designer",
+    "step1": {
+      "title": "When and Where?",
+      "arrival": "Arrival Date",
+      "departure": "Departure Date",
+      "nights": "nights",
+      "dreamDestinations": "Your dream destinations in Marrakech",
+      "continue": "Continue to explore experiences"
+    },
+    "step2": {
+      "title": "Unforgettable Experiences",
+      "all": "All",
+      "budget": "Experiences Budget (per person)"
+    },
+    "step3": {
+      "title": "Stay & Transport",
+      "all": "All",
+      "hotels": "Hotels",
+      "riads": "Riads",
+      "transports": "Transports"
+    },
+    "step4": {
+      "title": "Your Final Touch",
+      "itinerarySummary": "Your Marrakech Itinerary Summary",
+      "confirm": "Confirm & Book Trip",
+      "confirmSuccess": "Your itinerary and bookings have been saved successfully!",
+      "confirmError": "Error saving itinerary. Please try again."
+    }
+  },
   "auth": {
     "back": "Back",
     "login": {
       "title": "Welcome back",
-      "subtitle": "Welcome Back to the Red City",
+      "subtitle": "Welcome back to the Red City",
       "description": "Sign in to continue your Marrakech journey — discover hidden riads, vibrant souks, and timeless experiences.",
       "stats": {
         "monuments": "Monuments",
@@ -154,7 +226,7 @@
     },
     "register": {
       "title": "Create an account",
-      "subtitle": "Join the experience",
+      "subtitle": "Join the Marrakech Experience",
       "name": "Full name",
       "email": "Email address",
       "password": "Password",
@@ -269,13 +341,33 @@
   "common": {
     "loading": "Loading...",
     "error": "An error occurred",
+    "error_status": "Error: {{status}}",
+    "connection_error": "Connection refused. Please start your Laravel server.",
+    "retry": "Retry",
     "back": "Back",
     "cancel": "Cancel",
     "save": "Save",
     "delete": "Delete",
     "edit": "Edit",
     "confirm": "Confirm",
+    "details": "Details",
+    "service": "Service",
+    "host": "Local Host",
+    "perNight": "MAD/night",
     "mad": "MAD"
+  },
+  "bookings": {
+    "subtitle": "Follow your confirmed trips and pending service requests.",
+    "providedBy": "Provided by",
+    "noResults": "No bookings found yet.",
+    "startJourney": "Start your journey by choosing a service in Marrakech!",
+    "status": {
+      "completed": "Completed",
+      "confirmed": "Confirmed",
+      "accepted": "Accepted",
+      "pending": "Pending",
+      "rejected": "Rejected"
+    }
   },
   "about": {
     "hero": {

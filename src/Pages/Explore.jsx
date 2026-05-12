@@ -23,7 +23,12 @@ const Explore = () => {
       try {
         setLoading(true);
         const response = await api.get('/places');
-        setItems(response.data.data ? response.data.data : response.data);
+        const allItems = response.data.data ? response.data.data : response.data;
+        const filtered = allItems.filter(p => {
+          const cat = (p.category || p.type || '').toLowerCase();
+          return !cat.includes('hotel') && !cat.includes('riad') && !cat.includes('transport') && !cat.includes('hébergement');
+        });
+        setItems(filtered);
       } catch (err) {
         console.error('Error fetching explore data', err);
       } finally {
@@ -52,7 +57,7 @@ const Explore = () => {
                 <div>
                     <h1 className="explore-title">{t('explore.title')}</h1>
                     <p className="explore-subtitle">
-                        {t('explore.subtitle')}
+                        {t('explore.subtitle', 'Des palais impériaux aux jardins secrets, découvrez chaque recoin de la ville ocre.')}
                     </p>
                 </div>
                 <div className="view-toggle-container" style={{ background: 'rgba(255,255,255,0.1)', padding: '0.4rem', borderRadius: '12px', display: 'flex', border: '1px solid rgba(255,255,255,0.2)' }}>
@@ -111,7 +116,7 @@ const Explore = () => {
               </svg>
               <input
                 type="text"
-                placeholder={t('explore.search')}
+                placeholder={t('explore.searchPlaceholder', 'Search a place...')}
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
                 style={{

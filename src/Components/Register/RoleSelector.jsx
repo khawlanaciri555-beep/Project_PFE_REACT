@@ -14,22 +14,24 @@ export const RoleSelector = ({ activeRole, setRole }) => {
       {roles.map((role) => (
         <button
           key={role.id}
+          type="button"
           className={`role-tab ${activeRole === role.id ? 'active' : ''}`}
           onClick={() => setRole(role.id)}
+          style={{ position: 'relative' }}
         >
-          {role.label}
+          <span style={{ position: 'relative', zIndex: 2 }}>{role.label}</span>
           {activeRole === role.id && (
             <motion.div
               layoutId="role-pill"
-              className="role-pill-bg"
               transition={{ type: "spring", stiffness: 500, damping: 30 }}
               style={{
                 position: 'absolute',
                 inset: 0,
-                background: 'linear-gradient(135deg, #C58A3A 0%, #cc5533 100%)',
-                borderRadius: '12px',
-                zIndex: -1,
-                boxShadow: '0 4px 12px rgba(197, 138, 58, 0.4)'
+                background: 'rgba(255, 255, 255, 0.2)',
+                borderRadius: '10px',
+                zIndex: 1,
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+                boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)'
               }}
             />
           )}

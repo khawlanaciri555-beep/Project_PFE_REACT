@@ -11,7 +11,8 @@ import './Planning.css';
 
 const Planning = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(true);
   const [places, setPlaces] = useState([]);
@@ -110,7 +111,7 @@ const Planning = () => {
 
   return (
     <Layout>
-      <div className="planning-page premium-theme">
+      <div className={`planning-page premium-theme ${isRTL ? 'rtl-mode' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
         <div className="bg-pattern" />
 
         {/* Floating Budget Summary */}
@@ -325,7 +326,7 @@ const Planning = () => {
                     <div className="section-header-premium">
                       <h2 className="step-section-title premium-font">{t('planning.step2.title')}</h2>
                       <div className="discovery-chips">
-                         {['All', 'Activity', 'Experience', 'Tour', 'Workshop'].map((cat) => (
+                         {['All', 'Activity', 'Experience', 'Workshop'].map((cat) => (
                            <motion.button 
                              key={cat} 
                              variants={itemVariants}
@@ -356,7 +357,16 @@ const Planning = () => {
 
                     <motion.div variants={containerVariants} className="activities-grid-premium">
                       {services
-                        .filter(s => (filters.category === 'All' || s.type === filters.category) && s.price <= filters.budget)
+                        .filter(s => {
+                          const allowedTypes = ['Activity', 'Experience', 'Workshop'];
+                          const matchesCategory = filters.category === 'All' 
+                            ? allowedTypes.includes(s.type) 
+                            : s.type === filters.category;
+                          
+                          return matchesCategory && 
+                            s.price <= filters.budget &&
+                            (formData.selectedPlaces.length === 0 || !s.place_id || formData.selectedPlaces.some(p => Number(p.id) === Number(s.place_id)));
+                        })
                         .map(service => (
                           <motion.div 
                             key={service.id} 
@@ -430,7 +440,9 @@ const Planning = () => {
                       <div className="hotel-premium-section">
                         <label className="group-label">{t('planning.step3.luxuryRetreats')}</label>
                         <div className="hotels-premium-scroll">
-                          {hotels.map(hotel => (
+                          {hotels
+                            .filter(h => formData.selectedPlaces.length === 0 || !h.place_id || formData.selectedPlaces.some(p => Number(p.id) === Number(h.place_id)))
+                            .map(hotel => (
                             <motion.div 
                               key={hotel.id} 
                               variants={itemVariants}
@@ -439,11 +451,11 @@ const Planning = () => {
                               onClick={() => setFormData({...formData, selectedHotel: hotel})}
                             >
                               <div className="h-img-wrap">
-                                 <img src={hotel.image || '/logo picter/placeholder.jpg'} alt={hotel.name} />
+                                 <img src={getImageUrl(hotel.image) || '/logo picter/placeholder.jpg'} alt={hotel.name} />
                                  <div className="h-badge-premium">{hotel.type === 'riad' ? t('planning.labels.riad') : t('planning.labels.hotel')}</div>
                               </div>
                               <div className="hotel-info-premium">
-                                <h5>{hotel.name}</h5>
+                                <h5>{hotel.name || hotel.title}</h5>
                                 <div className="h-details-premium">
                                    <span className="h-rating">★ {hotel.rating || 4.8}</span>
                                    <span className="h-price-night">{hotel.price} {t('common.perNight')}</span>
@@ -460,16 +472,24 @@ const Planning = () => {
                       <div className="transport-premium-section">
                         <label className="group-label">{t('planning.step3.elegantMobility')}</label>
                         <div className="transport-list-premium">
-                          {transports.map(t_item => (
+                          {transports
+                            .filter(t_item => formData.selectedPlaces.length === 0 || !t_item.place_id || formData.selectedPlaces.some(p => Number(p.id) === Number(t_item.place_id)))
+                            .map(t_item => (
                             <motion.div 
                               key={t_item.id} 
                               variants={itemVariants}
                               className={`transport-row-premium ${formData.selectedTransport?.id === t_item.id ? 'active' : ''}`}
                               onClick={() => setFormData({...formData, selectedTransport: t_item})}
                             >
-                              <div className="t-icon-premium"><FaCar /></div>
+                               <div className="t-img-wrap-premium">
+                                  {t_item.image ? (
+                                    <img src={getImageUrl(t_item.image)} alt={t_item.title} />
+                                  ) : (
+                                    <div className="t-icon-fallback"><FaCar /></div>
+                                  )}
+                               </div>
                               <div className="t-content-premium">
-                                <h5>{t_item.title}</h5>
+                                <h5>{t_item.title || t_item.name || t_item.type}</h5>
                                 <p>{t_item.type}</p>
                               </div>
                               <div className="t-price-premium">{t_item.price} {t('common.mad')}</div>

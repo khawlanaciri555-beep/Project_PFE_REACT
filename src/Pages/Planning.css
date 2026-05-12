@@ -554,14 +554,25 @@ body.dark-mode .planning-page.premium-theme {
   border-color: var(--premium-terracotta);
 }
 
-.t-icon-premium {
-  width: 50px;
-  height: 50px;
-  background: var(--premium-sand);
+.t-img-wrap-premium {
+  width: 60px;
+  height: 60px;
   border-radius: 14px;
+  overflow: hidden;
+  background: var(--premium-sand);
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+}
+
+.t-img-wrap-premium img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.t-icon-fallback {
   font-size: 1.4rem;
   color: var(--premium-terracotta);
 }
@@ -892,4 +903,87 @@ body.dark-mode .planning-page.premium-theme {
     width: 200px;
     right: -20px;
   }
+}
+
+/* --- RTL Support --- */
+.planning-page.rtl-mode {
+  direction: rtl;
+}
+
+.planning-page.rtl-mode .stepper-plane {
+  transform: translateX(50%);
+}
+
+.planning-page.rtl-mode .pro-plane-icon {
+  transform: rotate(-10deg) scaleX(-1);
+}
+
+.planning-page.rtl-mode .plane-trail {
+  right: auto;
+  left: 100%;
+  background: linear-gradient(to right, var(--premium-terracotta), transparent);
+  transform-origin: left;
+  margin-right: 0;
+  margin-left: -10px;
+}
+
+.planning-page.rtl-mode .input-group-premium label {
+  gap: 0.5rem;
+}
+
+.planning-page.rtl-mode .btn-premium-next svg {
+  transform: rotate(180deg);
+}
+
+.planning-page.rtl-mode .btn-premium-back svg {
+  transform: rotate(180deg);
+}
+
+.planning-page.rtl-mode .stat-item {
+  flex-direction: row;
+}
+
+.planning-page.rtl-mode .budget-next-btn svg {
+  transform: rotate(180deg);
+}
+
+.planning-page.rtl-mode .hotel-info-premium {
+  text-align: right;
+}
+
+.planning-page.rtl-mode .t-price-premium {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.planning-page.rtl-mode .sum-label-premium {
+  text-align: right;
+}
+
+.planning-page.rtl-mode .sum-act-item {
+  flex-direction: row;
+}
+
+.planning-page.rtl-mode .itinerary-total-premium {
+  text-align: right;
+}
+
+.planning-page.rtl-mode .close-gallery-btn {
+  right: auto;
+  left: 20px;
+}
+
+.planning-page.rtl-mode .act-tag {
+  left: auto;
+  right: 20px;
+}
+
+.planning-page.rtl-mode .selection-indicator {
+  right: auto;
+  left: 15px;
+}
+
+.planning-page.rtl-mode .place-badge {
+  left: auto;
+  right: 15px;
 }

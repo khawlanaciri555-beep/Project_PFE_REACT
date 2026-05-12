@@ -163,15 +163,16 @@ const Register = () => {
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="register-card success-container"
+          className="auth-container success-container"
+          style={{ textAlign: 'center' }}
         >
-          <div className="success-icon">
+          <div className="success-icon" style={{ background: 'rgba(16, 185, 129, 0.2)', color: '#10b981', width: '80px', height: '80px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3rem', margin: '0 auto 1.5rem' }}>
             <FaCheckCircle />
           </div>
-          <h1>{t('auth.register.title')} ✓</h1>
-          <p>{t('auth.register.haveAccount')}</p>
+          <h1 className="auth-title">{t('auth.register.title')} ✓</h1>
+          <p className="auth-subtitle">{t('auth.register.haveAccount')}</p>
           <Link to="/login" style={{ textDecoration: 'none' }}>
-            <GradientButton>{t('auth.login.submit')}</GradientButton>
+            <button className="auth-submit-btn">{t('auth.login.submit')}</button>
           </Link>
         </motion.div>
       </div>
@@ -189,7 +190,7 @@ const Register = () => {
       </div>
 
       <Link to="/home" style={{ position: 'absolute', top: '2.5rem', left: '2.5rem', zIndex: 50, display: 'flex', alignItems: 'center', gap: '8px', color: '#CA5A3D', textDecoration: 'none', fontWeight: '600', fontSize: '1.05rem' }}>
-          <FaArrowLeft /> {t('auth.back')}
+          <FaArrowLeft /> {t('auth.back', 'Back')}
       </Link>
       <div className="register-card premium-glass-card" style={{ maxWidth: '550px', margin: '0 auto', textAlign: 'center', padding: '2.5rem' }}>
         <div className="auth-header">
@@ -198,14 +199,14 @@ const Register = () => {
              <span style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: '1.4rem', fontWeight: 'bold', color: '#1a1008', textTransform: 'uppercase', letterSpacing: '3px' }}>VibKech</span>
           </Link>
           <h1 style={{ color: '#C55A3A', fontSize: '2.2rem', marginBottom: '0.5rem', fontWeight: 'bold' }}>{t('auth.register.title')}</h1>
-          <p style={{ color: '#64748b' }}>{t('auth.register.subtitle')}</p>
+          <p style={{ color: '#64748b' }}>{t('auth.register.subtitle', 'Join the Marrakech Experience')}</p>
         </div>
 
         <RoleSelector activeRole={role} setRole={(r) => setRole(r)} />
 
-        <form onSubmit={handleSubmit} style={{ textAlign: 'left' }}>
+        <form onSubmit={handleSubmit} className="auth-form">
           {error && (
-            <div className="login-error-msg" style={{ marginBottom: '1.5rem', color: '#cc3232', background: 'rgba(204, 50, 50, 0.08)', padding: '10px', borderRadius: '8px' }}>
+            <div className="auth-error">
               <span>⚠</span> {error}
             </div>
           )}
@@ -225,15 +226,14 @@ const Register = () => {
           <div style={{ marginTop: '2rem' }}>
             <button
               type="submit"
-              className="submit-btn"
+              className="auth-submit-btn"
               disabled={loading}
-              style={{ background: '#CA5A3D', color: '#fff', width: '100%', padding: '14px', borderRadius: '12px', border: 'none', cursor: 'pointer', fontSize: '1.1rem', fontWeight: 'bold' }}
             >
               {loading ? (
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                <>
                   <div className="spinner" />
                   {t('common.loading')}
-                </div>
+                </>
               ) : (
                 t('auth.register.submit')
               )}
@@ -247,6 +247,8 @@ const Register = () => {
             {t('auth.register.login')}
           </Link>
         </p>
+      </div>
+    </div>
       </div>
     </div>
   );

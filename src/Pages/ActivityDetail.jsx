@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import Layout from '../Components/Layout';
@@ -6,14 +6,19 @@ import { useTranslation } from 'react-i18next';
 import api from '../api/axios';
 import getImageUrl from '../utils/imageUrl';
 import './ActivityDetail.css';
+import { AuthContext } from '../context/AuthContext';
+
+import BookingModal from '../Components/BookingModal';
 
 const ActivityDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { user } = useContext(AuthContext);
   const [service, setService] = useState(null);
   const [loading, setLoading] = useState(true);
   const [lightboxImg, setLightboxImg] = useState(null);
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
 
   useEffect(() => {
     const fetchService = async () => {
@@ -29,6 +34,22 @@ const ActivityDetail = () => {
     };
     fetchService();
   }, [id]);
+
+  const handleReserveClick = () => {
+    if (!user) {
+      navigate('/login', { state: { from: `/activity/${id}` } });
+      return;
+    }
+    setIsBookingOpen(true);
+  };
+
+  const handleConfirmBooking = async (formData) => {
+    await api.post('/bookings', {
+      service_id: service.id,
+      user_id: user.id,
+      ...formData
+    });
+  };
 
   if (loading) {
     return (
@@ -89,9 +110,17 @@ const ActivityDetail = () => {
             >
               <span className="act-type-badge">{service.type}</span>
               <h1 className="act-title">{service.title}</h1>
-              {service.price > 0 && (
-                <span className="act-price-badge">{service.price} MAD</span>
-              )}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: '1rem' }}>
+                {service.price > 0 && (
+                  <span className="act-price-badge">{service.price} MAD</span>
+                )}
+                <button 
+                  onClick={handleReserveClick}
+                  style={{ background: 'var(--primary)', color: 'white', padding: '0.8rem 2rem', borderRadius: '30px', border: 'none', fontWeight: 'bold', fontSize: '1.1rem', cursor: 'pointer', boxShadow: '0 10px 20px rgba(0,0,0,0.2)' }}
+                >
+                  Réserver
+                </button>
+              </div>
             </motion.div>
           </div>
         </div>
@@ -147,6 +176,58 @@ const ActivityDetail = () => {
             </motion.section>
           )}
 
+          {/* COMMENTS SECTION */}
+          <motion.section 
+            className="act-section comments-section"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            style={{ marginTop: '4rem', padding: '3rem', background: 'rgba(255,255,255,0.03)', borderRadius: '30px' }}
+          >
+            <h2 className="act-section-title">💬 Avis des Voyageurs</h2>
+            
+            <div className="comments-list" style={{ marginTop: '2rem' }}>
+              {/* This would normally fetch from /services/:id/comments or similar */}
+              {/* For now, showing a premium placeholder/empty state or fetching if available */}
+              <div style={{ textAlign: 'center', padding: '2rem', color: 'rgba(255,255,255,0.5)' }}>
+                <p>Aucun avis pour le moment. Soyez le premier à partager votre expérience !</p>
+              </div>
+            </div>
+
+            <div className="add-comment-form" style={{ marginTop: '3rem', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '2rem' }}>
+              <h3 style={{ fontSize: '1.2rem', marginBottom: '1.5rem', color: 'white' }}>Laisser un commentaire</h3>
+              <textarea 
+                placeholder="Partagez votre expérience..."
+                style={{ 
+                  width: '100%', 
+                  padding: '1.5rem', 
+                  borderRadius: '15px', 
+                  background: 'rgba(255,255,255,0.05)', 
+                  border: '1px solid rgba(255,255,255,0.1)', 
+                  color: 'white',
+                  minHeight: '120px',
+                  outline: 'none',
+                  fontSize: '1rem'
+                }}
+              ></textarea>
+              <button 
+                className="act-btn-submit"
+                style={{ 
+                  marginTop: '1rem', 
+                  padding: '1rem 2rem', 
+                  borderRadius: '10px', 
+                  background: 'var(--primary)', 
+                  color: 'white', 
+                  border: 'none', 
+                  fontWeight: 'bold',
+                  cursor: 'pointer'
+                }}
+              >
+                Envoyer le commentaire
+              </button>
+            </div>
+          </motion.section>
+
         </div>
 
         {/* LIGHTBOX */}
@@ -173,6 +254,13 @@ const ActivityDetail = () => {
         </AnimatePresence>
 
       </div>
+
+      <BookingModal 
+        isOpen={isBookingOpen}
+        onClose={() => setIsBookingOpen(false)}
+        service={service}
+        onConfirm={handleConfirmBooking}
+      />
     </Layout>
   );
 };

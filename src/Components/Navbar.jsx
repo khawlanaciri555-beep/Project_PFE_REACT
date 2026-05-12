@@ -13,7 +13,7 @@ const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
   const location = useLocation();
   const navigate = useNavigate();
-  const isHomePage = location.pathname === '/home';
+  const isHomePage = location.pathname === '/home' || location.pathname === '/';
   const { t } = useTranslation();
   
   const [isDarkMode, setIsDarkMode] = useState(() => {
