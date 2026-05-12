@@ -584,14 +584,15 @@ const ProviderProfile = ({ isDashboard = false, isEditMode = false }) => {
               </button>
             </form>
 
-            <div className="contact-item" style={{ display: 'flex', alignItems: 'center' }}>
-              <FaPhoneAlt style={{ flexShrink: 0 }} /> 
-              <EditableField isEditMode={isEditMode} value={data.contact.phone} onSave={(val) => handleUpdateContact('phone', val)} />
-=======
             <div className="contact-box" style={{ marginTop: '2rem' }}>
-              <div className="contact-item"><FaPhoneAlt /> <EditableField isEditMode={isEditMode} value={data.contact.phone} onSave={(val) => handleUpdateContact('phone', val)} /></div>
-              <div className="contact-item"><FaEnvelope /> <EditableField isEditMode={isEditMode} value={data.contact.email} onSave={(val) => handleUpdateContact('email', val)} /></div>
->>>>>>> 742e84c (verstion final)
+              <div className="contact-item">
+                <FaPhoneAlt /> 
+                <EditableField isEditMode={isEditMode} value={data.contact.phone} onSave={(val) => handleUpdateContact('phone', val)} />
+              </div>
+              <div className="contact-item">
+                <FaEnvelope /> 
+                <EditableField isEditMode={isEditMode} value={data.contact.email} onSave={(val) => handleUpdateContact('email', val)} />
+              </div>
             </div>
           </motion.div>
         </aside>

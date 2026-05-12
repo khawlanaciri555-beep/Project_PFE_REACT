@@ -199,6 +199,13 @@
       "title": "Your Final Touch",
       "itinerarySummary": "Your Marrakech Itinerary Summary",
       "confirm": "Confirm & Book Trip",
+      "timeline": "Timeline",
+      "destinations": "Destinations",
+      "experiences": "Experiences",
+      "accommodation": "Accommodation",
+      "noHotel": "No hotel selected",
+      "totalInvestment": "Total Investment",
+      "adjust": "Adjust Plan",
       "confirmSuccess": "Your itinerary and bookings have been saved successfully!",
       "confirmError": "Error saving itinerary. Please try again."
     }
@@ -474,7 +481,24 @@
         "completed": "Completed",
         "confirmed": "Confirmed",
         "pending": "Pending"
-      }
+      },
+      "tabs": {
+        "bookings": "Bookings",
+        "plannings": "My Plannings"
+      },
+      "planning": {
+        "tripTitle": "Trip to Marrakech",
+        "stops": "Stops"
+      },
+      "noPlannings": "No saved plannings found.",
+      "detailsTitle": "Booking Details",
+      "statusLabel": "Status",
+      "start_date": "Start Date",
+      "end_date": "End Date",
+      "cancel": "Cancel Booking",
+      "confirmCancel": "Are you sure you want to cancel this booking?",
+      "cancelSuccess": "Booking cancelled successfully.",
+      "cancelError": "Error cancelling booking."
     },
     "requests": {
       "title": "Booking Requests",

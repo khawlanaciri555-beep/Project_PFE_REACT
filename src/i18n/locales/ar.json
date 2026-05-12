@@ -199,10 +199,16 @@
       "title": "لمستك النهائية",
       "itinerarySummary": "ملخص رحلتك في مراكش",
       "confirm": "تأكيد وحجز الرحلة",
+      "timeline": "الجدول الزمني",
+      "destinations": "الوجهات",
+      "experiences": "التجارب",
+      "accommodation": "الإقامة",
+      "noHotel": "لم يتم اختيار فندق",
+      "totalInvestment": "إجمالي الاستثمار",
+      "adjust": "تعديل البرنامج",
       "confirmSuccess": "تم حفظ برنامج رحلتك وحجز الخدمات بنجاح!",
       "confirmError": "حدث خطأ أثناء حفظ البرنامج. يرجى المحاولة مرة أخرى."
     }
->>>>>>> 742e84c (verstion final)
   },
 
   "auth": {
@@ -370,7 +376,24 @@
       "accepted": "مقبول",
       "pending": "قيد الانتظار",
       "rejected": "مرفوض"
-    }
+    },
+    "tabs": {
+      "bookings": "حجوزات الخدمات",
+      "plannings": "برامج رحلاتي"
+    },
+    "planning": {
+      "tripTitle": "رحلة إلى مراكش",
+      "stops": "محطات"
+    },
+    "noPlannings": "لم يتم العثور على برامج رحلات محفوظة.",
+    "detailsTitle": "تفاصيل الحجز",
+    "statusLabel": "الحالة",
+    "start_date": "تاريخ البدء",
+    "end_date": "تاريخ الانتهاء",
+    "cancel": "إلغاء الحجز",
+    "confirmCancel": "هل أنت متأكد من رغبتك في إلغاء هذا الحجز؟",
+    "cancelSuccess": "تم إلغاء الحجز بنجاح.",
+    "cancelError": "حدث خطأ أثناء إلغاء الحجز."
   },
   "about": {
     "hero": {

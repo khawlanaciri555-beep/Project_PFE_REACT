@@ -41,9 +41,9 @@ const Planning = () => {
     : 0;
 
   // Real-time Budget Calculation
-  const totalBudget = (formData.selectedActivities.reduce((acc, curr) => acc + curr.price, 0)) +
-    (formData.selectedHotel ? formData.selectedHotel.price * nights : 0) +
-    (formData.selectedTransport ? parseInt(formData.selectedTransport.price || 0) : 0);
+  const totalBudget = (formData.selectedActivities.reduce((acc, curr) => acc + Number(curr.price || 0), 0)) +
+    (formData.selectedHotel ? Number(formData.selectedHotel.price || 0) * nights : 0) +
+    (formData.selectedTransport ? Number(formData.selectedTransport.price || 0) : 0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -77,9 +77,31 @@ const Planning = () => {
         alert(t('planning.step1.title'));
         return;
     }
+
+    if (step === 4) {
+      handleConfirm();
+      return;
+    }
+
     setIsFlying(true);
     setStep(step + 1);
     setTimeout(() => setIsFlying(false), 2000);
+  };
+
+  const handleConfirm = async () => {
+    try {
+      const payload = {
+         ...formData,
+         hotel_id: formData.selectedHotel?.id,
+         transport_id: formData.selectedTransport?.id,
+         activities: formData.selectedActivities.map(a => a.id)
+      };
+      await api.post('/itineraries', payload);
+      alert(t('planning.step4.confirmSuccess'));
+      navigate('/dashboard/my-bookings');
+    } catch (err) {
+       alert(t('planning.step4.confirmError'));
+    }
   };
   
   const prevStep = () => {
@@ -545,7 +567,7 @@ const Planning = () => {
                             <div className="sum-section">
                                <span className="sum-label-premium"><FaMapMarkerAlt /> {t('planning.step4.destinations')}</span>
                                <div className="sum-chips-premium">
-                                 {formData.selectedPlaces.map(p => <span key={p.id}>{p.name}</span>)}
+                                 {formData.selectedPlaces.map(p => <span key={p.id}>{p.name || p.title}</span>)}
                                </div>
                             </div>
                             <div className="sum-section">
@@ -561,7 +583,7 @@ const Planning = () => {
                             </div>
                             <div className="sum-section">
                                <span className="sum-label-premium">{t('planning.step4.accommodation')}</span>
-                               <p>{formData.selectedHotel ? formData.selectedHotel.name : t('planning.step4.noHotel')}</p>
+                               <p>{formData.selectedHotel ? (formData.selectedHotel.name || formData.selectedHotel.title) : t('planning.step4.noHotel')}</p>
                             </div>
                         </div>
                         <div className="itinerary-total-premium">
@@ -573,8 +595,13 @@ const Planning = () => {
                       <div className="itinerary-map-premium">
                         <div className="map-glass-wrap">
                           <ServiceMap items={formData.selectedPlaces.map(p => {
-                             const [lat, lng] = p.coordinates ? p.coordinates.split(',').map(c => parseFloat(c.trim())) : [31.6295, -7.9811];
-                             return { ...p, title: p.name, lat, lng };
+                             let lat = 31.6295, lng = -7.9811;
+                             if (p.coordinates && p.coordinates.includes(',')) {
+                               const parts = p.coordinates.split(',');
+                               lat = parseFloat(parts[0]);
+                               lng = parseFloat(parts[1]);
+                             }
+                             return { ...p, title: p.name || p.title, lat, lng };
                           })} />
                         </div>
                       </div>
@@ -583,21 +610,7 @@ const Planning = () => {
 
                   <div className="step-actions">
                     <button className="btn-premium-back" onClick={prevStep}>{t('planning.step4.adjust')}</button>
-                    <button className="btn-premium-confirm" onClick={async () => {
-                        try {
-                          const payload = {
-                             ...formData,
-                             hotel_id: formData.selectedHotel?.id,
-                             transport_id: formData.selectedTransport?.id,
-                             activities: formData.selectedActivities.map(a => a.id)
-                          };
-                          await api.post('/itineraries', payload);
-                          alert(t('planning.step4.confirmSuccess'));
-                          navigate('/dashboard/my-bookings');
-                        } catch (err) {
-                           alert(t('planning.step4.confirmError'));
-                        }
-                    }}>{t('planning.step4.confirm')}</button>
+                    <button className="btn-premium-confirm" onClick={handleConfirm}>{t('planning.step4.confirm')}</button>
                   </div>
                 </motion.div>
               )}

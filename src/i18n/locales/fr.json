@@ -170,6 +170,66 @@
       "login": "Se connecter"
     }
   },
+  "planning": {
+    "steps": {
+      "destinations": "Destinations",
+      "experiences": "Expériences",
+      "accommodation": "Hébergement",
+      "signature": "Signature"
+    },
+    "budget": {
+      "total": "Estimation Totale",
+      "places": "Lieux",
+      "nights": "Nuits",
+      "next": "Suivant"
+    },
+    "eyebrow": "Planifiez votre voyage de rêve",
+    "title": "Concepteur de Voyage Intelligent",
+    "step1": {
+      "title": "Où et Quand ?",
+      "arrival": "Date d'arrivée",
+      "departure": "Date de départ",
+      "nights": "nuits",
+      "dreamDestinations": "Vos destinations de rêve à Marrakech",
+      "continue": "Continuer vers les expériences"
+    },
+    "step2": {
+      "title": "Expériences Inoubliables",
+      "all": "Tous",
+      "budget": "Budget Expériences (par personne)",
+      "book": "Réserver",
+      "selected": "Sélectionné"
+    },
+    "step3": {
+      "title": "Séjour & Transport",
+      "luxuryRetreats": "Retraites de Luxe",
+      "elegantMobility": "Mobilité Élégante",
+      "pickupLocation": "Lieu de prise en charge",
+      "finalDestination": "Destination finale",
+      "previous": "Précédent",
+      "signature": "Signature Itinéraire"
+    },
+    "step4": {
+      "title": "Votre Touche Finale",
+      "itinerarySummary": "Résumé de votre itinéraire à Marrakech",
+      "confirm": "Confirmer & Réserver",
+      "timeline": "Chronologie",
+      "destinations": "Destinations",
+      "experiences": "Expériences",
+      "accommodation": "Hébergement",
+      "noHotel": "Aucun hôtel sélectionné",
+      "totalInvestment": "Investissement Total",
+      "adjust": "Ajuster le plan",
+      "confirmSuccess": "Votre itinéraire et vos réservations ont été enregistrés avec succès !",
+      "confirmError": "Erreur lors de l'enregistrement de l'itinéraire. Veuillez réessayer."
+    },
+    "labels": {
+      "medina": "Médina",
+      "riad": "Riad",
+      "hotel": "Hôtel",
+      "details": "Détails"
+    }
+  },
   "landing": {
     "eyebrow": "DÉCOUVREZ MARRAKECH",
     "welcome": "Bienvenue",
@@ -389,7 +449,24 @@
         "completed": "Terminé",
         "confirmed": "Confirmé",
         "pending": "En attente"
-      }
+      },
+      "tabs": {
+        "bookings": "Réservations",
+        "plannings": "Mes Programmes"
+      },
+      "planning": {
+        "tripTitle": "Voyage à Marrakech",
+        "stops": "Arrêts"
+      },
+      "noPlannings": "Aucun programme enregistré trouvé.",
+      "detailsTitle": "Détails de la Réservation",
+      "statusLabel": "Statut",
+      "start_date": "Date de début",
+      "end_date": "Date de fin",
+      "cancel": "Annuler la Réservation",
+      "confirmCancel": "Êtes-vous sûr de vouloir annuler cette réservation ?",
+      "cancelSuccess": "Réservation annulée avec succès.",
+      "cancelError": "Erreur lors de l'annulation de la réservation."
     },
     "requests": {
       "title": "Demandes de Réservation",
